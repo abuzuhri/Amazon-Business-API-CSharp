@@ -1,7 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Exceptions\ApiException.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="NSwag.ApiDescription.Client" Version="13.18.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\Document_API_v1.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="DocumentApiV1" OutputPath="DocumentApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/document-api-v1-model</SourceUri>
+    </OpenApiReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
 </Project>
