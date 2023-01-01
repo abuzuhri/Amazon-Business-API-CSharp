@@ -21,10 +21,10 @@ Install-Package CSharpAmazonBusinessAPI
 
 ### Tasks
 
-- [] [Document API v1](https://developer-docs.amazon.com/amazon-business/docs/document-api-v1-reference-1)
-- [] [Product Search API v1](https://developer-docs.amazon.com/amazon-business/docs/product-search-api-v1-reference)
-- [] [Reconciliation API v1](https://developer-docs.amazon.com/amazon-business/docs/reconciliation-api-v1-reference)
-- [] [Reporting API v1](https://developer-docs.amazon.com/amazon-business/docs/reporting-api-v1-reference-1)
+- [ ] [Document API v1](https://developer-docs.amazon.com/amazon-business/docs/document-api-v1-reference-1)
+- [ ] [Product Search API v1](https://developer-docs.amazon.com/amazon-business/docs/product-search-api-v1-reference)
+- [ ] [Reconciliation API v1](https://developer-docs.amazon.com/amazon-business/docs/reconciliation-api-v1-reference)
+- [ ] [Reporting API v1](https://developer-docs.amazon.com/amazon-business/docs/reporting-api-v1-reference-1)
 
 ---
 ## Keys
