@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>4f0b1efe-2d9d-43b7-b2d1-7e6a98d3fb20</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpAmazonBusinessAPI\CSharpAmazonBusinessAPI.csproj" />
+  </ItemGroup>
+
+</Project>

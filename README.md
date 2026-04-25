@@ -84,7 +84,7 @@ Each API has: (1) OpenAPI spec under `Source/CSharpAmazonBusinessAPI/OpenAPIs/` 
 
 #### Workflows & integrations
 - [x] **REST cross-API sample** — see [`CartToOrderSample.cs`](Source/CSharpAmazonBusinessAPI.SampleCode/CartToOrderSample.cs) for Product Search → Cart → Ordering. *Note:* Amazon's [Integrated Quoting workflow](https://developer-docs.amazon.com/amazon-business/docs/integrated-quoting) is a separate cXML/cert-auth integration, not a REST workflow — it's out of scope for this SDK.
-- [x] **[Third-party website authorization](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow)** — `LwaConsentHelper.BuildAuthorizationUrl()` + `ExchangeCodeForTokensAsync()`. Use during one-time onboarding to collect a customer's refresh token, then persist it for `AmazonBusinessCredential`.
+- [x] **[Third-party website authorization](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow)** — `LwaConsentHelper.BuildAuthorizationUrl()` + `ExchangeCodeForTokensAsync()`. Use during one-time onboarding to collect a customer's refresh token, then persist it for `AmazonBusinessCredential`. **Runnable demo:** see [`Source/CSharpAmazonBusinessAPI.WebAuthSample`](Source/CSharpAmazonBusinessAPI.WebAuthSample) — ASP.NET Core minimal-API project with the full consent flow.
 - [x] **[App Center authorization workflow](https://developer-docs.amazon.com/amazon-business/docs/app-center-authorization-workflow)** — same `LwaConsentHelper.ExchangeCodeForTokensAsync()` covers the LWA token-exchange step. The Amazon-initiated callback dance (`amazon_callback_uri`, `amazon_state` echoing) is server-side handler code your app implements.
 - [ ] ~~Punch-in~~ — **out of scope** (server-side cXML/SOAP-style endpoint your e-procurement system hosts, with TLS certs / shared-secret auth — same situation as Integrated Quoting). See [Punch-in integration guide](https://developer-docs.amazon.com/amazon-business/docs/punch-in-integration-guide) if you need to integrate the e-procurement side.
 - [x] **[Amazon Business Integrations MCP Server](https://developer-docs.amazon.com/amazon-business/docs/amazon-business-integrations-mcp-server)** — Amazon-hosted MCP server for AI assistants. Out of scope for the SDK; mentioned here for discoverability.
@@ -163,7 +163,7 @@ var connection = new AmazonBusinessConnection(new AmazonBusinessCredential
 ```
 
 ### Onboard a customer (OAuth consent → refresh token)
-For SaaS apps and App Center listings: send the customer to Amazon's consent page, then exchange the returned `code` for a long-lived `refresh_token` and persist it.
+For SaaS apps and App Center listings: send the customer to Amazon's consent page, then exchange the returned `code` for a long-lived `refresh_token` and persist it. A runnable end-to-end ASP.NET Core demo lives in [`Source/CSharpAmazonBusinessAPI.WebAuthSample`](Source/CSharpAmazonBusinessAPI.WebAuthSample) — `dotnet run` from that folder, browse to `https://localhost:7271`, click *Connect*.
 
 ```csharp
 // 1. Generate a CSRF token, then redirect the customer's browser here:

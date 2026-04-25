@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0AB3BF05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpAmazonBusinessAPI.Tests", "Tests\CSharpAmazonBusinessAPI.Tests\CSharpAmazonBusinessAPI.Tests.csproj", "{EA88C0C3-9B8E-4B25-97D5-0F4A7A7309C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpAmazonBusinessAPI.WebAuthSample", "CSharpAmazonBusinessAPI.WebAuthSample\CSharpAmazonBusinessAPI.WebAuthSample.csproj", "{7E47DE46-5665-414D-B476-DD8C187766C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,18 @@ Global
 		{EA88C0C3-9B8E-4B25-97D5-0F4A7A7309C5}.Release|x64.Build.0 = Release|Any CPU
 		{EA88C0C3-9B8E-4B25-97D5-0F4A7A7309C5}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA88C0C3-9B8E-4B25-97D5-0F4A7A7309C5}.Release|x86.Build.0 = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Debug|x86.Build.0 = Debug|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|x64.Build.0 = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{7E47DE46-5665-414D-B476-DD8C187766C3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
