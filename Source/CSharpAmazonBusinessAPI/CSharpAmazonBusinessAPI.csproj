@@ -4,8 +4,32 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Label="NuGet">
+    <PackageId>CSharpAmazonBusinessAPI</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Tareq Abuzuhri</Authors>
+    <Company>Tareq Abuzuhri</Company>
+    <Title>Amazon Business API for .NET</Title>
+    <Description>.NET C# client for the Amazon Business API. Wraps all 9 REST APIs (Document, Cart, Ordering, Product Search, Reconciliation, Reporting v2025-06-09 + v2021-01-08, User Management, Package Tracking, Application Management) behind a single AmazonBusinessConnection. Handles LWA token refresh, rate-limit retry, regional endpoint routing, sandbox toggle, and OAuth onboarding.</Description>
+    <PackageTags>amazon-business;amazon;business;api;rest;sdk;client;oauth;lwa;b2b;procurement</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/abuzuhri/Amazon-Business-API-CSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/abuzuhri/Amazon-Business-API-CSharp.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>See CHANGELOG.md at https://github.com/abuzuhri/Amazon-Business-API-CSharp/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <Copyright>Copyright (c) 2023 Tareq Abuzuhri</Copyright>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="CSharpAmazonBusinessAPI.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

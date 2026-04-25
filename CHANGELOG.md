@@ -2,6 +2,8 @@
 
 All notable changes to **CSharpAmazonBusinessAPI** are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project will adhere to [Semantic Versioning](https://semver.org/) once a `1.0` is tagged.
 
+> **Release process:** bump `<Version>` in `Source/CSharpAmazonBusinessAPI/CSharpAmazonBusinessAPI.csproj`, move the `[Unreleased]` block under a new dated heading, then `git tag vX.Y.Z && git push --tags`. The `Release` workflow (`.github/workflows/nuget.yml`) packs and pushes to nuget.org on tag push.
+
 ## [Unreleased]
 
 This release brings the library from a stub (only the Reports/Document spec wired) to **full coverage of all 9 Amazon Business REST APIs**, with auth + retry + logging + onboarding helpers and 41 unit tests / 8 sandbox integration tests.
