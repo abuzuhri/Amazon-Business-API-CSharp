@@ -1,15 +1,10 @@
 # ☕Amazon Business API C# 🚀 [![.NET](https://github.com/abuzuhri/Amazon-Business-API-CSharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/abuzuhri/Amazon-Business-API-CSharp/actions/workflows/dotnet.yml) [![NuGet](https://img.shields.io/nuget/v/CSharpAmazonBusinessAPI.svg)](https://www.nuget.org/packages/CSharpAmazonBusinessAPI/) 
 
-.Net C# library for the Amazon Business API
+.NET C# library for the [Amazon Business API](https://developer-docs.amazon.com/amazon-business/docs). Wraps all 9 REST APIs (Document, Cart, Ordering, Product Search, Reconciliation, Reporting v2025-06-09 + v2021-01-08, User Management, Package Tracking, Application Management) behind a single `AmazonBusinessConnection`. LWA token refresh, rate-limit retry, regional endpoint routing, sandbox toggle, and debug logging are handled for you.
 
-This is an API Binding in .Net C# for the [Amazon Business API](https://developer-docs.amazon.com/amazon-business/docs).
+The generated clients are produced by [NSwag](https://github.com/RicoSuter/NSwag) from Amazon's published OpenAPI specs ([fetched](scripts/fetch_spec.py) verbatim from `developer-docs.amazon.com`); the wrapper layer hides the per-spec type duplication so callers see `Country.US` instead of NSwag-generated `Region2`/`Region3`/etc.
 
-This library is based on the output of [swagger-codegen](https://app.swaggerhub.com/home) with the [OpenAPI files provided by Amazon (Models)](https://developer-docs.amazon.com/amazon-business/docs/document-api-v1-model) and has been modified by the contributors.
-
-The purpose of this package is to have an easy way of getting started with the Amazon Business API using C#
-
-
-
+**Contents** — [Quick start](#quick-start) · [Configuration](#configuration) · [Service surface](#amazonbusinessconnection-exposes-one-property-per-api-surface) · [Onboarding (OAuth consent)](#onboard-a-customer-oauth-consent--refresh-token) · [Roles](#roles-required-per-api) · [Status](#status--roadmap)
 
 ---
 ## Installation [![NuGet](https://img.shields.io/nuget/v/CSharpAmazonBusinessAPI.svg)](https://www.nuget.org/packages/CSharpAmazonBusinessAPI/)
@@ -18,8 +13,28 @@ The purpose of this package is to have an easy way of getting started with the A
 Install-Package CSharpAmazonBusinessAPI
 ```
 
+## Quick start
 
-### Tasks
+```csharp
+using CSharpAmazonBusinessAPI;
+using CSharpAmazonBusinessAPI.Utils;
+
+var connection = new AmazonBusinessConnection(new AmazonBusinessCredential
+{
+    ClientId     = "amzn1.application-oa2-client.XXXX",
+    ClientSecret = "XXXX",
+    RefreshToken = "Atzr|XXXX",
+    MarketPlace  = MarketPlace.UnitedStates,
+});
+
+// First call — token refresh, regional host, auth header are all handled.
+var reports = await connection.Documents.GetReportsAsync(
+    createdSince: DateTime.UtcNow.AddDays(-7));
+```
+
+See [Configuration](#configuration) for proxy / sandbox / debug-logging options, [Onboard a customer](#onboard-a-customer-oauth-consent--refresh-token) for the OAuth consent flow used during one-time customer onboarding, and `Source/CSharpAmazonBusinessAPI.SampleCode/` for a per-API sample for every wrapper.
+
+## Status & roadmap
 
 The roadmap below covers the full Amazon Business developer surface ([docs index](https://developer-docs.amazon.com/amazon-business/docs)) and mirrors the structure used in the sister [Amazon-SP-API-CSharp](https://github.com/abuzuhri/Amazon-SP-API-CSharp) project. Foundation work is required before the per-API service wrappers can be built.
 
@@ -28,7 +43,7 @@ The roadmap below covers the full Amazon Business developer surface ([docs index
 - [x] **`AmazonBusinessCredential`** — LWA-only (`ClientId`, `ClientSecret`, `RefreshToken`, `MarketPlace` / `MarketPlaceID`, optional `Proxy`, `IsDebugMode`, `Environment`). No AWS keys.
 - [x] **LWA token pipeline** — `LwaClient` POSTs to `https://api.amazon.com/auth/o2/token`; per-credential `AccessTokenCache` (thread-safe via `SemaphoreSlim`, refreshes 60s before expiry); `LwaAuthHandler` `DelegatingHandler` injects `x-amz-access-token` and retries once on 401.
 - [x] **LWA client-secret rotation** — `AmazonBusinessCredential.RotateClientSecret(newSecret)` swaps the secret in place and invalidates the cache so the next call re-exchanges.
-- [x] **`AmazonBusinessConnection` facade** — validates credentials, resolves `MarketPlaceID` → `MarketPlace`, builds a configured `HttpClient`, exposes API services (currently `Reports`).
+- [x] **`AmazonBusinessConnection` facade** — validates credentials, resolves `MarketPlaceID` → `MarketPlace`, builds a configured `HttpClient`, exposes one property per API surface (`Documents`, `Cart`, `Ordering`, `ProductSearch`, `Reconciliation`, `Reporting`, `ReportingLegacy`, `PackageTracking`, `Users`, `Applications`).
 - [x] **HTTP layer for NSwag-generated clients** — chained handlers `RateLimit → Auth → Debug → HttpClientHandler` wrap a shared `HttpClient` whose `BaseAddress` comes from `MarketPlace.Region`. Generated clients consume the `HttpClient` in their constructor.
 - [x] **Exception types** — `AmazonBusinessException` base + `Unauthorized`, `InvalidInput`, `NotFound`, `QuotaExceeded`, `InternalError` subclasses. Each carries `StatusCode` + `ResponseBody`.
 - [x] **Rate-limit handling** — `RateLimitHandler` `DelegatingHandler` honors `Retry-After` (delta or HTTP-date), exponential-backoff fallback, capped by `MaxThrottledRetryCount`; throws `AmazonBusinessQuotaExceededException` if exhausted.
@@ -37,7 +52,7 @@ The roadmap below covers the full Amazon Business developer surface ([docs index
 
 #### API surfaces
 
-Each API needs: (1) OpenAPI spec dropped into `Source/CSharpAmazonBusinessAPI/OpenAPIs/`, (2) a new `<OpenApiReference>` entry in the csproj, (3) a hand-written `*Service` wrapper exposed off `AmazonConnection`, (4) examples in the sample app, (5) sandbox-mode tests.
+Each API has: (1) OpenAPI spec under `Source/CSharpAmazonBusinessAPI/OpenAPIs/` (fetched by `scripts/fetch_spec.py`), (2) an `<OpenApiReference>` entry in the csproj, (3) a hand-written `*Service` wrapper exposed off `AmazonBusinessConnection`, (4) a sample under `Source/CSharpAmazonBusinessAPI.SampleCode/`, (5) sandbox-mode tests under `Source/Tests/`.
 
 - [x] **[Application Management API v1](https://developer-docs.amazon.com/amazon-business/docs/application-management-api-reference)** — wired as `connection.Applications`. Single op (`RotateApplicationClientSecretAsync`) triggers Amazon to deliver a new LWA client secret to the developer's registered SQS queue.
 - [x] **[Cart API v1](https://developer-docs.amazon.com/amazon-business/docs/cart-api-v1-reference)** — wired as `connection.Cart`. All 7 operations exposed (List/Get/AddItems/ModifyItems/DeleteItems/GetItems/EstimateCost). [Overview](https://developer-docs.amazon.com/amazon-business/docs/cart-api-overview) · [model](https://developer-docs.amazon.com/amazon-business/docs/cart-api-model) · [sandbox](https://developer-docs.amazon.com/amazon-business/docs/cart-api-static-sandbox-guide).
@@ -69,35 +84,34 @@ Each API needs: (1) OpenAPI spec dropped into `Source/CSharpAmazonBusinessAPI/Op
 
 #### Workflows & integrations
 - [x] **REST cross-API sample** — see [`CartToOrderSample.cs`](Source/CSharpAmazonBusinessAPI.SampleCode/CartToOrderSample.cs) for Product Search → Cart → Ordering. *Note:* Amazon's [Integrated Quoting workflow](https://developer-docs.amazon.com/amazon-business/docs/integrated-quoting) is a separate cXML/cert-auth integration, not a REST workflow — it's out of scope for this SDK.
-- [ ] **[Amazon Business Punch-in](https://developer-docs.amazon.com/amazon-business/docs/punch-in-integration-guide)** — procurement-system handoff. Likely a separate helper class rather than a generated client.
-- [ ] **[App Center authorization workflow](https://developer-docs.amazon.com/amazon-business/docs/app-center-authorization-workflow)** — distinct from Solution Provider Portal; needed for apps listed in [App Center](https://developer-docs.amazon.com/amazon-business/docs/what-is-amazon-business-app-center).
-- [ ] **[Third-party website authorization](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow)** — alternate consent flow; document side-by-side with the standard flow.
-- [ ] **[Amazon Business Integrations MCP Server](https://developer-docs.amazon.com/amazon-business/docs/amazon-business-integrations-mcp-server)** — out of scope for the SDK itself, but worth a pointer in the README so users discover it.
+- [x] **[Third-party website authorization](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow)** — `LwaConsentHelper.BuildAuthorizationUrl()` + `ExchangeCodeForTokensAsync()`. Use during one-time onboarding to collect a customer's refresh token, then persist it for `AmazonBusinessCredential`.
+- [x] **[App Center authorization workflow](https://developer-docs.amazon.com/amazon-business/docs/app-center-authorization-workflow)** — same `LwaConsentHelper.ExchangeCodeForTokensAsync()` covers the LWA token-exchange step. The Amazon-initiated callback dance (`amazon_callback_uri`, `amazon_state` echoing) is server-side handler code your app implements.
+- [ ] ~~Punch-in~~ — **out of scope** (server-side cXML/SOAP-style endpoint your e-procurement system hosts, with TLS certs / shared-secret auth — same situation as Integrated Quoting). See [Punch-in integration guide](https://developer-docs.amazon.com/amazon-business/docs/punch-in-integration-guide) if you need to integrate the e-procurement side.
+- [x] **[Amazon Business Integrations MCP Server](https://developer-docs.amazon.com/amazon-business/docs/amazon-business-integrations-mcp-server)** — Amazon-hosted MCP server for AI assistants. Out of scope for the SDK; mentioned here for discoverability.
 
 #### Sample app & tests
-- [ ] Replace the `Hello, World!` stub in `CSharpAmazonBusinessAPI.SampleCode/Program.cs` with runnable examples per API.
-- [x] **`Tests/CSharpAmazonBusinessAPI.Tests`** — xUnit, 35 unit tests + 4 sandbox integration tests.
-  - **Unit:** `MarketPlace` lookup + regional routing, `AmazonBusinessConnection` validation/marketplace resolution, `AccessTokenCache` (caching, invalidation, concurrent refresh, LWA failure), `LwaAuthHandler` (header injection, cache reuse, 401 retry-once with fresh token), `RateLimitHandler` (429 retry, `Retry-After` delta + HTTP-date, exhaustion → `AmazonBusinessQuotaExceededException`), `RotateClientSecret` flow, `ApiException` shape.
-  - **Integration:** `SandboxIntegrationTests.cs` smoke-tests Documents, Reconciliation, ReportingLegacy, ProductSearch against the real sandbox. Skipped automatically when `AB_INTEGRATION_*` env vars aren't set; set them locally to exercise real wiring.
+- [x] **`SampleCode/Program.cs`** loads credentials from `appsettings.json` + User Secrets and prints the resolved region/host/marketplace. Live calls per API are pre-wired and commented — uncomment after dropping in real credentials.
+- [x] **`Tests/CSharpAmazonBusinessAPI.Tests`** — xUnit, 41 unit tests + 8 sandbox integration tests (read-only).
+  - **Unit:** `MarketPlace` lookup + regional routing, `AmazonBusinessConnection` validation/marketplace resolution, `AccessTokenCache` (caching, invalidation, concurrent refresh, LWA failure), `LwaAuthHandler` (header injection, cache reuse, 401 retry-once with fresh token), `RateLimitHandler` (429 retry, `Retry-After` delta + HTTP-date, exhaustion → `AmazonBusinessQuotaExceededException`), `RotateClientSecret` flow, `ApiException` shape, `LwaConsentHelper` URL-builder + arg validation.
+  - **Integration:** `SandboxIntegrationTests.cs` smoke-tests Documents, Reconciliation, ReportingLegacy, Reporting (GetOrderReports / GetShipmentReports), ProductSearch, Cart, PackageTracking against the real sandbox. Skipped automatically when `AB_INTEGRATION_*` env vars aren't set. **Destructive ops** (Ordering.PlaceOrder, Users.CreateBusinessUserAccount, Applications.RotateApplicationClientSecret) are intentionally not tested here — add a separate suite when you opt in.
   - Run with `dotnet test` (or `dotnet test --filter Category=Integration` for just the sandbox tests).
 - [x] [Amazon Business roles](https://developer-docs.amazon.com/amazon-business/docs/amazon-business-roles) reference — see the *Roles required per API* table in the [Usage](#usage) section. Roles are requested via the Developer Registration Access Form (DRAF) at app creation; the API surface won't authorize without the matching role.
 
 ---
 ## Keys
-To get all keys needed you need to follow this step [Creating and configuring IAM policies and entities](https://developer-docs.amazon.com/amazon-business/docs/authorization-workflow) and then you need to [Registering your Application](https://developer-docs.amazon.com/amazon-business/docs/register-as-a-developer) then [Authorizing applications
-](https://developer-docs.amazon.com/amazon-business/docs/create-app-client)
-> :warning: **Use role ARN and dont use IAM user**
 
+Amazon Business uses **Login with Amazon (LWA) only** — no AWS IAM, no STS, no role ARN. Onboarding flow:
 
-| Name | Description |
+1. [Register as a developer](https://developer-docs.amazon.com/amazon-business/docs/register-as-a-developer) and request the [roles](#roles-required-per-api) your app needs (Developer Registration Access Form).
+2. [Create an app client](https://developer-docs.amazon.com/amazon-business/docs/create-app-client) in the Solution Provider Portal — you'll receive a `ClientId` + `ClientSecret`.
+3. [Authorize your app](https://developer-docs.amazon.com/amazon-business/docs/generate-refresh-token) (or use the [website-authorization workflow](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow)) to obtain a long-lived `RefreshToken` per Amazon Business customer.
+
+| Field | Description |
 | --- | --- |
-| Region | Marketplace region [List of Marketplaces](https://developer-docs.amazon.com/amazon-business/docs/marketplace-ids)|
-| ClientId | Your amazon app id |
-| ClientSecret | Your amazon app secret |
-| RefreshToken | Check how to get [RefreshToken](https://developer-docs.amazon.com/amazon-business/docs/website-authorization-workflow) |
-
-
-For more information about keys please check [New Amazon doc for create keys Developer ](https://developer-docs.amazon.com/) , If you are not registered as developer please [Register](https://developercentral.amazon.com/) to be able to create application. 
+| `MarketPlace` / `MarketPlaceID` | Target marketplace ([list](https://developer-docs.amazon.com/amazon-business/docs/marketplace-ids)). Determines regional endpoint (NA/EU/FE). |
+| `ClientId` | Your app's `amzn1.application-oa2-client.…` ID. |
+| `ClientSecret` | Your app's secret (rotatable — see [LWA client-secret rotation](#lwa-client-secret-rotation)). |
+| `RefreshToken` | Long-lived token issued per customer after consent. Exchanged for a 1-hour access token automatically by the SDK. |
 
 
 ## Usage
@@ -146,6 +160,27 @@ var connection = new AmazonBusinessConnection(new AmazonBusinessCredential
         Credentials = new System.Net.NetworkCredential("username", "password"),
     },
 });
+```
+
+### Onboard a customer (OAuth consent → refresh token)
+For SaaS apps and App Center listings: send the customer to Amazon's consent page, then exchange the returned `code` for a long-lived `refresh_token` and persist it.
+
+```csharp
+// 1. Generate a CSRF token, then redirect the customer's browser here:
+var url = LwaConsentHelper.BuildAuthorizationUrl(
+    clientId:    "amzn1.application-oa2-client.XXXX",
+    redirectUri: "https://my.app/oauth/callback",
+    state:       Guid.NewGuid().ToString());
+
+// 2. On callback, verify state matches, then exchange the code:
+var tokens = await LwaConsentHelper.ExchangeCodeForTokensAsync(
+    code:         queryParams["code"],
+    clientId:     "amzn1.application-oa2-client.XXXX",
+    clientSecret: "...",
+    redirectUri:  "https://my.app/oauth/callback");
+
+// 3. Persist tokens.RefreshToken for this customer; pass it to AmazonBusinessCredential
+//    going forward. (The access_token expires in 1h — the SDK handles renewal automatically.)
 ```
 
 ### LWA client-secret rotation
@@ -218,31 +253,25 @@ var transactions = await connection.Reconciliation.GetTransactionsAsync(
 ### Package Tracking
 For more, see [`PackageTrackingSample.cs`](Source/CSharpAmazonBusinessAPI.SampleCode/PackageTrackingSample.cs).
 ```csharp
+// Country defaults from the connection's marketplace.
 var details = await connection.PackageTracking.GetPackageTrackingDetailsAsync(
     orderId:    "114-2589187-9801025",
     shipmentId: "401971789238301",
-    packageId:  "1",
-    region:     Region.US);
+    packageId:  "1");
 ```
 
 ### Product Search
-For more, see [`ProductSearchSample.cs`](Source/CSharpAmazonBusinessAPI.SampleCode/ProductSearchSample.cs). The 5 ops have very wide parameter lists — call `.Client` directly.
+For more, see [`ProductSearchSample.cs`](Source/CSharpAmazonBusinessAPI.SampleCode/ProductSearchSample.cs). The two most common ops have wrappers; the other three (`SearchOffersRequest`, `GetProductsByAsins`, `GetOffersByOfferIds`) are reachable via `.Client`.
 ```csharp
-var results = await connection.ProductSearch.Client.SearchProductsRequestAsync(
-    keywords: "office chair",
-    productRegion: ProductRegion.US,
-    shippingRegion: null, locale: "en_US", shippingPostalCode: null,
-    facets: null, pageNumber: 0, pageSize: 24,
-    groupTag: null, category: null, subCategory: null,
-    availability: "InStockOnly",
-    deliveryDay: null, eligibleForFreeShipping: null, primeEligible: null,
-    upc: null, isbn: null, sku: null, ean: null,
-    partNumber: null, oemPartNumber: null,
-    searchRefinements: null, productFilters: null,
-    x_amz_user_email: "buyer@example.com",
-    inclusionsForProducts: null, inclusionsForOffers: null,
-    sortKey: SortKey.RELEVANCE,
-    minPrice: null, maxPrice: null);
+var results = await connection.ProductSearch.SearchProductsAsync(
+    keywords:      "office chair",
+    customerEmail: "buyer@example.com",
+    pageSize:      24,
+    sortKey:       SortKey.RELEVANCE);
+
+var product = await connection.ProductSearch.GetProductByAsinAsync(
+    asin:          "B07HMBFZCZ",
+    customerEmail: "buyer@example.com");
 ```
 
 ### Other surfaces
