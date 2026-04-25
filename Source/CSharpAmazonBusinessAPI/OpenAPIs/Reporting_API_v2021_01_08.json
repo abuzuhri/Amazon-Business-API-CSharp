@@ -1,0 +1,1515 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Amazon Business API for Order History",
+    "version": "2021-01-08",
+    "description": "With Amazon Business API for Order History, you can analyze your order and supplier data, track shipments, and track progress towards your spending goals.",
+    "license": {
+      "name": "Amazon Software License",
+      "url": "https://aws.amazon.com/asl/"
+    }
+  },
+  "externalDocs": {
+    "description": "Learn more about the Amazon Business API.",
+    "url": "http://business.amazon.com"
+  },
+  "host": "api.business.amazon.com",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/reports/2021-01-08/orders": {
+      "get": {
+        "description": "Returns a paginated list of orders with order dates that fall within the date range that you specify. You can optionally retrieve lineItem, charges, and shipments for these orders.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getOrdersByOrderDate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "date-time",
+            "description": "The lower limit for the search range. This date represents the order date."
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size (100). To get the next page of results, include nextPageToken as the only parameter. There are no more pages to return when the response returns no nextPageToken. This token needs to be encoded."
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "date-time",
+            "description": "The upper limit for the search range. This date represents the order date."
+          },
+          {
+            "name": "includeLineItems",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all line items associated with the order."
+          },
+          {
+            "name": "includeShipments",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all shipments associated with the order."
+          },
+          {
+            "name": "includeCharges",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all charges associated with the order."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders were successfully retrieved.",
+            "schema": {
+              "$ref": "#/definitions/OrdersOutput"
+            },
+            "x-amzn-api-sandbox": [
+              {
+                "request": {
+                  "parameters": {
+                    "startDate": {
+                      "value": "2020-12-01T00:00:00"
+                    },
+                    "endDate": {
+                      "value": "2020-12-01T23:00:00"
+                    }
+                  }
+                },
+                "response": {
+                  "orders": [
+                    {
+                      "orderDate": "2020-12-01T01:55:00Z",
+                      "orderId": "112-1248174-0174665",
+                      "purchaseOrderNumber": "[purchaseOrderNumber]",
+                      "orderQuantity": 0,
+                      "orderStatus": "CANCELLED",
+                      "orderSubTotal": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderShippingAndHandling": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderPromotion": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderTax": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderNetTotal": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "lastOrderApproverName": "[lastOrderApproverName]",
+                      "buyingCustomer": {
+                        "id": "[EMPTY]",
+                        "email": "[buyingCustomer@example.com]",
+                        "name": "[buyingCustomerName]"
+                      },
+                      "buyerGroupName": "[buyerGroupName]",
+                      "businessOrderInfo": {
+                        "glCode": "[glCode]",
+                        "costCenter": "[costCenter]",
+                        "location": "[location]",
+                        "projectCode": "[projectCode]",
+                        "department": "[department]",
+                        "customField": "[customValue]"
+                      },
+                      "lineItems": [
+                        {
+                          "productCategory": "[productCategory]",
+                          "asin": "[productAsin]",
+                          "title": "[productTitle]",
+                          "unspsc": "[unspsc]",
+                          "productCondition": "New",
+                          "listedPricePerUnit": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "purchasedPricePerUnit": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemQuantity": 3,
+                          "itemSubTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemShippingAndHandling": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemPromotion": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemTax": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemNetTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "purchaseOrderLineItem": "[purchaseOrderLineItem]",
+                          "taxExemptionApplied": true,
+                          "taxExemptionType": "[taxExemptionType]",
+                          "taxExemptOptOut": false,
+                          "discountProgram": "[discountProgram]",
+                          "discountType": "[discountType]",
+                          "discountAmount": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "discountRatio": "0.1",
+                          "seller": {
+                            "sellerName": "[sellerName]",
+                            "sellerPrimaryAddress": {
+                              "addressLine1": "11501 Alterra Pkwy, Austin, TX 78758",
+                              "addressLine2": null,
+                              "city": "[sellerCity]",
+                              "state": "[sellerState]",
+                              "postalCode": "[sellerPostalCode]",
+                              "countryCode": "[sellerCountryCode]"
+                            },
+                            "sellerCity": "[sellerCity]",
+                            "sellerState": "[sellerState]",
+                            "sellerPostalCode": "[sellerPostalCode]"
+                          },
+                          "sellerCredentials": [
+                            "[sellerCredential]"
+                          ],
+                          "sellerCredentialDetails": [
+                            {
+                              "certificateType": "[Certificate]",
+                              "certifyingAgenciesDetails": [
+                                {
+                                  "certifyingAgencyName": "[IssuingAgency]",
+                                  "certificateExpirationDate": "2025-12-15T15:14:02Z"
+                                }
+                              ]
+                            }
+                          ],
+                          "brandCode": "[brandCode]",
+                          "brandName": "[brandName]",
+                          "manufacturerName": "[manufacturerName]",
+                          "transactionIds": [
+                            "[transactionId]"
+                          ],
+                          "carrierTrackingNumbers": [
+                            "[carrierTrackingNumber]"
+                          ]
+                        }
+                      ],
+                      "shipments": [
+                        {
+                          "shipmentDate": "2020-12-15T15:14:02Z",
+                          "shipmentStatus": "SHIPPED",
+                          "carrierTracking": "[carrierTracking]",
+                          "deliveryInformation": {
+                            "expectedDeliveryDate": "2020-12-15T15:14:02Z",
+                            "deliveryStatus": "DELIVERED"
+                          },
+                          "shipmentQuantity": 1,
+                          "shipmentSubTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentShippingAndHandling": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentPromotion": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentTax": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentNetTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "carrierName": "[carrierName]",
+                          "shippingAddress": {
+                            "addressLine1": "[addressLine1]",
+                            "addressLine2": "[addressLine2]",
+                            "city": "[shippingCity]",
+                            "state": "[shippingState]",
+                            "postalCode": "[shippingPostalCode]",
+                            "countryCode": "[shippingCountryCode]"
+                          }
+                        }
+                      ],
+                      "charges": [
+                        {
+                          "transactionDate": "2020-12-15T15:14:02Z",
+                          "transactionId": "[transactionId]",
+                          "amount": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "paymentInstrumentType": "[paymentInstrumentType]",
+                          "paymentInstrumentLast4Digits": "[paymentInstrumentLast4Digits]"
+                        }
+                      ]
+                    }
+                  ],
+                  "nextPageToken": "[nextPageToken]",
+                  "size": 1
+                }
+              }
+            ],
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestid": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "The request has missing or invalid parameters and can't be parsed.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": [
+              {
+                "request": {
+                  "parameters": {
+                    "startDate": {
+                      "value": "2020-12-01T00:00:00"
+                    },
+                    "endDate": {
+                      "value": "2020-08-01T00:00:00"
+                    }
+                  }
+                },
+                "response": {
+                  "errors": [
+                    {
+                      "code": "INVALID_REQUEST_PARAMETER",
+                      "message": "Bad number of query parameters. Please specify either a date range or a purchase order number."
+                    }
+                  ]
+                }
+              }
+            ],
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "The request's authorization header isn't formatted correctly or doesn't contain a valid token.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The specified resource doesn't exist.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "504": {
+            "description": "A gateway timeout occurred.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/2021-01-08/orders/{orderId}": {
+      "get": {
+        "description": "API to fetch details for a specific order based on order identifier. You can optionally retrieve lineItem, charges, and shipments for this order.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getOrdersByOrderId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The unique identifier for an order to get the corresponding order details."
+          },
+          {
+            "name": "includeLineItems",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all line items associated with the order."
+          },
+          {
+            "name": "includeShipments",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all shipments associated with the order."
+          },
+          {
+            "name": "includeCharges",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "An option to get all charges associated with the order."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders were successfully retrieved.",
+            "schema": {
+              "$ref": "#/definitions/OrdersOutput"
+            },
+            "x-amzn-api-sandbox": [
+              {
+                "request": {
+                  "parameters": {
+                    "orderId": {
+                      "value": "114-7470804-5505847"
+                    }
+                  }
+                },
+                "response": {
+                  "orders": [
+                    {
+                      "orderDate": "2020-12-01T01:55:00Z",
+                      "orderId": "112-1248174-0174665",
+                      "purchaseOrderNumber": "[purchaseOrderNumber]",
+                      "orderQuantity": 0,
+                      "orderStatus": "CANCELLED",
+                      "orderSubTotal": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderShippingAndHandling": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderPromotion": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderTax": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "orderNetTotal": {
+                        "currencyCode": "USD",
+                        "amount": "0"
+                      },
+                      "lastOrderApproverName": "[lastOrderApproverName]",
+                      "buyingCustomer": {
+                        "id": "[EMPTY]",
+                        "email": "[buyingCustomer@example.com]",
+                        "name": "[buyingCustomerName]"
+                      },
+                      "buyerGroupName": "[buyerGroupName]",
+                      "businessOrderInfo": {
+                        "glCode": "[glCode]",
+                        "costCenter": "[costCenter]",
+                        "location": "[location]",
+                        "projectCode": "[projectCode]",
+                        "department": "[department]",
+                        "customField": "[customValue]"
+                      },
+                      "lineItems": [
+                        {
+                          "productCategory": "[productCategory]",
+                          "asin": "[productAsin]",
+                          "title": "[productTitle]",
+                          "unspsc": "[unspsc]",
+                          "productCondition": "New",
+                          "listedPricePerUnit": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "purchasedPricePerUnit": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemQuantity": 3,
+                          "itemSubTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemShippingAndHandling": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemPromotion": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemTax": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "itemNetTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "purchaseOrderLineItem": "[purchaseOrderLineItem]",
+                          "taxExemptionApplied": true,
+                          "taxExemptionType": "[taxExemptionType]",
+                          "taxExemptOptOut": false,
+                          "discountProgram": "[discountProgram]",
+                          "discountType": "[discountType]",
+                          "discountAmount": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "discountRatio": "0.1",
+                          "seller": {
+                            "sellerName": "[sellerName]",
+                            "sellerPrimaryAddress": {
+                              "addressLine1": "11501 Alterra Pkwy, Austin, TX 78758",
+                              "addressLine2": null,
+                              "city": "[sellerCity]",
+                              "state": "[sellerState]",
+                              "postalCode": "[sellerPostalCode]",
+                              "countryCode": "[sellerCountryCode]"
+                            },
+                            "sellerCity": "[sellerCity]",
+                            "sellerState": "[sellerState]",
+                            "sellerPostalCode": "[sellerPostalCode]"
+                          },
+                          "sellerCredentials": [
+                            "[sellerCredential]"
+                          ],
+                          "sellerCredentialDetails": [
+                            {
+                              "certificateType": "[Certificate]",
+                              "certifyingAgenciesDetails": [
+                                {
+                                  "certifyingAgencyName": "[IssuingAgency]",
+                                  "certificateExpirationDate": "2025-12-15T15:14:02Z"
+                                }
+                              ]
+                            }
+                          ],
+                          "brandCode": "[brandCode]",
+                          "brandName": "[brandName]",
+                          "manufacturerName": "[manufacturerName]",
+                          "transactionIds": [
+                            "[transactionId]"
+                          ],
+                          "carrierTrackingNumbers": [
+                            "[carrierTrackingNumber]"
+                          ]
+                        }
+                      ],
+                      "shipments": [
+                        {
+                          "shipmentDate": "2020-12-15T15:14:02Z",
+                          "shipmentStatus": "SHIPPED",
+                          "carrierTracking": "[carrierTracking]",
+                          "deliveryInformation": {
+                            "expectedDeliveryDate": "2020-12-15T15:14:02Z",
+                            "deliveryStatus": "DELIVERED"
+                          },
+                          "shipmentQuantity": 1,
+                          "shipmentSubTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentShippingAndHandling": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentPromotion": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentTax": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "shipmentNetTotal": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "carrierName": "[carrierName]",
+                          "shippingAddress": {
+                            "addressLine1": "[addressLine1]",
+                            "addressLine2": "[addressLine2]",
+                            "city": "[shippingCity]",
+                            "state": "[shippingState]",
+                            "postalCode": "[shippingPostalCode]",
+                            "countryCode": "[shippingCountryCode]"
+                          }
+                        }
+                      ],
+                      "charges": [
+                        {
+                          "transactionDate": "2020-12-15T15:14:02Z",
+                          "transactionId": "[transactionId]",
+                          "amount": {
+                            "currencyCode": "USD",
+                            "amount": "0"
+                          },
+                          "paymentInstrumentType": "[paymentInstrumentType]",
+                          "paymentInstrumentLast4Digits": "[paymentInstrumentLast4Digits]"
+                        }
+                      ]
+                    }
+                  ],
+                  "nextPageToken": "[nextPageToken]",
+                  "size": 1
+                }
+              }
+            ],
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestid": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "The request has missing or invalid parameters and can't be parsed.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": [
+              {
+                "request": {
+                  "parameters": {}
+                },
+                "response": {
+                  "errors": [
+                    {
+                      "code": "INVALID_REQUEST_PARAMETER",
+                      "message": "Bad number of query parameters. Please specify either a date range or a purchase order number."
+                    }
+                  ]
+                }
+              }
+            ],
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The specified resource doesn't exist.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          },
+          "504": {
+            "description": "A gateway timeout occurred.",
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "Your rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-requestId": {
+                "description": "Amazon auto-generated unique request reference identifier.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Money": {
+      "description": "The monetary value.",
+      "type": "object",
+      "required": [
+        "currencyCode",
+        "amount"
+      ],
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-digit currency code in ISO 4217 format."
+        },
+        "amount": {
+          "type": "string",
+          "description": "The currency amount."
+        }
+      }
+    },
+    "Order": {
+      "description": "The response schema for the getOrdersByDates and getOrdersById operations.",
+      "type": "object",
+      "required": [
+        "orderDate",
+        "orderId",
+        "purchaseOrderNumber",
+        "orderQuantity",
+        "orderStatus",
+        "lastOrderApproverName",
+        "buyingCustomer",
+        "buyerGroupName",
+        "orderSubTotal",
+        "orderShippingAndHandling",
+        "orderPromotion",
+        "orderTax",
+        "orderNetTotal",
+        "businessOrderInfo"
+      ],
+      "properties": {
+        "orderDate": {
+          "description": "The date when the order was placed.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderId": {
+          "description": "Amazon auto-generated identifier for the order.",
+          "type": "string"
+        },
+        "purchaseOrderNumber": {
+          "description": "The Purchase Order Number assigned to the order.",
+          "type": "string"
+        },
+        "orderQuantity": {
+          "description": "The item quantity relevant to this order.",
+          "type": "integer"
+        },
+        "orderStatus": {
+          "description": "The status of the order.",
+          "type": "string",
+          "enum": [
+            "Pending Approval",
+            "Payment Confirmed",
+            "Pending Fulfillment",
+            "Pending",
+            "Cancelled",
+            "Closed"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "Pending Approval",
+              "description": "The order has been submitted for approval."
+            },
+            {
+              "value": "Payment Confirmed",
+              "description": "The payment information has been collected by Amazon Business. This doesn't mean that payment has been authorized by the bank or that Amazon Business have the collected funds."
+            },
+            {
+              "value": "Pending Fulfillment",
+              "description": "The order is due for fulfillment."
+            },
+            {
+              "value": "Pending",
+              "description": "The order details are being processed by Amazon Business."
+            },
+            {
+              "value": "Cancelled",
+              "description": "The order has been cancelled either by the buyer or by Amazon Business."
+            },
+            {
+              "value": "Closed",
+              "description": "The order has been delivered to the buyer and closed."
+            }
+          ]
+        },
+        "lastOrderApproverName": {
+          "description": "The name of the last person who approved the order.",
+          "type": "string"
+        },
+        "buyingCustomer": {
+          "description": "The requisitioner or buyer who placed the order.",
+          "$ref": "#/definitions/Customer"
+        },
+        "buyerGroupName": {
+          "description": "The group within the business from which the order was placed.",
+          "type": "string"
+        },
+        "businessOrderInfo": {
+          "type": "object",
+          "description": "Additional information provided at checkout.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "orderSubTotal": {
+          "description": "The principal amount on the order. This only includes the price and excludes shipping, taxes, or discounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "orderShippingAndHandling": {
+          "description": "The total shipping charges on the order. This excludes shipment tax and discounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "orderPromotion": {
+          "description": "The total discount on the order. This includes discounts on items and shipping. We don't show shipping discounts separately for each individual order.",
+          "$ref": "#/definitions/Money"
+        },
+        "orderTax": {
+          "description": "The total taxes for the order.",
+          "$ref": "#/definitions/Money"
+        },
+        "orderNetTotal": {
+          "description": "The total amount charged for the order.",
+          "$ref": "#/definitions/Money"
+        },
+        "lineItems": {
+          "description": "The items in the order.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LineItem"
+          }
+        },
+        "shipments": {
+          "description": "The shipments in the order.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Shipment"
+          }
+        },
+        "charges": {
+          "description": "The charges for the order.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        }
+      }
+    },
+    "Charge": {
+      "description": "The charged amount and the payment details for the order.",
+      "type": "object",
+      "required": [
+        "transactionDate",
+        "transactionId",
+        "amount",
+        "paymentInstrumentType",
+        "paymentInstrumentLast4Digits"
+      ],
+      "properties": {
+        "transactionDate": {
+          "description": "The date when the payment was processed.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "transactionId": {
+          "description": "The transaction reference identifier for the transaction.",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The amount charged for a particular transaction. This is the amount for which Amazon received an authorization if the transaction isn’t settled yet.",
+          "$ref": "#/definitions/Money"
+        },
+        "paymentInstrumentType": {
+          "description": "Credit card, Pay by Invoice, Bank Account, Reward Account.",
+          "type": "string"
+        },
+        "paymentInstrumentLast4Digits": {
+          "description": "The last 4 digits of the payment card used in the transaction. If Pay by Invoice was used, this value is null.",
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "description": "A customer with a role in a purchase such as buyer, payer, or approver.",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "[DEPRECATED: This field always returns an empty string.] The unique customer identifier internal to Amazon.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The customer's name.",
+          "type": "string"
+        },
+        "email": {
+          "description": "The customer's email address.",
+          "type": "string"
+        }
+      }
+    },
+    "OrdersOutput": {
+      "type": "object",
+      "description": "A paginated list of orders",
+      "required": [
+        "orders",
+        "nextPageToken",
+        "size"
+      ],
+      "properties": {
+        "orders": {
+          "description": "The orders for the orderId or given date range.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          }
+        },
+        "nextPageToken": {
+          "description": "A page token returned in the response to your previous request when the number of results exceed the page size (100). To get the next page of results, include nextPageToken as the only parameter. There are no more pages to return when the response returns no nextPageToken. This token needs to be encoded.",
+          "type": "string"
+        },
+        "size": {
+          "description": "The quantity of orders returned in the current response.",
+          "type": "integer"
+        }
+      }
+    },
+    "LineItem": {
+      "type": "object",
+      "description": "A line item in an order.",
+      "required": [
+        "productCategory",
+        "asin",
+        "title",
+        "unspsc",
+        "productCondition",
+        "listedPricePerUnit",
+        "purchasedPricePerUnit",
+        "itemQuantity",
+        "itemSubTotal",
+        "itemShippingAndHandling",
+        "itemPromotion",
+        "itemTax",
+        "itemNetTotal",
+        "purchaseOrderLineItem",
+        "taxExemptionApplied",
+        "taxExemptionType",
+        "taxExemptOptOut",
+        "discountProgram",
+        "discountType",
+        "discountAmount",
+        "discountRatio",
+        "seller",
+        "sellerCredentials",
+        "sellerCredentialDetails",
+        "brandCode",
+        "brandName",
+        "manufacturerName",
+        "transactionIds",
+        "carrierTrackingNumbers"
+      ],
+      "properties": {
+        "productCategory": {
+          "description": "The Amazon Business category for the product.",
+          "type": "string"
+        },
+        "asin": {
+          "description": "The Amazon Standard Identification Number (ASIN) for the product.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the product.",
+          "type": "string"
+        },
+        "unspsc": {
+          "description": "The United Nations Standard Products and Services Code for the product.",
+          "type": "string"
+        },
+        "productCondition": {
+          "description": "The condition of the product purchased such as new, used, or used good.",
+          "type": "string"
+        },
+        "listedPricePerUnit": {
+          "description": "The listed price for each unit.",
+          "$ref": "#/definitions/Money"
+        },
+        "purchasedPricePerUnit": {
+          "description": "The price for each purchased unit.",
+          "$ref": "#/definitions/Money"
+        },
+        "itemQuantity": {
+          "description": "The number of purchased item.",
+          "type": "integer"
+        },
+        "itemSubTotal": {
+          "description": "The base amount paid for an item. This excludes shipping and handling, tax, promotions, and discounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "itemShippingAndHandling": {
+          "description": "The base amount paid for shipping and handling an item. This excludes tax and discount amounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "itemPromotion": {
+          "description": "The total discounts and promotions applied to an item. This includes all discount components such as discount on price, shipping, gift wrapping, or other fees. This excludes tax.",
+          "$ref": "#/definitions/Money"
+        },
+        "itemTax": {
+          "description": "The tax charged for an item.",
+          "$ref": "#/definitions/Money"
+        },
+        "itemNetTotal": {
+          "description": "The total amount charged for an item. This includes shipping and handling, tax, discounts, and item price.",
+          "$ref": "#/definitions/Money"
+        },
+        "purchaseOrderLineItem": {
+          "description": "Applicable only to customers who are using Punchout.",
+          "type": "string"
+        },
+        "taxExemptionApplied": {
+          "description": "Indicates if tax exemption was applied.",
+          "type": "boolean"
+        },
+        "taxExemptionType": {
+          "description": "Specifies the type of tax exemption applied.",
+          "type": "string"
+        },
+        "taxExemptOptOut": {
+          "description": "Indicates if tax exemption was opted out.",
+          "type": "boolean"
+        },
+        "discountProgram": {
+          "description": "Negotiated Pricing or Quantity Discounts",
+          "type": "string"
+        },
+        "discountType": {
+          "description": "The type of discount applied.",
+          "type": "string"
+        },
+        "discountAmount": {
+          "description": "The discounted amount in currency.",
+          "$ref": "#/definitions/Money"
+        },
+        "discountRatio": {
+          "description": "The percentage discount.",
+          "type": "string"
+        },
+        "seller": {
+          "description": "The information about the selling merchant including name, city, state, and postal code.",
+          "$ref": "#/definitions/Seller"
+        },
+        "sellerCredentials": {
+          "description": "The seller's credentials or certifications such as minority-owned business or veteran-owned business.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sellerCredentialDetails": {
+          "type": "array",
+          "description": "The information about seller's credentials or certifications including certificate issuing agency name and certificate expiration.",
+          "items": {
+            "$ref": "#/definitions/SellerCredentialDetails"
+          }
+        },
+        "brandCode": {
+          "description": "The brand code provided by the vendor or seller.",
+          "type": "string"
+        },
+        "brandName": {
+          "description": "The brand provided by the vendor or seller.",
+          "type": "string"
+        },
+        "manufacturerName": {
+          "description": "The name of the manufacturer provided by the vendor or seller.",
+          "type": "string"
+        },
+        "transactionIds": {
+          "description": "The transaction reference identifiers.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "carrierTrackingNumbers": {
+          "description": "The tracking numbers from the shipment carrier.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Seller": {
+      "type": "object",
+      "description": "The information about the selling merchant including name, address, city, state, postal code and country code.",
+      "required": [
+        "sellerName"
+      ],
+      "properties": {
+        "sellerName": {
+          "description": "The name of the selling merchant.",
+          "type": "string"
+        },
+        "sellerPrimaryAddress": {
+          "description": "The primary physical address of a seller.",
+          "$ref": "#/definitions/SellerAddress"
+        },
+        "sellerCity": {
+          "description": "[DEPRECATED: Please use city in sellerPrimaryAddress instead] The city of the selling merchant.",
+          "type": "string"
+        },
+        "sellerState": {
+          "description": "[DEPRECATED: Please use state in sellerPrimaryAddress instead] The state of the selling merchant.",
+          "type": "string"
+        },
+        "sellerPostalCode": {
+          "description": "[DEPRECATED: Please use postalCode in sellerPrimaryAddress instead] The postal code of the selling merchant.",
+          "type": "string"
+        }
+      }
+    },
+    "SellerAddress": {
+      "type": "object",
+      "description": "A detailed physical address.",
+      "required": [
+        "addressLine1",
+        "addressLine2",
+        "city",
+        "state",
+        "postalCode",
+        "countryCode"
+      ],
+      "properties": {
+        "addressLine1": {
+          "description": "The primary address of the seller with the street name, building number, city, state, and postal code.",
+          "type": "string"
+        },
+        "addressLine2": {
+          "description": "The secondary address of the seller which can contain apartment, suite, room, or floor numbers.",
+          "type": "string"
+        },
+        "city": {
+          "description": "The city of the selling merchant.",
+          "type": "string"
+        },
+        "state": {
+          "description": "The state of the selling merchant.",
+          "type": "string"
+        },
+        "postalCode": {
+          "description": "The postal code of the selling merchant.",
+          "type": "string"
+        },
+        "countryCode": {
+          "description": "The country code of the selling merchant.",
+          "type": "string"
+        }
+      }
+    },
+    "SellerCredentialDetails": {
+      "type": "object",
+      "description": "The information about seller's credentials or certifications including certificate issuing agency name and certificate expiration.",
+      "required": [
+        "certificateType"
+      ],
+      "properties": {
+        "certificateType": {
+          "description": "The name of the credential or certificate.",
+          "type": "string"
+        },
+        "certifyingAgenciesDetails" : {
+          "type": "array",
+          "description": "Details of issuing agency and expiration date of certificate.",
+          "items": {
+            "$ref": "#/definitions/SellerCertifyingAgenciesDetails"
+          }
+        }
+      }
+    },
+    "SellerCertifyingAgenciesDetails": {
+      "type": "object",
+      "description": "Details of issuing agency and expiration date of certificate.",
+      "properties": {
+        "certifyingAgencyName": {
+          "description": "The name of the agency that issued the certificate.",
+          "type": "string"
+        },
+        "certificateExpirationDate": {
+          "description": "The expiration date of certificate.",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Shipment": {
+      "type": "object",
+      "description": "The shipment sent to the customer.",
+      "required": [
+        "shipmentDate",
+        "shipmentStatus",
+        "carrierTracking",
+        "deliveryInformation",
+        "shipmentQuantity",
+        "shipmentSubTotal",
+        "shipmentShippingAndHandling",
+        "shipmentPromotion",
+        "shipmentTax",
+        "shipmentNetTotal",
+        "carrierName"
+      ],
+      "properties": {
+        "shipmentDate": {
+          "description": "Date when the item was shipped.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "shipmentStatus": {
+          "description": "The current status of the shipment.",
+          "type": "string",
+          "enum": [
+            "Shipped"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "Shipped",
+              "description": "The package has been shipped."
+            }
+          ]
+        },
+        "carrierTracking": {
+          "description": "The tracking number from the shipment carrier.",
+          "type": "string"
+        },
+        "deliveryInformation": {
+          "description": "The delivery status and estimated delivery date.",
+          "$ref": "#/definitions/DeliveryInformation"
+        },
+        "shipmentQuantity": {
+          "description": "The total number of items for shipping.",
+          "type": "integer"
+        },
+        "shipmentSubTotal": {
+          "description": "The cost of shipment excluding shipping, taxes, and discounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "shipmentShippingAndHandling": {
+          "description": "The shipping and handling charges for the shipment.",
+          "$ref": "#/definitions/Money"
+        },
+        "shipmentPromotion": {
+          "description": "The discounts for the shipment.",
+          "$ref": "#/definitions/Money"
+        },
+        "shipmentTax": {
+          "description": "The tax amount for the shipment.",
+          "$ref": "#/definitions/Money"
+        },
+        "shipmentNetTotal": {
+          "description": "The total amount charged for the shipment.",
+          "$ref": "#/definitions/Money"
+        },
+        "carrierName": {
+          "description": "The name of the shipment carrier.",
+          "type": "string"
+        },
+        "shippingAddress": {
+          "description": "The primary physical shipping address.",
+          "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "DeliveryInformation": {
+      "type": "object",
+      "description": "The delivery status and estimated delivery date.",
+      "required": [
+        "expectedDeliveryDate",
+        "deliveryStatus"
+      ],
+      "properties": {
+        "expectedDeliveryDate": {
+          "type": "string",
+          "description": "The expected delivery date of the shipment.",
+          "format": "date-time"
+        },
+        "deliveryStatus": {
+          "type": "string",
+          "description": "The current delivery status of the shipment.",
+          "enum": [
+            "DELIVERED",
+            "NOT DELIVERED",
+            "NOT AVAILABLE"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "DELIVERED",
+              "description": "The package has been delivered."
+            },
+            {
+              "value": "NOT DELIVERED",
+              "description": "The package hasn't been delivered."
+            },
+            {
+              "value": "NOT AVAILABLE",
+              "description": "The package has no delivery information."
+            }
+          ]
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "description": "A detailed physical address.",
+      "required": [
+        "addressLine1",
+        "addressLine2",
+        "city",
+        "state",
+        "postalCode",
+        "countryCode"
+      ],
+      "properties": {
+        "addressLine1": {
+          "description": "The primary address with the street name, building number, city, state, and postal code.",
+          "type": "string"
+        },
+        "addressLine2": {
+          "description": "The secondary address which can contain apartment, suite, room, or floor numbers.",
+          "type": "string"
+        },
+        "city": {
+          "description": "The city of the address.",
+          "type": "string"
+        },
+        "state": {
+          "description": "The state of the address.",
+          "type": "string"
+        },
+        "postalCode": {
+          "description": "The postal code of the address.",
+          "type": "string"
+        },
+        "countryCode": {
+          "description": "The country code of the address.",
+          "type": "string"
+        }
+      }
+    },
+    "ErrorList": {
+      "type": "object",
+      "description": "A list of error responses returned when a request is unsuccessful.",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      }
+    },
+    "Error": {
+      "description": "The error response returned when the request is unsuccessful.",
+      "properties": {
+        "code": {
+          "description": "An error code that identifies the type of error that occurred.",
+          "type": "string"
+        },
+        "message": {
+          "description": "A message that describes the error condition.",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional details that can help the caller understand or fix the issue.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object"
+    }
+  }
+}

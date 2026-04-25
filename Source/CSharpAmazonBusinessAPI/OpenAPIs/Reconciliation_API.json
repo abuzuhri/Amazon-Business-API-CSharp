@@ -1,0 +1,2493 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "With the Amazon Business API for Payment Reconciliation, you can build applications that help Amazon Business customers get purchase-related information for reconciling business transactions.",
+    "version": "2021-01-08",
+    "title": "Amazon Business API for Payment Reconciliation",
+    "contact": {
+      "name": "AB Support",
+      "url": "https://developer-docs.amazon.com/amazon-business/"
+    },
+    "license": {
+      "name": "Amazon Software License",
+      "url": "https://aws.amazon.com/asl/"
+    }
+  },
+  "host": "api.business.amazon.com",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/reconciliation/2021-01-08/transactions": {
+      "get": {
+        "description": "Returns a paginated list of business transactions with feed dates that fall within the date range that you specify.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getTransactions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "feedStartDate",
+            "in": "query",
+            "description": "The lower limit for the search range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "feedEndDate",
+            "in": "query",
+            "description": "The upper limit for the search range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request. nextPageToken is returned when the number of results exceed the page size. To get the next page of results, include nextPageToken as the only parameter. When no nextPageToken value is returned there are no more pages to return.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransactionsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "feedStartDate": {
+                        "value": "2020-07-09T00:00:00Z"
+                      },
+                      "feedEndDate": {
+                        "value": "2020-08-01T00:00:00Z"
+                      }
+                    }
+                  },
+                  "response": {
+                    "transactions": [
+                      {
+                        "marketplaceId": "ATVPDKIKX0DER",
+                        "transactionDate": "2020-04-03T16:59:18.768Z",
+                        "feedDate": "2021-05-12T20:44:21.791Z",
+                        "transactionType": "CHARGE",
+                        "transactionId": "1x47pVc03Ffs71cjjCct",
+                        "chargeIdentifier": "RA5RE0N60",
+                        "shipTaxRate": "0.00",
+                        "giftWrapTaxRate": "0.00",
+                        "legalEntityName": "May ProdInv",
+                        "invoiceNumber": "JP218PV8HMOI",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": "5.99"
+                        },
+                        "paymentInstrumentType": "PayStation",
+                        "buyer": {
+                          "id": "amzn1.account.3KXYF4ES2JQB4XSQ3WJXEMTUNF2GINLRMZYGCNTDNB2TGN32NFQR3RAADVPCS56Y226EN5QTGEQSLWPB3G5573CD7JWWZJ3CAXWP53A",
+                          "name": "jared",
+                          "email": "kozjared+b2b@amazon.com"
+                        },
+                        "payer": {
+                          "id": "amzn1.account.3KXYF4ES2JQB4XSQ3WJXEMTUNF2GINLRMZYGCNTDNB2TGN32NFQR3RAADVPCS56Y226EN5QTGEQSLWPB3G5573CD7JWWZJ3CAXWP53A",
+                          "name": "jared",
+                          "email": "kozjared+b2b@amazon.com"
+                        },
+                        "associatedTransactionDetails": [
+                          {
+                            "associatedTransactionId": "ONf39R7NmjIh9247YJ34"
+                          }
+                        ],
+                        "transactionLineItems": [
+                          {
+                            "totalAmount": {
+                              "currencyCode": "USD",
+                              "amount": "5.99"
+                            },
+                            "principalAmount": {
+                              "currencyCode": "USD",
+                              "amount": "5.99"
+                            },
+                            "shippingCharge": {
+                              "currencyCode": "USD",
+                              "amount": "2.99"
+                            },
+                            "discount": {
+                              "currencyCode": "USD",
+                              "amount": "-2.99"
+                            },
+                            "tax": {
+                              "currencyCode": "USD",
+                              "amount": "0.0"
+                            },
+                            "taxRate": "0.00",
+                            "orderId": "114-1458190-2465828",
+                            "unspsc": "44121700",
+                            "orderLineItemId": "31208275451321",
+                            "purchaseOrderNumber": "",
+                            "asin": "B07T8K1HJG",
+                            "productTitle": "Ticonderoga Neon Pencils, #2 Pre-Sharpened Wood Pencils with Erasers, 18-Count, 13018",
+                            "itemQuantity": 1,
+                            "shipmentId": "DhG3L9W23",
+                            "shipmentDate": "2020-04-03T16:59:21Z",
+                            "merchantLegalName": "Amazon.com Services LLC",
+                            "businessOrderInfo": {
+                              "GL code": "535-office",
+                              "COVID-19 Related?": "No",
+                              "Cost center": ""
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "feedStartDate": {
+                        "value": "incorrectFormatDate"
+                      },
+                      "feedEndDate": {
+                        "value": "2020-08-01T00:00:00"
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "Input date [incorrectFormatDate] is not in the expected ISO8601 format."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "The request's Authorization header is not formatted correctly or does not contain a valid token.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "504": {
+            "description": "A gateway timeout occurred.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reconciliation/2021-01-08/invoices/batch/paymentDetails": {
+      "post": {
+        "description": "Returns the payment status and due date for a batch of invoices provided in the request. For each invoice, the response includes either successful payment details (status and due date) or error details if the data cannot be retrieved.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getBatchInvoicePaymentDetails",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "getBatchInvoicePaymentDetailsRequest",
+            "description": "Request to retrieve payment details for a batch of invoices.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetBatchInvoicePaymentDetailsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetBatchInvoicePaymentDetailsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "body": {
+                        "value": {
+                          "invoiceIds": [
+                            "JP218PV8HMOI",
+                            "1XQX-T4VG-9939"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "invoicePaymentDetailsResults": [
+                      {
+                        "invoiceId": "JP218PV8HMOI",
+                        "resultType": "SUCCESS"
+                      },
+                      {
+                        "invoiceId": "1XQX-T4VG-9939",
+                        "resultType": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "body": {
+                        "value": {
+                          "invoiceIds": [
+                            "INVALID_INVOICE_ID"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The request contains invalid parameters.",
+                        "details": "The invoiceIds array must contain at least one invoice ID."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized. The request is not authorized.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout. The server did not receive a timely response from an upstream service.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reconciliation/2021-01-08/invoices": {
+      "post": {
+        "description": "Returns the invoice details for the order line items provided in the request.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getInvoiceDetailsByOrderLineItems",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "invoiceDetailsByOrderLineItemsRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InvoiceDetailsByOrderLineItemsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/InvoiceDetailsByOrderLineItemsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "body": {
+                        "value": {
+                          "orderLineItems": [
+                            {
+                              "orderId": "503-0807783-5846230",
+                              "orderLineItemId": "6172301145805",
+                              "shipmentId": "Dps13nXXc"
+                            },
+                            {
+                              "orderId": "250-9059274-9386231",
+                              "orderLineItemId": "6172160940605",
+                              "shipmentId": "DZms0yvhc"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "invoiceDetailsByOrderLineItems": [
+                      {
+                        "orderLineItem": {
+                          "orderId": "250-9059274-9386231",
+                          "orderLineItemId": "6172160940605",
+                          "shipmentId": "DZms0yvhc"
+                        },
+                        "invoiceDetails": [
+                          {
+                            "invoiceNumber": "JP218PV8HMOI",
+                            "invoiceDate": "2022-03-30T15:30:22.077Z",
+                            "consolidatedInvoiceDetails": {
+                              "invoiceNumber": "11XS-123S-XFA1"
+                            },
+                            "invoiceType": "STANDARD",
+                            "invoiceIssuer": {
+                              "name": "Mizuta"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "Mizuta"
+                            },
+                            "orderDate": "2022-03-29T18:46:51Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "1751.0",
+                            "tax": [],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 1,
+                                "asin": "4863893469",
+                                "title": "ハリー・ポッターと呪いの子 第一部、第二部 特別リハーサル版 (ハリー・ポッターシリーズ)",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "159.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1751.0"
+                                },
+                                "apportionment": [],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "61.0"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "61.0"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "0.0"
+                                  }
+                                },
+                                "discount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "-61.0"
+                                },
+                                "apportionment": []
+                              }
+                            ]
+                          },
+                          {
+                            "invoiceNumber": "JP22E0VEIAJGKI",
+                            "invoiceDate": "2022-03-30T15:30:22.077Z",
+                            "invoiceType": "STANDARD",
+                            "invoiceIssuer": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "orderDate": "2022-03-29T18:46:51Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "3267.0",
+                            "tax": [],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 5,
+                                "asin": "B09DXP8C3Q",
+                                "title": "ショウワノート PUIPUIモルカー 文具パック 942865M02",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "99.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "3267.0"
+                                },
+                                "apportionment": [],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "182.0"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "182.0"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "0.0"
+                                  }
+                                },
+                                "discount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "-182.0"
+                                },
+                                "apportionment": []
+                              }
+                            ]
+                          },
+                          {
+                            "invoiceNumber": "JP21UV8HMOC",
+                            "invoiceDate": "2022-04-09T04:52:05.942Z",
+                            "invoiceType": "CREDIT_MEMO",
+                            "associatedInvoiceNumber": "JP218PV8HMOI",
+                            "associatedInvoiceDate": "2022-03-30T15:30:22.077Z",
+                            "invoiceIssuer": {
+                              "name": "Mizuta"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "Mizuta"
+                            },
+                            "orderDate": "2022-03-29T18:46:51Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "1751.00",
+                            "tax": [
+                              {
+                                "rate": "0.1",
+                                "inclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1751.0"
+                                },
+                                "exclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1592.0"
+                                },
+                                "amount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "159.0"
+                                }
+                              }
+                            ],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 1,
+                                "asin": "4863893469",
+                                "title": "ハリー・ポッターと呪いの子 第一部、第二部 特別リハーサル版 (ハリー・ポッターシリーズ)",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "159.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1818.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "orderLineItemId": "6172160940605",
+                                    "lineNumber": 1,
+                                    "units": 1,
+                                    "unitPrice": {
+                                      "currencyCode": "JPY",
+                                      "amount": "1592.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "159.0"
+                                    }
+                                  }
+                                ],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "73.00"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "61.00"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "12.00"
+                                  }
+                                },
+                                "discount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "-67.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "taxExclusiveFee": {
+                                      "currencyCode": "JPY",
+                                      "amount": "61.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "6.0"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "invoiceNumber": "JP2SRUXAJGKC",
+                            "invoiceDate": "2022-04-09T04:52:05.942Z",
+                            "invoiceType": "CREDIT_MEMO",
+                            "associatedInvoiceNumber": "JP22E0VEIAJGKI",
+                            "associatedInvoiceDate": "2022-03-30T15:30:22.077Z",
+                            "invoiceIssuer": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "orderDate": "2022-03-29T18:46:51Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "2178.00",
+                            "tax": [
+                              {
+                                "rate": "0.1",
+                                "inclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "2178.0"
+                                },
+                                "exclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1980.0"
+                                },
+                                "amount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "198.0"
+                                }
+                              }
+                            ],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 2,
+                                "asin": "B09DXP8C3Q",
+                                "title": "ショウワノート PUIPUIモルカー 文具パック 942865M02",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "99.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "2311.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "orderLineItemId": "6172160940645",
+                                    "lineNumber": 1,
+                                    "units": 2,
+                                    "unitPrice": {
+                                      "currencyCode": "JPY",
+                                      "amount": "990.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "99.0"
+                                    }
+                                  }
+                                ],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "145.00"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "121.00"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "24.00"
+                                  }
+                                },
+                                "discount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "-133.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "taxExclusiveFee": {
+                                      "currencyCode": "JPY",
+                                      "amount": "121.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "12.0"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "invoiceNumber": "JP2SPSMAJGKC",
+                            "invoiceDate": "2022-04-09T01:43:15.233Z",
+                            "invoiceType": "CREDIT_MEMO",
+                            "associatedInvoiceNumber": "JP22E0VEIAJGKI",
+                            "associatedInvoiceDate": "2022-03-30T15:30:22.077Z",
+                            "invoiceIssuer": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "アマゾンジャパン合同会社"
+                            },
+                            "orderDate": "2022-03-29T18:46:51Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "1089.00",
+                            "tax": [
+                              {
+                                "rate": "0.1",
+                                "inclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1089.0"
+                                },
+                                "exclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "990.0"
+                                },
+                                "amount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "99.0"
+                                }
+                              }
+                            ],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 1,
+                                "asin": "B09DXP8C3Q",
+                                "title": "ショウワノート PUIPUIモルカー 文具パック 942865M02",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "",
+                                  "amount": "0"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "99.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1156.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "orderLineItemId": "6172160940645",
+                                    "lineNumber": 1,
+                                    "units": 1,
+                                    "unitPrice": {
+                                      "currencyCode": "JPY",
+                                      "amount": "990.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "99.0"
+                                    }
+                                  }
+                                ],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "73.00"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "61.00"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "12.00"
+                                  }
+                                },
+                                "discount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "-67.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "taxExclusiveFee": {
+                                      "currencyCode": "JPY",
+                                      "amount": "61.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "6.0"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "orderLineItem": {
+                          "orderId": "503-0807783-5846230",
+                          "orderLineItemId": "6172301145805",
+                          "shipmentId": "Dps13nXXc"
+                        },
+                        "invoiceDetails": [
+                          {
+                            "invoiceNumber": "JP25EF9G0FUI",
+                            "invoiceDate": "2022-04-01T08:48:53.158Z",
+                            "invoiceType": "STANDARD",
+                            "invoiceIssuer": {
+                              "name": "Shenzhen Sepo Supply Chain Co., LTD"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "Shenzhen Sepo Supply Chain Co., LTD"
+                            },
+                            "orderDate": "2022-03-29T19:19:55Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "1409.0",
+                            "tax": [
+                              {
+                                "rate": "0.1",
+                                "inclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1409.0"
+                                },
+                                "exclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1281.0"
+                                },
+                                "amount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "128.0"
+                                }
+                              }
+                            ],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 1,
+                                "asin": "B09D2J8ZMD",
+                                "title": "60個 風船 バルーン ゴム風船 誕生日 飾り付け 吹雪入れ風船 誕生日会 バースデー 卒業 開店 記念日 結婚式 お祝",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "JPY",
+                                  "amount": "999.0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "JPY",
+                                  "amount": "908"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "91.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "999.0"
+                                },
+                                "apportionment": [
+                                  {
+                                    "orderLineItemId": "6172301145805",
+                                    "lineNumber": 1,
+                                    "units": 1,
+                                    "unitPrice": {
+                                      "currencyCode": "JPY",
+                                      "amount": "908.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "91.0"
+                                    }
+                                  }
+                                ],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "410.0"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "373.0"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "37.0"
+                                  }
+                                },
+                                "apportionment": [
+                                  {
+                                    "taxExclusiveFee": {
+                                      "currencyCode": "JPY",
+                                      "amount": "373.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "37.0"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "invoiceNumber": "JP22C9G0FUC",
+                            "invoiceDate": "2022-04-09T03:38:16.262Z",
+                            "invoiceType": "CREDIT_MEMO",
+                            "associatedInvoiceNumber": "JP25EF9G0FUI",
+                            "associatedInvoiceDate": "2022-04-01T08:48:53.158Z",
+                            "invoiceIssuer": {
+                              "name": "Shenzhen Sepo Supply Chain Co., LTD"
+                            },
+                            "billToAddress": {
+                              "fullName": "test return",
+                              "phoneNumber": "81120899543",
+                              "addressLine1": "Arco Tower Annex, 1 Chome-8-1 Shimomeguro, Meguro City, Toky",
+                              "stateOrRegion": "Yamanashi-ken",
+                              "postalCode": "153-0064",
+                              "countryCode": "JP"
+                            },
+                            "sellerInformation": {
+                              "name": "Shenzhen Sepo Supply Chain Co., LTD"
+                            },
+                            "orderDate": "2022-03-29T19:19:55Z",
+                            "currencyCode": "JPY",
+                            "invoiceTotal": "1409.00",
+                            "tax": [
+                              {
+                                "rate": "0.1",
+                                "inclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1409.0"
+                                },
+                                "exclusiveTotal": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1281.0"
+                                },
+                                "amount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "128.0"
+                                }
+                              }
+                            ],
+                            "transactionDataItems": [
+                              {
+                                "taxRate": "0.1",
+                                "unit": 1,
+                                "asin": "B09D2J8ZMD",
+                                "title": "60個 風船 バルーン ゴム風船 誕生日 飾り付け 吹雪入れ風船 誕生日会 バースデー 卒業 開店 記念日 結婚式 お祝",
+                                "unitTaxInclusivePrice": {
+                                  "currencyCode": "JPY",
+                                  "amount": "999.0"
+                                },
+                                "unitTaxExclusivePrice": {
+                                  "currencyCode": "JPY",
+                                  "amount": "908"
+                                },
+                                "unitTaxAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "91.0"
+                                },
+                                "totalAmount": {
+                                  "currencyCode": "JPY",
+                                  "amount": "1409.00"
+                                },
+                                "apportionment": [
+                                  {
+                                    "orderLineItemId": "6172301145805",
+                                    "lineNumber": 1,
+                                    "units": 1,
+                                    "unitPrice": {
+                                      "currencyCode": "JPY",
+                                      "amount": "908.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "91.0"
+                                    }
+                                  }
+                                ],
+                                "fees": []
+                              }
+                            ],
+                            "fees": [
+                              {
+                                "feeType": "SHIPPING",
+                                "tax": {
+                                  "rate": "0.1",
+                                  "inclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "410.00"
+                                  },
+                                  "exclusiveTotal": {
+                                    "currencyCode": "JPY",
+                                    "amount": "373.00"
+                                  },
+                                  "amount": {
+                                    "currencyCode": "JPY",
+                                    "amount": "37.00"
+                                  }
+                                },
+                                "apportionment": [
+                                  {
+                                    "taxExclusiveFee": {
+                                      "currencyCode": "JPY",
+                                      "amount": "373.0"
+                                    },
+                                    "taxAmount": {
+                                      "currencyCode": "JPY",
+                                      "amount": "37.0"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "The server could not process an API request due to missing or invalid parameters. Errors may include mistyping the API endpoint, a header name or value, or a query parameter.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "Missing required request parameters."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "The request's Authorization header is not formatted correctly or does not contain a valid token.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The specified resource does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The request rate exceeded the allowed limit.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "504": {
+            "description": "A gateway timeout occurred.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "The allowed rate limit (requests per second) for this operation."
+              },
+              "x-amzn-requestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "InvoiceDetail": {
+      "type": "object",
+      "required": [
+        "invoiceDate",
+        "invoiceNumber"
+      ],
+      "properties": {
+        "invoiceNumber": {
+          "type": "string",
+          "description": "The ID number of the Invoice or Credit Memo."
+        },
+        "invoiceDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the Invoice or Credit Memo was issued."
+        },
+        "consolidatedInvoiceDetails": {
+          "description": "This contains the consolidated invoice details if the order is enabled for purchase/periodic consolidation.",
+          "$ref": "#/definitions/ConsolidatedInvoiceDetails"
+        },
+        "invoiceType": {
+          "description": "Indicate that the data returned is Invoice or Credit Memo. Possible values: STANDARD (for Invoice) and CREDIT_MEMO (for Credit Memo).",
+          "$ref": "#/definitions/InvoiceType"
+        },
+        "associatedInvoiceNumber": {
+          "type": "string",
+          "description": "The invoice number associated with the Credit Memo. This field shows value if the invoiceType is CREDIT_MEMO. For STANDARD invoice, this field shows \"null\". Available for JP region only."
+        },
+        "associatedInvoiceDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The invoice date associated with the Credit Memo. This field shows value if the invoiceType is CREDIT_MEMO. For STANDARD invoice, this field shows \"null\". Available for JP region only."
+        },
+        "invoiceIssuer": {
+          "description": "The details associated with the issuer of the invoice. Available for JP region only.",
+          "$ref": "#/definitions/InvoiceIssuerDetail"
+        },
+        "billToAddress": {
+          "description": "The address information to which the Invoice or Credit Memo was issued. Available for JP region only.",
+          "$ref": "#/definitions/PhysicalAddress"
+        },
+        "sellerInformation": {
+          "description": "The details associated with the original seller of the products. Available for JP region only.",
+          "$ref": "#/definitions/MerchantDetail"
+        },
+        "orderDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time the order was placed. The date follows the ISO 8601 format, yyyy-MM-ddThh:mm:ssZ. Available for JP region only."
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-digit currency code, in ISO 4217 format. Available for JP region only."
+        },
+        "invoiceTotal": {
+          "type": "string",
+          "description": "Sum of all charges specified in the invoice, including products, applicable taxes, and any additional fees. Available for JP region only."
+        },
+        "tax": {
+          "type": "array",
+          "description": "The tax amount and rate the buyer pays for the product and services. Available for JP region only.",
+          "items": {
+            "$ref": "#/definitions/TaxDetail"
+          }
+        },
+        "transactionDataItems": {
+          "type": "array",
+          "description": "The invoice line item details including ASIN, price, unit, discount, and fee. Available for JP region only.",
+          "items": {
+            "$ref": "#/definitions/TransactionDataItem"
+          }
+        },
+        "fees": {
+          "type": "array",
+          "description": "The invoice level fee the buyer pays for the product and services. Available for JP region only.",
+          "items": {
+            "$ref": "#/definitions/InvoiceLevelFeeDetail"
+          }
+        }
+      },
+      "description": "The detailed information of an invoice."
+    },
+    "MerchantDetail": {
+      "type": "object",
+      "required": [
+        "name",
+        "registrationNumber"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the seller."
+        },
+        "registrationNumber": {
+          "type": "string",
+          "description": "The tax registration number (JCT#)."
+        }
+      },
+      "description": "Provides details associated with the merchant selling the products."
+    },
+    "FeeType": {
+      "type": "string",
+      "description": "Additional fees that Amazon Business charge based on the customer's selection.",
+      "enum": [
+        "SHIPPING",
+        "GIFTWRAPPING",
+        "OTHER"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "SHIPPING",
+          "description": "The cost of shipping an item or order."
+        },
+        {
+          "value": "GIFTWRAPPING",
+          "description": "The cost of gift wrapping an item or order."
+        },
+        {
+          "value": "OTHER",
+          "description": "The cost of other fee for an item or order."
+        }
+      ]
+    },
+    "Address": {
+      "type": "object",
+      "required": [
+        "addressType"
+      ],
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "description": "The schema name for a subtype."
+        }
+      },
+      "description": "The base type for an address."
+    },
+    "Customer": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique customer identifier."
+        },
+        "name": {
+          "type": "string",
+          "description": "The customer name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The customer email address."
+        }
+      },
+      "description": "A customer with a role in a transaction."
+    },
+    "InvoiceDetailsOfOrderLineItem": {
+      "type": "object",
+      "required": [
+        "invoiceDetails",
+        "orderLineItem"
+      ],
+      "properties": {
+        "orderLineItem": {
+          "description": "The Order line item to which the invoice details are associated to.",
+          "$ref": "#/definitions/OrderLineItem"
+        },
+        "invoiceDetails": {
+          "type": "array",
+          "description": "List of invoice detail for all invoices related to the order line item.",
+          "items": {
+            "$ref": "#/definitions/InvoiceDetail"
+          }
+        }
+      },
+      "description": "Invoice details with the corresponding order line item."
+    },
+    "TransactionDataItem": {
+      "type": "object",
+      "required": [
+        "apportionment",
+        "asin",
+        "discount",
+        "fees",
+        "taxRate",
+        "title",
+        "totalAmount",
+        "unit",
+        "unitTaxAmount",
+        "unitTaxExclusivePrice",
+        "unitTaxInclusivePrice"
+      ],
+      "properties": {
+        "taxRate": {
+          "type": "string",
+          "description": "The tax percentage applied on products and services."
+        },
+        "unit": {
+          "type": "integer",
+          "description": "The number of units ordered."
+        },
+        "asin": {
+          "type": "string",
+          "description": "The Amazon Standard Identification Number (ASIN) for the item."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the item."
+        },
+        "unitTaxInclusivePrice": {
+          "description": "The unit price of the product including taxes.",
+          "$ref": "#/definitions/Money"
+        },
+        "unitTaxExclusivePrice": {
+          "description": "The unit price of the product excluding taxes.",
+          "$ref": "#/definitions/Money"
+        },
+        "unitTaxAmount": {
+          "description": "A taxable amount for each unit of a product.",
+          "$ref": "#/definitions/Money"
+        },
+        "totalAmount": {
+          "description": "Includes the price of all units of the product, discounts, and the total tax amounts.",
+          "$ref": "#/definitions/Money"
+        },
+        "discount": {
+          "description": "The discount amount or rate applied on products and services.",
+          "$ref": "#/definitions/Money"
+        },
+        "apportionment": {
+          "type": "array",
+          "description": "Contains amount distribution data associated with each line item.",
+          "items": {
+            "$ref": "#/definitions/LineItemApportionmentDetail"
+          }
+        },
+        "fees": {
+          "type": "array",
+          "description": "The fees associated with line item in the invoice.",
+          "items": {
+            "$ref": "#/definitions/LineItemLevelFeeDetail"
+          }
+        }
+      },
+      "description": "Contains the required information associated with a specific product or service."
+    },
+    "InvoiceIssuerDetail": {
+      "type": "object",
+      "required": [
+        "name",
+        "registrationNumber"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the issuer."
+        },
+        "registrationNumber": {
+          "type": "string",
+          "description": "The tax registration number associated with the issuer of the invoice. For Japan, this is the Japan Consumption Tax number (JCT#)."
+        }
+      },
+      "description": "Provides details associated with the issuer of the invoice."
+    },
+    "Money": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currencyCode"
+      ],
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-digit currency code, in ISO 4217 format."
+        },
+        "amount": {
+          "type": "string",
+          "description": "The currency amount."
+        }
+      },
+      "description": "The monetary value."
+    },
+    "InvoiceLevelFeeApportionmentDetail": {
+      "type": "object",
+      "required": [
+        "taxAmount",
+        "taxExclusiveFee"
+      ],
+      "properties": {
+        "taxExclusiveFee": {
+          "description": "A tax exclusive fee associated with the fee for consideration.",
+          "$ref": "#/definitions/Money"
+        },
+        "taxAmount": {
+          "description": "The tax amount associated with the fee.",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Details the tax rate and amount associated with the type of fee at invoice level."
+    },
+    "GetBatchInvoicePaymentDetailsResponse": {
+      "type": "object",
+      "required": [
+        "invoicePaymentDetailsResults"
+      ],
+      "properties": {
+        "invoicePaymentDetailsResults": {
+          "type": "array",
+          "description": "List of payment details for the requested invoices.",
+          "items": {
+            "$ref": "#/definitions/InvoicePaymentDetailResult"
+          }
+        }
+      },
+      "description": "Response object containing payment details for multiple invoices."
+    },
+    "FailedInvoicePaymentDetailResult": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/InvoicePaymentDetailResult"
+        },
+        {
+          "type": "object",
+          "required": [
+            "error"
+          ],
+          "properties": {
+            "error": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      ],
+      "description": "Error response when payment details for an invoice cannot be retrieved."
+    },
+    "AssociatedTransactionDetail": {
+      "type": "object",
+      "required": [
+        "associatedTransactionId"
+      ],
+      "properties": {
+        "associatedTransactionId": {
+          "type": "string",
+          "description": "The identifier for an associated transaction."
+        }
+      },
+      "description": "A transaction detail that is associated with this transaction."
+    },
+    "ConsolidatedInvoiceDetails": {
+      "type": "object",
+      "required": [
+        "invoiceNumber"
+      ],
+      "properties": {
+        "invoiceNumber": {
+          "type": "string",
+          "description": "The consolidation invoice ID for the order if document is ready. If not, then it be \"Pending\""
+        }
+      },
+      "description": "This contains the consolidated invoice details if the order is enabled for purchase/periodic consolidation."
+    },
+    "InvoicePaymentDetailResult": {
+      "type": "object",
+      "required": [
+        "invoiceId",
+        "resultType"
+      ],
+      "properties": {
+        "invoiceId": {
+          "type": "string",
+          "example": "JP218PV8HMOI",
+          "description": "Unique identifier for the invoice."
+        },
+        "resultType": {
+          "type": "string",
+          "description": "Discriminator field to identify the type of result.",
+          "enum": [
+            "SUCCESS",
+            "ERROR"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "SUCCESS",
+              "description": "Indicates a successful response with payment details for the invoice."
+            },
+            {
+              "value": "ERROR",
+              "description": "Indicates an error occurred when retrieving payment details for the invoice."
+            }
+          ]
+        }
+      },
+      "description": "Details about an invoice's payment status or error information."
+    },
+    "TransactionsResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "transactions"
+      ],
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "description": "A list of transactions with feed dates that fall within the specified date range.",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A page token that is returned when the results of the call exceed the page size. To get another page of results, call the operation again, passing in this value with the nextPageToken parameter."
+        }
+      },
+      "description": "The response schema for the getTransactions operation."
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "An error code that identifies the type of error that occurred."
+        },
+        "message": {
+          "type": "string",
+          "description": "A message that describes the error condition."
+        },
+        "details": {
+          "type": "string",
+          "description": "Additional details that can help the caller understand or fix the issue."
+        }
+      },
+      "description": "Error response returned when the request is unsuccessful."
+    },
+    "LineItemLevelFeeDetail": {
+      "type": "object",
+      "required": [
+        "apportionment",
+        "discount",
+        "feeType",
+        "tax"
+      ],
+      "properties": {
+        "feeType": {
+          "description": "The type of fee that was calculated and added to the total cost. The type of fees include shipping, gift wrapping, and cash on delivery.",
+          "$ref": "#/definitions/FeeType"
+        },
+        "tax": {
+          "description": "The tax amount added to the total cost.",
+          "$ref": "#/definitions/TaxDetail"
+        },
+        "discount": {
+          "description": "The discount amount or rate deducted from the total cost.",
+          "$ref": "#/definitions/Money"
+        },
+        "apportionment": {
+          "type": "array",
+          "description": "Provides details about the tax rate and amount associated with the type of fee at the line item level.",
+          "items": {
+            "$ref": "#/definitions/LineItemLevelFeeApportionmentDetail"
+          }
+        }
+      },
+      "description": "The fee details associated with an order line item."
+    },
+    "PhysicalAddress": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Address"
+        },
+        {
+          "required": [
+            "addressLine1",
+            "city",
+            "countryCode",
+            "fullName",
+            "postalCode"
+          ],
+          "properties": {
+            "fullName": {
+              "type": "string",
+              "description": "The full name of the customer associated with the address.",
+              "minLength": 1
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The phone number of the customer associated with the address.",
+              "minLength": 1
+            },
+            "companyName": {
+              "type": "string",
+              "description": "The company name of the customer associated with the address."
+            },
+            "addressLine1": {
+              "type": "string",
+              "description": "The primary address of the customer with the street name, building number, city, state, and postal code.",
+              "minLength": 1
+            },
+            "addressLine2": {
+              "type": "string",
+              "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers.",
+              "maxLength": 60
+            },
+            "addressLine3": {
+              "type": "string",
+              "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers. Preferred to use addressLine3 when addressLine2 exceeds the allowed number of characters",
+              "maxLength": 60
+            },
+            "city": {
+              "type": "string",
+              "description": "The city associated with the customer's address.",
+              "minLength": 1
+            },
+            "stateOrRegion": {
+              "type": "string",
+              "description": "The state associated with the customer's address. This is a requirement for US region only."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "The postal code associated with the customer's address.",
+              "minLength": 1
+            },
+            "countryCode": {
+              "type": "string",
+              "description": "The country code associated with the customer's address in ISO 3166 alpha-2 (2-char) format.",
+              "pattern": "^[A-Z]{2}$"
+            }
+          }
+        }
+      ],
+      "description": "A detailed physical address."
+    },
+    "InvoiceLevelFeeDetail": {
+      "type": "object",
+      "required": [
+        "apportionment",
+        "discount",
+        "feeType",
+        "tax"
+      ],
+      "properties": {
+        "feeType": {
+          "description": "The type of fee that was calculated and added to the total cost. The type of fees include shipping, gift wrapping, and cash on delivery.",
+          "$ref": "#/definitions/FeeType"
+        },
+        "tax": {
+          "description": "The tax amount added to the total cost.",
+          "$ref": "#/definitions/TaxDetail"
+        },
+        "discount": {
+          "description": "The discount amount or rate deducted from the total cost.",
+          "$ref": "#/definitions/Money"
+        },
+        "apportionment": {
+          "type": "array",
+          "description": "The distribution of tax data across multiple tax rate associated with the fee.",
+          "items": {
+            "$ref": "#/definitions/InvoiceLevelFeeApportionmentDetail"
+          }
+        }
+      },
+      "description": "The fee details associated with an invoice."
+    },
+    "GetBatchInvoicePaymentDetailsRequest": {
+      "type": "object",
+      "required": [
+        "invoiceIds"
+      ],
+      "properties": {
+        "invoiceIds": {
+          "type": "array",
+          "example": [
+            "JP218PV8HMOI",
+            "1XQX-T4VG-9939"
+          ],
+          "description": "List of invoice IDs for payment detail retrieval.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "maxItems": 25,
+          "minItems": 1
+        }
+      },
+      "description": "Request object for retrieving payment details for multiple invoices."
+    },
+    "TransactionLineItem": {
+      "type": "object",
+      "properties": {
+        "refundReason": {
+          "type": "string",
+          "description": "The reason why a refund was issued."
+        },
+        "totalAmount": {
+          "description": "The total amount charged for the item. This is the principalAmount plus or minus any additional charges or credits.",
+          "$ref": "#/definitions/Money"
+        },
+        "principalAmount": {
+          "description": "The amount charged for the item, before applying any additional charges or credits.",
+          "$ref": "#/definitions/Money"
+        },
+        "shippingCharge": {
+          "description": "The shipping charge for the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "regulatoryFee": {
+          "description": "The regulatory fee charged on the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "giftWrappingCharge": {
+          "description": "The gift wrapping charge for the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "discount": {
+          "description": "The discount applied to the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "tax": {
+          "description": "The tax charged on the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "unitPrice": {
+          "description": "The price per unit of the item.",
+          "$ref": "#/definitions/Money"
+        },
+        "taxRate": {
+          "type": "string",
+          "description": "The tax rate associated with item."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "The Amazon order identifier associated with the item."
+        },
+        "unspsc": {
+          "type": "string",
+          "description": "United Nations Standard Products and Services Code for the item."
+        },
+        "orderLineItemId": {
+          "type": "string",
+          "description": "The order line item identifier for the item. This identifier is created by Amazon"
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "The purchase order number associated with the item of a PPI order. This number is created by the buyer."
+        },
+        "purchaseOrderLineItemId": {
+          "type": "string",
+          "description": "The purchase order line item identifier associated with the item. This identifier is created by the buyer."
+        },
+        "asin": {
+          "type": "string",
+          "description": "The Amazon Standard Identification Number (ASIN) for the item."
+        },
+        "productTitle": {
+          "type": "string",
+          "description": "The title of the item."
+        },
+        "itemQuantity": {
+          "type": "integer",
+          "description": "The item quantity relevant to this transaction."
+        },
+        "shipmentId": {
+          "type": "string",
+          "description": "The identifier of the shipment associated with the item. This identifier is created by Amazon."
+        },
+        "shipmentDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The shipment date associated with the item."
+        },
+        "merchantLegalName": {
+          "type": "string",
+          "description": "The legal name of the seller."
+        },
+        "budgetId": {
+          "type": "string",
+          "description": "The budget identifier associated with the item."
+        },
+        "businessOrderInfo": {
+          "type": "object",
+          "description": "Additional order information configured by administrators that requisitioners must enter at checkout.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A transaction line item."
+    },
+    "SuccessInvoicePaymentDetailResult": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/InvoicePaymentDetailResult"
+        },
+        {
+          "type": "object",
+          "required": [
+            "paymentDetails"
+          ],
+          "properties": {
+            "paymentDetails": {
+              "$ref": "#/definitions/PaymentDetails"
+            }
+          }
+        }
+      ],
+      "description": "Successful response containing payment details for an invoice."
+    },
+    "InvoiceType": {
+      "type": "string",
+      "description": "The type of invoice, STANDARD or CREDIT_MEMO.",
+      "enum": [
+        "STANDARD",
+        "CREDIT_MEMO"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "STANDARD",
+          "description": "A standard invoice is a simple document that is used for billing products or services provided."
+        },
+        {
+          "value": "CREDIT_MEMO",
+          "description": "A credit memo invoice is a simple document that is used for refunds on products or services provided."
+        }
+      ]
+    },
+    "LineItemLevelFeeApportionmentDetail": {
+      "type": "object",
+      "required": [
+        "associatedOrderLineItemId",
+        "unitTaxAmount",
+        "unitTaxExclusiveFee",
+        "units"
+      ],
+      "properties": {
+        "associatedOrderLineItemId": {
+          "type": "string",
+          "description": "The order line item identifier for the item. This identifier is created by Amazon Business."
+        },
+        "units": {
+          "type": "integer",
+          "description": "The quantity of the product with similar fee."
+        },
+        "unitTaxExclusiveFee": {
+          "description": "A tax exclusive fee associated with the fee for consideration.",
+          "$ref": "#/definitions/Money"
+        },
+        "unitTaxAmount": {
+          "description": "The tax amount associated with the fee.",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Details the tax rate and amount associated with the type of fee at line item level."
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "marketplaceId": {
+          "type": "string",
+          "description": "The identifier of the marketplace where the item was bought."
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date when the transaction occurred."
+        },
+        "feedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date after which you can successfully query the transaction with the getTransactions operation."
+        },
+        "transactionType": {
+          "type": "string",
+          "description": "The type of transaction.",
+          "enum": [
+            "CHARGE",
+            "REFUND",
+            "OVERREFUND"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "CHARGE",
+              "description": "Positive transaction amount."
+            },
+            {
+              "value": "REFUND",
+              "description": "Negative transaction amount."
+            },
+            {
+              "value": "OVERREFUND",
+              "description": "Additional refund."
+            }
+          ]
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "The identifier for this transaction."
+        },
+        "chargeIdentifier": {
+          "type": "string",
+          "description": "The identifier for customer payment."
+        },
+        "shipTaxRate": {
+          "type": "string",
+          "description": "The shipping tax rate for a transaction."
+        },
+        "giftWrapTaxRate": {
+          "type": "string",
+          "description": "The gift wrap tax rate for a transaction."
+        },
+        "legalEntityName": {
+          "type": "string",
+          "description": "The name of the Business Legal Entity on behalf of which the order was placed."
+        },
+        "purchasingCustomerGroupName": {
+          "type": "string",
+          "description": "The name of the department under the Legal Entity on behalf of which the order was placed"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "The ID number of the Invoice or Credit Memo."
+        },
+        "amount": {
+          "description": "The amount charged for a specific transaction. If the amount is not settled yet, this is the amount for which Amazon received an authorization.",
+          "$ref": "#/definitions/Money"
+        },
+        "paymentInstrumentType": {
+          "type": "string",
+          "description": "The type of payment instrument, such as a credit card, pay by invoice, a bank account, a reward account, etc."
+        },
+        "paymentInstrumentLast4Digits": {
+          "type": "string",
+          "description": "The last 4 digits of the payment instrument number."
+        },
+        "buyer": {
+          "description": "The customer account on behalf of which the order was placed.",
+          "$ref": "#/definitions/Customer"
+        },
+        "payer": {
+          "description": "The customer account that owns the payment instrument with which the order was paid.",
+          "$ref": "#/definitions/Customer"
+        },
+        "associatedTransactionDetails": {
+          "type": "array",
+          "description": "A list of transaction details that are associated with this transaction. For example, if a payment is made with three different transactions (each using a different payment instrument), this list will contain associatedTransactionId values for the two other transactions associated with this transaction.",
+          "items": {
+            "$ref": "#/definitions/AssociatedTransactionDetail"
+          }
+        },
+        "transactionLineItems": {
+          "type": "array",
+          "description": "A list of transaction line items.",
+          "items": {
+            "$ref": "#/definitions/TransactionLineItem"
+          }
+        }
+      },
+      "description": "A business transaction."
+    },
+    "ErrorList": {
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      },
+      "description": "A list of error responses for an unsuccessful request."
+    },
+    "InvoiceDetailsByOrderLineItemsResponse": {
+      "type": "object",
+      "required": [
+        "invoiceDetailsByOrderLineItems"
+      ],
+      "properties": {
+        "invoiceDetailsByOrderLineItems": {
+          "type": "array",
+          "description": "Lists the invoices that includes order line item and invoice details.",
+          "items": {
+            "$ref": "#/definitions/InvoiceDetailsOfOrderLineItem"
+          }
+        }
+      },
+      "description": "The response schema for the getInvoiceDetailsByOrderLineItems operation."
+    },
+    "OrderLineItem": {
+      "type": "object",
+      "required": [
+        "orderId",
+        "orderLineItemId",
+        "shipmentId"
+      ],
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "description": "Amazon-generated order identifier associated with the orderLineItem."
+        },
+        "orderLineItemId": {
+          "type": "string",
+          "description": "Amazon-generated item identifier associated with the orderLineItem.."
+        },
+        "shipmentId": {
+          "type": "string",
+          "description": "Amazon-generated shipment ID associated with the orderLineItem."
+        }
+      },
+      "description": "The identifiers for the order line item."
+    },
+    "InvoiceDetailsByOrderLineItemsRequest": {
+      "type": "object",
+      "required": [
+        "orderLineItems"
+      ],
+      "properties": {
+        "orderLineItems": {
+          "type": "array",
+          "description": "List of order line items for the requested invoice details. The maximum number of order line items listed in each call is 25.",
+          "items": {
+            "$ref": "#/definitions/OrderLineItem"
+          }
+        }
+      },
+      "description": "The request schema for the getInvoiceDetailsByOrderLineItems operation."
+    },
+    "PaymentDetails": {
+      "type": "object",
+      "required": [
+        "dueDate",
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Issued",
+          "description": "Current payment status of the invoice.\n\n**Possible values:**\n- `Closed` : The invoice has been paid and closed.\n- `Past Due` : The invoice payment is overdue.\n- `Issued` : The invoice has been issued and is awaiting payment.\n- `Payment Processing` : The invoice payment is currently being processed."
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2025-06-07T23:59:59Z",
+          "description": "Date when invoice payment is due."
+        }
+      },
+      "description": "Details about an invoice's payment status and due date."
+    },
+    "LineItemApportionmentDetail": {
+      "type": "object",
+      "required": [
+        "lineNumber",
+        "orderLineItemId",
+        "taxAmount",
+        "unitPrice",
+        "units"
+      ],
+      "properties": {
+        "orderLineItemId": {
+          "type": "string",
+          "description": "The order line item identifier for the item. This identifier is created by Amazon Business."
+        },
+        "lineNumber": {
+          "type": "integer",
+          "description": "Sequence number in apportionment data."
+        },
+        "units": {
+          "type": "integer",
+          "description": "The quantity of the product with similar unit price."
+        },
+        "unitPrice": {
+          "description": "The price of a unit of the product.",
+          "$ref": "#/definitions/Money"
+        },
+        "taxAmount": {
+          "description": "The total tax amount for the product.",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Details the tax rate and amount associated with the line item."
+    },
+    "TaxDetail": {
+      "type": "object",
+      "required": [
+        "amount",
+        "exclusiveTotal",
+        "inclusiveTotal",
+        "rate"
+      ],
+      "properties": {
+        "rate": {
+          "type": "string",
+          "description": "The tax rate."
+        },
+        "inclusiveTotal": {
+          "description": "The tax-inclusive total against the associated tax rate.",
+          "$ref": "#/definitions/Money"
+        },
+        "exclusiveTotal": {
+          "description": "The tax-exclusive total against the associated tax rate",
+          "$ref": "#/definitions/Money"
+        },
+        "amount": {
+          "description": "The tax total amount against the associated tax rate.",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Details the information to show the total tax rate."
+    }
+  },
+  "externalDocs": {
+    "description": "Learn more about Amazon Business",
+    "url": "https://business.amazon.com"
+  }
+}

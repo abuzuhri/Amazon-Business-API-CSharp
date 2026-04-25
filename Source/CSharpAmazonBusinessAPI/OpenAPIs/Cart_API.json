@@ -1,0 +1,2408 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "The Amazon Business Cart API enables applications to manage shopping carts for Amazon Business customers, including synchronization with Amazon's website, item management, and cost estimation.",
+    "version": "2025-04-30",
+    "title": "Amazon Business Cart API",
+    "contact": {
+      "name": "AP Support",
+      "url": "https://developer-docs.amazon.com/amazon-business/"
+    },
+    "license": {
+      "name": "Apache License 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/cart/2025-04-30/carts": {
+      "get": {
+        "description": "Retrieves a paginated list of cart summaries for a customer in the specified region.\n\nA cart summary includes basic information like the cart's ID, type, and region, but not item details.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "listCarts",
+        "parameters": [
+          {
+            "name": "x-amz-user-email",
+            "in": "header",
+            "description": "Email address of the Amazon Business customer making the request.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken. This token needs to be encoded.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of cart summaries to return per page. Default: 5. Maximum: 10.",
+            "required": false,
+            "type": "integer",
+            "default": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The cart details list was successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CartDetailsResult"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "cartDetailsList": [
+                      {
+                        "id": "cart-123",
+                        "cartType": "DEFAULT",
+                        "region": "US"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {}
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: region.",
+                        "details": "Please provide the required parameter (region) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/cart/2025-04-30/carts/{cartId}": {
+      "get": {
+        "description": "Retrieves a summary of the cart's overall information, providing aggregate-level data for the entire cart without including individual item details.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getCart",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart whose details are to be retrieved.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The cart details were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "id": "cart-123",
+                    "cartType": "DEFAULT",
+                    "region": "US",
+                    "attributes": [
+                      {
+                        "attributeType": "SubTotal",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": 70
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {}
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: cartId.",
+                        "details": "Please provide the required parameter (cartId) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/cart/2025-04-30/carts/{cartId}/totalPurchaseCostEstimations": {
+      "post": {
+        "description": "Computes estimated total purchase cost for the cart against a delivery address.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getEstimatedTotalPurchaseCost",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart whose estimated total purchase cost is to be computed.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "in": "body",
+            "name": "estimatedTotalPurchaseCostRequest",
+            "description": "Request to compute estimated total purchase cost.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EstimatedTotalPurchaseCostRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimated total purchase cost for the cart was successfully computed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/EstimatedTotalPurchaseCostResult"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      },
+                      "body": {
+                        "value": {
+                          "address": {
+                            "addressType": "PhysicalAddress",
+                            "fullName": "cart user",
+                            "addressLine1": "307 Boren Ave",
+                            "city": "Seattle",
+                            "stateOrRegion": "WA",
+                            "postalCode": "98101",
+                            "countryCode": "US"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "charges": [
+                      {
+                        "type": "PRINCIPAL",
+                        "category": "SUBTOTAL",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": 123
+                        }
+                      },
+                      {
+                        "type": "PRINCIPAL",
+                        "category": "SHIPPING",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": 10
+                        }
+                      },
+                      {
+                        "type": "TAX",
+                        "category": "SUBTOTAL",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": 12.3
+                        }
+                      },
+                      {
+                        "type": "TAX",
+                        "category": "SHIPPING",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "amount": 1.2
+                        }
+                      }
+                    ],
+                    "rejectionArtifacts": []
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "body": {
+                        "value": {
+                          "address": {
+                            "addressType": "PhysicalAddress",
+                            "addressLine1": "307 Boren Ave",
+                            "city": "Seattle",
+                            "stateOrRegion": "WA",
+                            "postalCode": "98101",
+                            "countryCode": "US"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: address.",
+                        "details": "Please provide the required parameter (address) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/cart/2025-04-30/carts/{cartId}/items": {
+      "get": {
+        "description": "Retrieves the items in the cart.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getItems",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart whose items are to be retrieved.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Cart items were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CartItems"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "items": [
+                      {
+                        "productIdentifier": "ProductIdentifier1",
+                        "itemId": "Id1",
+                        "buyingOptionIdentifier": "BuyingOptionIdentifier1",
+                        "quantity": 2,
+                        "isItemAvailable": true,
+                        "price": {
+                          "currencyCode": "USD",
+                          "amount": 30
+                        },
+                        "addedToCartDate": "2024-07-10T15:00:00.000Z",
+                        "modifiedDate": "2024-07-10T15:00:00.000Z"
+                      },
+                      {
+                        "productIdentifier": "ProductIdentifier2",
+                        "itemId": "Id2",
+                        "buyingOptionIdentifier": "BuyingOptionIdentifier2",
+                        "quantity": 2,
+                        "isItemAvailable": true,
+                        "price": {
+                          "currencyCode": "USD",
+                          "amount": 40
+                        },
+                        "addedToCartDate": "2024-07-10T15:00:00.000Z",
+                        "modifiedDate": "2024-07-15T20:00:00.000Z"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {}
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: cartId.",
+                        "details": "Please provide the required parameter (cartId) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Adds items to the cart.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "addItems",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart to which items are to be added.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "in": "body",
+            "name": "addItemRequest",
+            "description": "Request to add items to the cart.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddItemsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The items were successfully added to the cart.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/AddItemsResult"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      },
+                      "body": {
+                        "value": {
+                          "items": [
+                            {
+                              "productIdentifier": "ProductIdentifier1",
+                              "buyingOptionIdentifier": "BuyingOptionIdentifier1",
+                              "quantity": 1,
+                              "externalId": "client-item-001"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "items": [
+                      {
+                        "productIdentifier": "ProductIdentifier1",
+                        "itemId": "Id1",
+                        "buyingOptionIdentifier": "BuyingOptionIdentifier1",
+                        "quantity": 1,
+                        "isItemAvailable": true,
+                        "price": {
+                          "currencyCode": "USD",
+                          "amount": 30
+                        },
+                        "addedToCartDate": "2024-07-10T15:00:00.000Z",
+                        "modifiedDate": "2024-07-10T15:00:00.000Z"
+                      }
+                    ],
+                    "rejectedItems": []
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "body": {
+                        "value": {
+                          "items": [
+                            {
+                              "buyingOptionIdentifier": "BuyingOptionIdentifier1",
+                              "quantity": 1
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: productIdentifier.",
+                        "details": "Please provide the required parameter (productIdentifier) in the add items request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes all items in the cart.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "deleteItems",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart from which items are to be deleted.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Items were successfully deleted from the cart.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {}
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {}
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: cartId.",
+                        "details": "Please provide the required parameter (cartId) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Modifies items in the cart.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 2 | 2 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "modifyItems",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "The unique identifier of the cart in which items are to be modified.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "in": "body",
+            "name": "modifyItemsRequest",
+            "description": "Request to modify items in the cart.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModifyItemsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Cart items were successfully modified.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ModifyItemsResult"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "region": {
+                        "value": "US"
+                      },
+                      "body": {
+                        "value": {
+                          "items": [
+                            {
+                              "itemId": "cId1",
+                              "quantity": 3
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "items": [
+                      {
+                        "productIdentifier": "ProductIdentifier1",
+                        "itemId": "cId1",
+                        "buyingOptionIdentifier": "BuyingOptionIdentifier1",
+                        "quantity": 3,
+                        "isItemAvailable": true,
+                        "price": {
+                          "currencyCode": "USD",
+                          "amount": 30
+                        },
+                        "addedToCartDate": "2024-07-10T15:00:00.000Z",
+                        "modifiedDate": "2024-07-10T15:00:00.000Z"
+                      }
+                    ],
+                    "rejectedItems": []
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "cartId": {
+                        "value": "cart-123"
+                      },
+                      "body": {
+                        "value": {
+                          "items": [
+                            {
+                              "itemId": "cId1"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: quantity.",
+                        "details": "Please provide the required parameter (quantity) in the modify items request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CatalogMetadata": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/MetadataAttribute"
+        },
+        {
+          "type": "object",
+          "required": [
+            "catalogId"
+          ],
+          "properties": {
+            "catalogId": {
+              "type": "string",
+              "description": "The unique identifier of the catalog."
+            },
+            "catalogVersion": {
+              "type": "string",
+              "description": "The version id of the catalog."
+            }
+          }
+        }
+      ],
+      "description": "Catalog Information"
+    },
+    "Address": {
+      "type": "object",
+      "required": [
+        "addressType"
+      ],
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "description": "The schema name for a subtype."
+        }
+      },
+      "description": "The base type for an address."
+    },
+    "Attribute": {
+      "type": "object",
+      "required": [
+        "attributeType"
+      ],
+      "properties": {
+        "attributeType": {
+          "type": "string",
+          "description": "The schema name for a subtype."
+        }
+      },
+      "description": "An attribute of the cart."
+    },
+    "EstimatedTotalPurchaseCostResult": {
+      "type": "object",
+      "required": [
+        "charges",
+        "rejectionArtifacts"
+      ],
+      "properties": {
+        "charges": {
+          "type": "array",
+          "description": "Detailed breakdown of all costs when delivering cart items to the provided address. This array will be empty when rejectionArtifacts contains items.",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        },
+        "rejectionArtifacts": {
+          "type": "array",
+          "description": "Array of rejection artifacts explaining any issues with the cost estimation. This array will be empty when charges contains items.",
+          "items": {
+            "$ref": "#/definitions/RejectionArtifact"
+          }
+        }
+      },
+      "description": "Details of the estimated total purchase cost for the cart. Either charges will be populated on cost estimation or rejectionArtifacts will be populated when cost estimation fails, but never both simultaneously."
+    },
+    "EstimatedTotalPurchaseCostRequest": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "description": "Address to which items in the cart are to be delivered.",
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "description": "Request to compute estimated total purchase cost for the cart."
+    },
+    "CartItem": {
+      "type": "object",
+      "required": [
+        "addedToCartDate",
+        "buyingOptionIdentifier",
+        "isItemAvailable",
+        "itemId",
+        "modifiedDate",
+        "productIdentifier",
+        "quantity"
+      ],
+      "properties": {
+        "productIdentifier": {
+          "type": "string",
+          "description": "The Amazon-specific reference for an item represented as an Amazon Standard Identification Number (ASIN)."
+        },
+        "itemId": {
+          "type": "string",
+          "description": "Unique identifier for this item within the cart."
+        },
+        "buyingOptionIdentifier": {
+          "type": "string",
+          "description": "The buying option identifier signed with cart information."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Number of units of this item in the cart.",
+          "minimum": 1
+        },
+        "isItemAvailable": {
+          "type": "boolean",
+          "description": "Flag that indicates if item in the cart is available or not."
+        },
+        "price": {
+          "description": "Price for a single unit of this item. In tax-inclusive regions (UK, DE, ES, FR, IT, JP, IN), this field includes taxes. In tax-exclusive regions (US, MX, CA), this field includes base price only.",
+          "$ref": "#/definitions/Money"
+        },
+        "taxExclusivePrice": {
+          "description": "Price for a single unit of this item excluding taxes.",
+          "$ref": "#/definitions/Money"
+        },
+        "addedToCartDate": {
+          "description": "ISO 8601 timestamp when item was added to cart. Time zone is optional. The format is YYYY-MM-DD HH:MM:SS:MMS. For example, 2020-07-10 15:00:00.000, represents the 10th of July 2020 at 3 p.m.",
+          "$ref": "#/definitions/DateTime"
+        },
+        "modifiedDate": {
+          "description": "ISO 8601 timestamp of last modification to cart item. Time zone is optional. The format is YYYY-MM-DD HH:MM:SS:MMS. For example, 2020-07-10 15:00:00.000, represents the 10th of July 2020 at 3 p.m.",
+          "$ref": "#/definitions/DateTime"
+        },
+        "metadata": {
+          "type": "array",
+          "description": "List of metadata artifacts associated with the item.",
+          "items": {
+            "$ref": "#/definitions/MetadataAttribute"
+          }
+        }
+      },
+      "description": "Details of an item in a shopping cart"
+    },
+    "ModifyItemsRequest": {
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "description": "Items to modify in the cart.",
+          "items": {
+            "$ref": "#/definitions/ModifyItemRequest"
+          },
+          "maxItems": 50,
+          "minItems": 1
+        }
+      },
+      "description": "Request to modify items in the cart."
+    },
+    "RejectionMessage": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/RejectionArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "message"
+          ],
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "The rejection message."
+            }
+          }
+        }
+      ],
+      "description": "Rejection artifact containing a descriptive message explaining why an item was rejected."
+    },
+    "MetadataAttribute": {
+      "type": "object",
+      "required": [
+        "artifactType"
+      ],
+      "properties": {
+        "artifactType": {
+          "type": "string",
+          "description": "The type of metadata attribute."
+        }
+      },
+      "description": "A metadata attribute associated with an item."
+    },
+    "AddItemsRequest": {
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "description": "Items to add to cart.",
+          "items": {
+            "$ref": "#/definitions/AddItemRequest"
+          },
+          "maxItems": 50,
+          "minItems": 1
+        }
+      },
+      "description": "Request to add items to the cart."
+    },
+    "UnavailableQuantity": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/RejectionArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "quantity"
+          ],
+          "properties": {
+            "quantity": {
+              "type": "integer",
+              "description": "Quantity that is not available for this item."
+            }
+          }
+        }
+      ],
+      "description": "Rejection artifact indicating that the requested quantity for an item is not available. This occurs when the available inventory is less than the requested quantity."
+    },
+    "DateTime": {
+      "type": "object",
+      "required": [
+        "date"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time format based on ISO 8601. Time zone is optional. The format is YYYY-MM-DD HH:MM:SS:MMS. For example, 2020-07-10 15:00:00.000, represents the 10th of July 2020 at 3 p.m."
+        }
+      },
+      "description": "The date format based on ISO 8601."
+    },
+    "CartItems": {
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "description": "List of items in the cart along with their data.",
+          "items": {
+            "$ref": "#/definitions/CartItem"
+          }
+        }
+      },
+      "description": "Items in the cart."
+    },
+    "Money": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currencyCode"
+      ],
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-digit currency code based on ISO 4217.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount in currency value."
+        }
+      },
+      "description": "Monetary value in currency."
+    },
+    "ModifyItemRequest": {
+      "type": "object",
+      "required": [
+        "itemId",
+        "quantity"
+      ],
+      "properties": {
+        "itemId": {
+          "type": "string",
+          "description": "Unique identifier for the item within the cart."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Modified quantity for the item.",
+          "minimum": 1
+        }
+      },
+      "description": "Details of modifications to be made to the item in cart."
+    },
+    "AddItemsResult": {
+      "type": "object",
+      "required": [
+        "items",
+        "rejectedItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "description": "List of all items in the cart, including items added as part of the add items request.",
+          "items": {
+            "$ref": "#/definitions/CartItem"
+          }
+        },
+        "rejectedItems": {
+          "type": "array",
+          "description": "Items that were rejected during cart addition.",
+          "items": {
+            "$ref": "#/definitions/RejectedItem"
+          }
+        }
+      },
+      "description": "Response for adding items to the cart."
+    },
+    "Cart": {
+      "type": "object",
+      "required": [
+        "cartType",
+        "id",
+        "region"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier associated with the cart."
+        },
+        "region": {
+          "description": "The region associated with the cart.",
+          "$ref": "#/definitions/RegionCode"
+        },
+        "cartType": {
+          "description": "Specifies the cart type.",
+          "$ref": "#/definitions/CartType"
+        },
+        "attributes": {
+          "type": "array",
+          "description": "Attributes associated with the cart.",
+          "items": {
+            "$ref": "#/definitions/Attribute"
+          }
+        }
+      },
+      "description": "Attributes and identifying details about a cart."
+    },
+    "CartDetails": {
+      "type": "object",
+      "required": [
+        "cartType",
+        "id",
+        "region"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier associated with the cart."
+        },
+        "region": {
+          "description": "The region associated with the cart.",
+          "$ref": "#/definitions/RegionCode"
+        },
+        "cartType": {
+          "description": "Specifies the cart type.",
+          "$ref": "#/definitions/CartType"
+        }
+      },
+      "description": "Identifier and other metadata associated with the cart."
+    },
+    "UnsupportedCartItems": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/RejectionArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "cartItemIdentifiers",
+            "message"
+          ],
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "The rejection message."
+            },
+            "cartItemIdentifiers": {
+              "type": "array",
+              "description": "The list of cart item identifiers that were rejected. Each identifier contains a cartItemId that uniquely identifies a cart item that could not be processed successfully.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "description": "Rejection artifact for one or more cart items that could not be processed successfully. This object lists the rejection reason and the specific cart items that were affected by the rejection."
+    },
+    "CartType": {
+      "type": "string",
+      "description": "Cart type.",
+      "enum": [
+        "DEFAULT"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "DEFAULT",
+          "description": "Independent cart that operates separately from Amazon Business website cart."
+        }
+      ]
+    },
+    "CartDetailsResult": {
+      "type": "object",
+      "required": [
+        "cartDetailsList"
+      ],
+      "properties": {
+        "cartDetailsList": {
+          "type": "array",
+          "description": " List of cart details in a page.",
+          "items": {
+            "$ref": "#/definitions/CartDetails"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A page token returned in the response when the number of results exceed the page size. To get the next page of results, include nextPageToken as a parameter. There are no more pages to return when the response returns no nextPageToken. This token needs to be encoded."
+        }
+      },
+      "description": "The results of the cart details query."
+    },
+    "Subtotal": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Attribute"
+        },
+        {
+          "required": [
+            "amount"
+          ],
+          "properties": {
+            "amount": {
+              "description": "Subtotal amount.",
+              "$ref": "#/definitions/Money"
+            }
+          }
+        }
+      ],
+      "description": "The total of all item prices in the shopping cart.1. In countries with tax-inclusive pricing (UK, DE, ES, FR, IT, JP, IN), the subtotal includes item prices and their taxes combined. 2. In countries with tax-exclusive pricing (US, MX, CA), the subtotal only includes the base item prices without taxes."
+    },
+    "Charge": {
+      "type": "object",
+      "required": [
+        "amount",
+        "category",
+        "type"
+      ],
+      "properties": {
+        "amount": {
+          "description": "The charge.",
+          "$ref": "#/definitions/Money"
+        },
+        "category": {
+          "type": "string",
+          "description": "The charge category.",
+          "enum": [
+            "SUBTOTAL",
+            "SHIPPING",
+            "GIFT_WRAP",
+            "PAYMENT_METHOD_FEE",
+            "EXPORT_FEE",
+            "OTHER"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "SUBTOTAL",
+              "description": "The sum of adding some numbers together but isn't the final total."
+            },
+            {
+              "value": "SHIPPING",
+              "description": "The cost of shipping for the cart."
+            },
+            {
+              "value": "GIFT_WRAP",
+              "description": "The cost of gift wrapping for selected items in the cart."
+            },
+            {
+              "value": "PAYMENT_METHOD_FEE",
+              "description": "An extra fee associated with the selected payment method."
+            },
+            {
+              "value": "EXPORT_FEE",
+              "description": "The cost of exporting items in the cart."
+            },
+            {
+              "value": "OTHER",
+              "description": "Uncategorized charges."
+            }
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "These are the type of charges applied to the cart.",
+          "enum": [
+            "PRINCIPAL",
+            "TAX",
+            "DISCOUNT"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "PRINCIPAL",
+              "description": "The price of items in the cart before any additional charges or credits are applied."
+            },
+            {
+              "value": "TAX",
+              "description": "The tax charges applied to items in the cart."
+            },
+            {
+              "value": "DISCOUNT",
+              "description": "The discount applied to the cart."
+            }
+          ]
+        }
+      },
+      "description": "A qualified monetary charge corresponding to estimated cost breakdown for the cart."
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "An error code that identifies the type of error that occurred."
+        },
+        "message": {
+          "type": "string",
+          "description": "A message that describes the error condition."
+        },
+        "details": {
+          "type": "string",
+          "description": "Additional details that can help the caller understand or fix the issue."
+        }
+      },
+      "description": "Error response returned when the request is unsuccessful."
+    },
+    "SubtotalWithoutTax": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Attribute"
+        },
+        {
+          "required": [
+            "amount"
+          ],
+          "properties": {
+            "amount": {
+              "description": "Subtotal amount excluding taxes.",
+              "$ref": "#/definitions/Money"
+            }
+          }
+        }
+      ],
+      "description": "The total of all item prices in the shopping cart excluding taxes. Applicable and populated only for UK, DE, ES, FR, IT, JP, IN"
+    },
+    "PhysicalAddress": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Address"
+        },
+        {
+          "required": [
+            "addressLine1",
+            "city",
+            "countryCode",
+            "fullName",
+            "postalCode"
+          ],
+          "properties": {
+            "fullName": {
+              "type": "string",
+              "description": "The full name of the customer associated with the address.",
+              "minLength": 1
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The phone number of the customer associated with the address.",
+              "minLength": 1
+            },
+            "companyName": {
+              "type": "string",
+              "description": "The company name of the customer associated with the address."
+            },
+            "addressLine1": {
+              "type": "string",
+              "description": "The primary address of the customer with the street name, building number, city, state, and postal code.",
+              "minLength": 1
+            },
+            "addressLine2": {
+              "type": "string",
+              "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers.",
+              "maxLength": 60
+            },
+            "addressLine3": {
+              "type": "string",
+              "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers. Preferred to use addressLine3 when addressLine2 exceeds the allowed number of characters",
+              "maxLength": 60
+            },
+            "city": {
+              "type": "string",
+              "description": "The city associated with the customer's address.",
+              "minLength": 1
+            },
+            "stateOrRegion": {
+              "type": "string",
+              "description": "The state associated with the customer's address. This is a requirement for US region only."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "The postal code associated with the customer's address.",
+              "minLength": 1
+            },
+            "countryCode": {
+              "type": "string",
+              "description": "The country code associated with the customer's address in ISO 3166 alpha-2 (2-char) format.",
+              "pattern": "^[A-Z]{2}$"
+            }
+          }
+        }
+      ],
+      "description": "A detailed physical address."
+    },
+    "ModifyItemsResult": {
+      "type": "object",
+      "required": [
+        "items",
+        "rejectedItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "description": "List of all items in the cart after processing the modify items request.",
+          "items": {
+            "$ref": "#/definitions/CartItem"
+          }
+        },
+        "rejectedItems": {
+          "type": "array",
+          "description": "Items that were rejected during cart modification.",
+          "items": {
+            "$ref": "#/definitions/RejectedItem"
+          }
+        }
+      },
+      "description": "Response for modifying items in the cart."
+    },
+    "TotalItemCountRestriction": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/RejectionArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "maxQuantity"
+          ],
+          "properties": {
+            "maxQuantity": {
+              "type": "integer",
+              "description": "Maximum number of items that can be added to cart."
+            }
+          }
+        }
+      ],
+      "description": "Rejection artifact indicating that the number of items in the cart exceeded the maximum allowed value."
+    },
+    "AddItemRequest": {
+      "type": "object",
+      "required": [
+        "buyingOptionIdentifier",
+        "externalId",
+        "productIdentifier",
+        "quantity"
+      ],
+      "properties": {
+        "productIdentifier": {
+          "type": "string",
+          "description": "The Amazon-specific reference for an item represented as an Amazon Standard Identification Number (ASIN)."
+        },
+        "buyingOptionIdentifier": {
+          "type": "string",
+          "description": "The buying option identifier to be used for adding item to the cart."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Quantity of item.",
+          "minimum": 1
+        },
+        "externalId": {
+          "type": "string",
+          "description": "A unique customer-specified identifier for this item request. This identifier is returned in the rejectedItems array if the item fails to be added to the cart."
+        },
+        "metadata": {
+          "type": "array",
+          "description": "List of metadata artifacts associated with the item.",
+          "items": {
+            "$ref": "#/definitions/MetadataAttribute"
+          }
+        }
+      },
+      "description": "Details of the item that needs to be added to the cart."
+    },
+    "TotalQuantityRestriction": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/RejectionArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "maxQuantity"
+          ],
+          "properties": {
+            "maxQuantity": {
+              "type": "integer",
+              "description": "Maximum cumulative quantity across all items that can be added to cart."
+            }
+          }
+        }
+      ],
+      "description": "Rejection artifact indicating that the cumulative quantity across all items in the cart exceeded the maximum allowed value."
+    },
+    "ErrorList": {
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "List of errors.",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      },
+      "description": "A list of error responses for an unsuccessful request."
+    },
+    "RejectedItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "rejectionArtifacts"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier of the item that was rejected."
+        },
+        "rejectionArtifacts": {
+          "type": "array",
+          "description": "Array of rejection artifacts explaining why the item was rejected.",
+          "items": {
+            "$ref": "#/definitions/RejectionArtifact"
+          }
+        }
+      },
+      "description": "Details of an item that was rejected during cart addition."
+    },
+    "RejectionArtifact": {
+      "type": "object",
+      "required": [
+        "rejectionArtifactType"
+      ],
+      "properties": {
+        "rejectionArtifactType": {
+          "type": "string",
+          "description": "The schema name for a subtype."
+        }
+      },
+      "description": "An artifact explaining why an item or request was rejected."
+    },
+    "RegionCode": {
+      "type": "string",
+      "description": "Region associated with the cart.",
+      "enum": [
+        "DE",
+        "FR",
+        "UK",
+        "IT",
+        "ES",
+        "IN",
+        "US",
+        "CA",
+        "MX",
+        "JP",
+        "AU"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "DE",
+          "description": "Germany"
+        },
+        {
+          "value": "FR",
+          "description": "France"
+        },
+        {
+          "value": "UK",
+          "description": "United Kingdom"
+        },
+        {
+          "value": "IT",
+          "description": "Italy"
+        },
+        {
+          "value": "ES",
+          "description": "Spain"
+        },
+        {
+          "value": "IN",
+          "description": "India"
+        },
+        {
+          "value": "US",
+          "description": "United States of America"
+        },
+        {
+          "value": "CA",
+          "description": "Canada"
+        },
+        {
+          "value": "MX",
+          "description": "Mexico"
+        },
+        {
+          "value": "JP",
+          "description": "Japan"
+        },
+        {
+          "value": "AU",
+          "description": "Australia"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "Region": {
+      "name": "region",
+      "in": "query",
+      "description": "The region where the customer wants to retrieve the carts.",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "DE",
+        "FR",
+        "UK",
+        "IT",
+        "ES",
+        "IN",
+        "US",
+        "CA",
+        "MX",
+        "JP",
+        "AU"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "DE",
+          "description": "Germany"
+        },
+        {
+          "value": "FR",
+          "description": "France"
+        },
+        {
+          "value": "UK",
+          "description": "United Kingdom"
+        },
+        {
+          "value": "IT",
+          "description": "Italy"
+        },
+        {
+          "value": "ES",
+          "description": "Spain"
+        },
+        {
+          "value": "IN",
+          "description": "India"
+        },
+        {
+          "value": "US",
+          "description": "United States of America"
+        },
+        {
+          "value": "CA",
+          "description": "Canada"
+        },
+        {
+          "value": "MX",
+          "description": "Mexico"
+        },
+        {
+          "value": "JP",
+          "description": "Japan"
+        },
+        {
+          "value": "AU",
+          "description": "Australia"
+        }
+      ]
+    }
+  }
+}

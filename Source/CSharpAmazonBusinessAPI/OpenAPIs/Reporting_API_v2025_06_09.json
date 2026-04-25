@@ -1,0 +1,2473 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "The Amazon Business API for Order and Shipment Reporting provides comprehensive capabilities for analyzing order data, tracking shipments, and monitoring procurement activities. This API enables businesses to retrieve detailed information about orders, order line items, shipments, and shipment items. Key features include:\n\n- Detailed order and shipment data retrieval\n- Line item-level reporting for orders and shipments\n- Flexible filtering options for targeted data analysis\n- Pagination support for handling large datasets\n- Comprehensive error handling and status reporting\n\nThese capabilities facilitate in-depth analysis and reporting of procurement activities, helping businesses track supplier performance, monitor spending goals, and optimize their purchasing processes.",
+    "version": "2025-06-09",
+    "title": "Amazon Business API for Order and Shipment Reporting",
+    "contact": {
+      "name": "AB Support",
+      "url": "https://developer-docs.amazon.com/amazon-business/"
+    },
+    "license": {
+      "name": "Amazon Software License",
+      "url": "https://aws.amazon.com/asl/"
+    }
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/reports/2025-06-09/orderReports": {
+      "get": {
+        "description": "Fetches orders from all legal entities associated with the partyId based on specified search criteria. This endpoint allows for detailed querying of order data, enabling comprehensive order reporting and analysis. \n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getOrderReports",
+        "parameters": [
+          {
+            "name": "orderStartDate",
+            "in": "query",
+            "description": "The start of the order date range to search for orders, in ISO 8601 format. Must not be more than 366 days before orderEndDate.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderEndDate",
+            "in": "query",
+            "description": "The end of the order date range to search for orders, in ISO 8601 format. Must not be in the future and must not be more than 366 days after orderStartDate.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderStatuses",
+            "in": "query",
+            "description": "List of OrderStatus values used to filter the results.\n\n**Possible values:**\n- `PENDING_APPROVAL` : The order has been submitted for approval.\n- `PAYMENT_CONFIRMED` : The payment information has been collected by Amazon Business.\n- `PENDING_FULFILLMENT` : The order is due for fulfillment. \n- `PENDING` : The order details are being processed by Amazon Business.\n- `CANCELLED` : The order has been cancelled either by the buyer or by Amazon Business.\n- `CLOSED` : The order has been delivered to the buyer and closed.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "minItems": 1
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. Must be used with the same query parameters as the original request, changing parameters will result in an error. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetOrderReportsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-01-15T10:30:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-02-15T10:30:00Z"
+                      },
+                      "region": {
+                        "value": "US"
+                      },
+                      "orderStatuses": {
+                        "value": [
+                          "CLOSED"
+                        ]
+                      }
+                    }
+                  },
+                  "response": {
+                    "ordersReport": [
+                      {
+                        "orderMetadata": {
+                          "orderDate": "2025-04-11T00:00:00Z",
+                          "orderId": "112-3456789-0123456",
+                          "region": "US"
+                        },
+                        "purchaseOrderNumber": "PO-2025-0123",
+                        "orderStatus": "CLOSED",
+                        "charges": [
+                          {
+                            "type": "SUBTOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 499.95
+                            }
+                          },
+                          {
+                            "type": "SHIPPING_AND_HANDLING",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 25.0
+                            }
+                          },
+                          {
+                            "type": "PROMOTION",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": -50.0
+                            }
+                          },
+                          {
+                            "type": "TAX",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 37.5
+                            }
+                          },
+                          {
+                            "type": "NET_TOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 512.45
+                            }
+                          }
+                        ],
+                        "buyingCustomer": {
+                          "name": "[customerName]",
+                          "email": "[customerEmail]"
+                        },
+                        "buyerGroup": {
+                          "name": "[buyerGroupName]"
+                        },
+                        "businessOrderInfo": {
+                          "glCode": "[glCode]",
+                          "costCenter": "[costCenter]",
+                          "location": "[location]",
+                          "projectCode": "[projectCode]",
+                          "department": "[department]"
+                        },
+                        "approverDetails": {
+                          "lastOrderApproverCustomer": {
+                            "name": "[approverName]",
+                            "email": "[approverEmail]"
+                          }
+                        }
+                      }
+                    ],
+                    "nextPageToken": "[nextPageToken]"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderEndDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required parameter orderStartDate is missing.",
+                        "details": "Please provide the required parameter orderStartDate in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reports/2025-06-09/orderLineItemReports": {
+      "get": {
+        "description": "Fetches order line items from all legal entities associated with the partyId based on specified search criteria. This endpoint allows for detailed querying of order line item data, enabling comprehensive order line item reporting and analysis.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getOrderLineItemReports",
+        "parameters": [
+          {
+            "name": "orderStartDate",
+            "in": "query",
+            "description": "The start of the order date range to search for order line items, in ISO 8601 format. Must not be more than 366 days before orderEndDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderEndDate",
+            "in": "query",
+            "description": "The end of the order date range to search for order line items, in ISO 8601 format. Must not be in the future and must not be more than 366 days after orderStartDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "orderIds",
+            "in": "query",
+            "description": "List of order IDs to filter by. If the order date for any specified order ID is not within the provided date range, an empty result will be returned.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "maxItems": 30,
+            "minItems": 1
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. Must be used with the same query parameters as the original request, changing parameters will result in an error. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order line items were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetOrderLineItemReportsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-04-30T00:00:00Z"
+                      },
+                      "region": {
+                        "value": "US"
+                      },
+                      "orderIds": {
+                        "value": [
+                          "112-3456789-0123456"
+                        ]
+                      }
+                    }
+                  },
+                  "response": {
+                    "orderLineItemsReport": [
+                      {
+                        "orderMetadata": {
+                          "orderDate": "2025-04-11T00:00:00Z",
+                          "orderId": "112-3456789-0123456",
+                          "region": "US"
+                        },
+                        "orderLineItemId": "1",
+                        "purchaseOrderNumber": "PO-2025-0123",
+                        "purchaseOrderLineItemNumber": "PO-2025-0123-1",
+                        "productDetails": {
+                          "productCategory": "Office Electronics",
+                          "asin": "B08N5KWB9H",
+                          "title": "Professional Laptop Docking Station",
+                          "unspsc": {
+                            "code": "43211602"
+                          },
+                          "productCondition": "New",
+                          "brandCode": "TH-101",
+                          "brandName": "TechHub",
+                          "manufacturerName": "TechHub Electronics",
+                          "serialNumbers": [
+                            "DOCK-2025-001",
+                            "DOCK-2025-002"
+                          ]
+                        },
+                        "quantity": 5,
+                        "unitPrice": {
+                          "currencyCode": "USD",
+                          "amount": 99.99
+                        },
+                        "charges": [
+                          {
+                            "type": "SUBTOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 499.95
+                            }
+                          },
+                          {
+                            "type": "SHIPPING_AND_HANDLING",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 25.0
+                            }
+                          },
+                          {
+                            "type": "PROMOTION",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": -50.0
+                            }
+                          },
+                          {
+                            "type": "TAX",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 37.5
+                            }
+                          },
+                          {
+                            "type": "NET_TOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 512.45
+                            }
+                          }
+                        ],
+                        "taxExemption": {
+                          "applied": false,
+                          "type": "None",
+                          "optOut": false
+                        },
+                        "pricingProgram": {
+                          "name": "Business Pricing",
+                          "discountAmount": {
+                            "currencyCode": "USD",
+                            "amount": 50.0
+                          }
+                        },
+                        "sustainability": {
+                          "certificationCategory": "Climate Pledge Friendly",
+                          "certificationTypes": [
+                            "type1",
+                            "type2"
+                          ]
+                        },
+                        "seller": {
+                          "name": "[sellerName]",
+                          "primaryAddress": {
+                            "addressLine1": "[addressLine1]",
+                            "addressLine2": "[addressLine2]",
+                            "city": "[city]",
+                            "stateOrRegion": "[state]",
+                            "postalCode": "[postalCode]",
+                            "countryCode": "US"
+                          },
+                          "credentials": {
+                            "types": [
+                              "Small Business"
+                            ],
+                            "details": [
+                              {
+                                "certificateType": "SmallBusiness",
+                                "certifyingAgenciesDetails": [
+                                  {
+                                    "agencyName": "[certifyingAgencyName]",
+                                    "certificateExpirationDate": "2028-04-01T00:00:00Z"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "nextPageToken": "[nextPageToken]"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-02-01T00:00:00Z"
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The orderStartDate must be before or equal to orderEndDate.",
+                        "details": "Please ensure orderStartDate is chronologically before orderEndDate."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reports/2025-06-09/purchaseOrders/{purchaseOrderNumber}/orderReports": {
+      "get": {
+        "description": "Fetches orders associated with a specific purchase order number. This endpoint allows for detailed querying of order data related to a particular purchase order, enabling comprehensive order reporting and analysis. This API supports data retrieval for the past 2 years only. If the purchase order is older than 2 years, it would return empty result.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getOrderReportsByPurchaseOrderNumber",
+        "parameters": [
+          {
+            "name": "purchaseOrderNumber",
+            "in": "path",
+            "description": "The purchase order number used to retrieve associated orders.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. Must be used with the same query parameters as the original request, changing parameters will result in an error. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetOrderReportsByPurchaseOrderNumberResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "purchaseOrderNumber": {
+                        "value": "PO-12345"
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "ordersReport": [
+                      {
+                        "orderMetadata": {
+                          "orderDate": "2025-04-11T00:00:00Z",
+                          "orderId": "112-3456789-0123456",
+                          "region": "US"
+                        },
+                        "purchaseOrderNumber": "PO-12345",
+                        "orderStatus": "CLOSED",
+                        "charges": [
+                          {
+                            "type": "SUBTOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 499.95
+                            }
+                          },
+                          {
+                            "type": "SHIPPING_AND_HANDLING",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 25.0
+                            }
+                          },
+                          {
+                            "type": "PROMOTION",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": -50.0
+                            }
+                          },
+                          {
+                            "type": "TAX",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 37.5
+                            }
+                          },
+                          {
+                            "type": "NET_TOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 512.45
+                            }
+                          }
+                        ],
+                        "buyingCustomer": {
+                          "name": "[customerName]",
+                          "email": "[customerEmail]"
+                        },
+                        "buyerGroup": {
+                          "name": "[buyerGroupName]"
+                        },
+                        "businessOrderInfo": {
+                          "glCode": "[glCode]",
+                          "costCenter": "[costCenter]",
+                          "location": "[location]",
+                          "projectCode": "[projectCode]",
+                          "department": "[department]"
+                        },
+                        "approverDetails": {
+                          "lastOrderApproverCustomer": {
+                            "name": "[approverName]",
+                            "email": "[approverEmail]"
+                          }
+                        }
+                      }
+                    ],
+                    "nextPageToken": "[nextPageToken]"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "purchaseOrderNumber": {
+                        "value": ""
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required parameter purchaseOrderNumber is missing or invalid.",
+                        "details": "Please provide a valid purchase order number."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reports/2025-06-09/shipmentReports": {
+      "get": {
+        "description": "Fetches shipments from all legal entities associated with the partyId based on specified search criteria. This endpoint allows for detailed querying of shipment data, enabling comprehensive shipment reporting and analysis.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getShipmentReports",
+        "parameters": [
+          {
+            "name": "orderStartDate",
+            "in": "query",
+            "description": "The start of the order date range to search for shipments, in ISO 8601 format. Must not be more than 366 days before orderEndDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderEndDate",
+            "in": "query",
+            "description": "The end of the order date range to search for shipments, in ISO 8601 format. Must not be in the future and must not be more than 366 days after orderStartDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "shipmentStatuses",
+            "in": "query",
+            "description": "List of shipment status values used to filter the results.\n\n**Possible values:**\n- `SHIPPED` : The shipment has been sent out.\n- `PENDING_PAYMENT` : The shipment is awaiting payment before it can be processed.\n- `SHIPPING_SOON` : The shipment is being prepared and will be shipped shortly.\n- `SHIPPED_PLANNED` : The shipment has been planned but not yet dispatched.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "minItems": 1
+          },
+          {
+            "name": "orderIds",
+            "in": "query",
+            "description": "List of order IDs to filter by. If the order date for any specified order ID is not within the provided date range, an empty result will be returned.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "maxItems": 30,
+            "minItems": 1
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. Must be used with the same query parameters as the original request, changing parameters will result in an error. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shipment details were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetShipmentReportsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-04-30T00:00:00Z"
+                      },
+                      "shipmentStatuses": {
+                        "value": [
+                          "SHIPPED"
+                        ]
+                      },
+                      "orderIds": {
+                        "value": [
+                          "112-3456789-0123456"
+                        ]
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "shipmentsReport": [
+                      {
+                        "orderMetadata": {
+                          "orderDate": "2025-04-11T00:00:00Z",
+                          "orderId": "112-3456789-0123456",
+                          "region": "US"
+                        },
+                        "shipmentMetadata": {
+                          "shipmentDate": "2025-04-21T00:00:00Z",
+                          "shipmentId": "SHIP-12345"
+                        },
+                        "purchaseOrderNumber": "PO-12345",
+                        "shipmentStatus": "SHIPPED",
+                        "deliveryInfo": {
+                          "expectedDeliveryDate": "2025-04-22T00:00:00Z",
+                          "status": "NOT_DELIVERED"
+                        },
+                        "charges": [
+                          {
+                            "type": "SUBTOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 100.0
+                            }
+                          },
+                          {
+                            "type": "SHIPPING_AND_HANDLING",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 10.0
+                            }
+                          },
+                          {
+                            "type": "PROMOTION",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": -5.0
+                            }
+                          },
+                          {
+                            "type": "TAX",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 5.0
+                            }
+                          },
+                          {
+                            "type": "NET_TOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 110.0
+                            }
+                          }
+                        ],
+                        "shippingAddress": {
+                          "fullName": "[recipientFullName]",
+                          "addressLine1": "[addressLine1]",
+                          "addressLine2": "[addressLine2]",
+                          "city": "[city]",
+                          "stateOrRegion": "[state]",
+                          "postalCode": "[postalCode]",
+                          "countryCode": "US"
+                        }
+                      }
+                    ],
+                    "nextPageToken": "NEXT_PAGE_TOKEN"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-02-01T00:00:00Z"
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "InvalidInput",
+                        "message": "Invalid date range specified.",
+                        "details": "The orderStartDate must be before or equal to the orderEndDate."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    },
+    "/reports/2025-06-09/shipmentLineItemReports": {
+      "get": {
+        "description": "Fetches shipment line items from all legal entities associated with the partyId based on specified search criteria. This endpoint allows for detailed querying of shipment line item data, enabling comprehensive shipment line item reporting and analysis.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "getShipmentLineItemReports",
+        "parameters": [
+          {
+            "name": "orderStartDate",
+            "in": "query",
+            "description": "The start of the order date range to search for shipment line items, in ISO 8601 format. Must not be more than 366 days before orderEndDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderEndDate",
+            "in": "query",
+            "description": "The end of the order date range to search for shipment line items, in ISO 8601 format. Must not be in the future and must not be more than 366 days after orderStartDate.\",",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "orderIds",
+            "in": "query",
+            "description": "List of order IDs to filter by. If the order date for any specified order ID is not within the provided date range, an empty result will be returned.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "maxItems": 30,
+            "minItems": 1
+          },
+          {
+            "name": "purchaseOrderNumbers",
+            "in": "query",
+            "description": "List of purchase order numbers to filter by. If the order date for any specified purchase order number is not within the provided date range, an empty result will be returned.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv",
+            "maxItems": 30,
+            "minItems": 1
+          },
+          {
+            "$ref": "#/parameters/Region"
+          },
+          {
+            "name": "nextPageToken",
+            "in": "query",
+            "description": "A page token returned in the response to your previous request when the number of results exceed the page size. To get the next page of results, include pageToken as a parameter. There are no more pages to return when the response returns no nextPageToken.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shipment items were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetShipmentLineItemReportsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-04-30T00:00:00Z"
+                      },
+                      "orderIds": {
+                        "value": [
+                          "112-3456789-0123456"
+                        ]
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "shipmentLineItemsReport": [
+                      {
+                        "orderMetadata": {
+                          "orderDate": "2025-04-11T00:00:00Z",
+                          "orderId": "112-3456789-0123456",
+                          "region": "US"
+                        },
+                        "shipmentMetadata": {
+                          "shipmentDate": "2025-04-21T00:00:00Z",
+                          "shipmentId": "SHIP-12345"
+                        },
+                        "purchaseOrderNumber": "PO-12345",
+                        "purchaseOrderLineItemNumber": "1",
+                        "orderLineItemId": "LINE-12345",
+                        "productDetails": {
+                          "productCategory": "Office Electronics",
+                          "asin": "B00EXAMPLE",
+                          "title": "Example Product",
+                          "unspsc": {
+                            "code": "43211602"
+                          },
+                          "productCondition": "New",
+                          "brandCode": "EXBRAND",
+                          "brandName": "Example Brand",
+                          "manufacturerName": "Example Manufacturer",
+                          "serialNumbers": [
+                            "SN123456",
+                            "SN123457"
+                          ]
+                        },
+                        "charges": [
+                          {
+                            "type": "SUBTOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 100.0
+                            }
+                          },
+                          {
+                            "type": "SHIPPING_AND_HANDLING",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 10.0
+                            }
+                          },
+                          {
+                            "type": "PROMOTION",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": -5.0
+                            }
+                          },
+                          {
+                            "type": "TAX",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 5.0
+                            }
+                          },
+                          {
+                            "type": "NET_TOTAL",
+                            "amount": {
+                              "currencyCode": "USD",
+                              "amount": 110.0
+                            }
+                          }
+                        ],
+                        "quantity": 2,
+                        "carrierName": "Example Carrier",
+                        "packages": [
+                          {
+                            "trackingId": "1Z999AA1123456789",
+                            "packageId": "PACKAGE-12345"
+                          }
+                        ],
+                        "receivingInfo": {
+                          "customer": {
+                            "name": "[customerName]",
+                            "email": "[customerEmail]"
+                          },
+                          "date": "2025-04-23T00:00:00Z",
+                          "status": "ALL_ITEMS_RECEIVED",
+                          "quantity": 2
+                        }
+                      }
+                    ],
+                    "nextPageToken": "NEXT_PAGE_TOKEN"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderStartDate": {
+                        "value": "2025-04-01T00:00:00Z"
+                      },
+                      "orderEndDate": {
+                        "value": "2025-02-01T00:00:00Z"
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "InvalidInput",
+                        "message": "Invalid date range specified.",
+                        "details": "The orderStartDate must be before or equal to the orderEndDate."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "required": [
+        "addressLine1",
+        "city",
+        "countryCode",
+        "postalCode"
+      ],
+      "properties": {
+        "addressLine1": {
+          "type": "string",
+          "description": "The primary address line.",
+          "minLength": 1
+        },
+        "addressLine2": {
+          "type": "string",
+          "description": "The secondary address line.",
+          "maxLength": 60
+        },
+        "city": {
+          "type": "string",
+          "description": "The city name.",
+          "minLength": 1
+        },
+        "stateOrRegion": {
+          "type": "string",
+          "description": "The state or region. Mandatory for addresses in the US."
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "The postal code.",
+          "minLength": 1
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "The country code in ISO 3166-1 alpha-2 format.",
+          "pattern": "^[A-Z]{2}$"
+        }
+      },
+      "description": "A detailed physical address."
+    },
+    "Customer": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the customer."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the customer."
+        }
+      },
+      "description": "Details of a customer."
+    },
+    "OrderLineItemReport": {
+      "type": "object",
+      "required": [
+        "charges",
+        "orderLineItemId",
+        "orderMetadata",
+        "productDetails"
+      ],
+      "properties": {
+        "orderMetadata": {
+          "description": "Metadata about an order including order ID and order date.",
+          "$ref": "#/definitions/OrderMetadata"
+        },
+        "orderLineItemId": {
+          "type": "string",
+          "description": "The unique identifier assigned to this specific line item in the order."
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "The purchase order number associated with this line item."
+        },
+        "purchaseOrderLineItemNumber": {
+          "type": "string",
+          "description": "The reference number that identifies this line item on the purchase order."
+        },
+        "productDetails": {
+          "description": "Details of the product in this line item.",
+          "$ref": "#/definitions/ProductDetails"
+        },
+        "unitPrice": {
+          "description": "The actual purchased price per unit for this line item.",
+          "$ref": "#/definitions/Money"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "The quantity of items",
+          "minimum": 0
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges associated with the order",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        },
+        "taxExemption": {
+          "description": "Information about tax exemption for this line item.",
+          "$ref": "#/definitions/TaxExemption"
+        },
+        "pricingProgram": {
+          "description": "Information about discounts applied to this line item.",
+          "$ref": "#/definitions/PricingProgram"
+        },
+        "sustainability": {
+          "description": "Sustainability information for this line item.",
+          "$ref": "#/definitions/Sustainability"
+        },
+        "seller": {
+          "description": "Information about the seller of this line item.",
+          "$ref": "#/definitions/Seller"
+        }
+      },
+      "description": "Represents a detailed line item report for an order,"
+    },
+    "ReceivingInfo": {
+      "type": "object",
+      "required": [
+        "customer",
+        "quantity",
+        "status"
+      ],
+      "properties": {
+        "customer": {
+          "description": "The customer associated with this receiving info.",
+          "$ref": "#/definitions/Customer"
+        },
+        "date": {
+          "description": "The date when the item was received. If the item is not yet received, this field will be null.",
+          "$ref": "#/definitions/DateTime"
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of receiving an item.\n\n**Possible values:**\n- `ALL_ITEMS_RECEIVED` : The item has been fully received.\n- `PARTIALLY_RECEIVED` : Only a part of the item quantity has been received.\n- `PENDING` : The item has not been received yet.\n- `ITEMS_MISSING` : Some items from the shipment are missing."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "The quantity of the item received.",
+          "minimum": 0
+        }
+      },
+      "description": "A line item's receiving status."
+    },
+    "GetOrderLineItemReportsResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "orderLineItemsReport"
+      ],
+      "properties": {
+        "orderLineItemsReport": {
+          "type": "array",
+          "description": "The list of order line items matching the search criteria.",
+          "items": {
+            "$ref": "#/definitions/OrderLineItemReport"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        },
+        "size": {
+          "type": "integer",
+          "description": "Number of order line items in the response."
+        }
+      },
+      "description": "The response schema for the GetOrderLineItemReports operation."
+    },
+    "CertifyingAgencyDetail": {
+      "type": "object",
+      "properties": {
+        "agencyName": {
+          "type": "string",
+          "description": "The name of the certifying agency."
+        },
+        "certificateExpirationDate": {
+          "description": "The expiration date of the certificate.",
+          "$ref": "#/definitions/DateTime"
+        }
+      },
+      "description": "Information about a certifying agency."
+    },
+    "DeliveryInfo": {
+      "type": "object",
+      "required": [
+        "expectedDeliveryDate",
+        "status"
+      ],
+      "properties": {
+        "expectedDeliveryDate": {
+          "description": "The expected date and time of delivery.",
+          "$ref": "#/definitions/DateTime"
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of a delivery.\n\n**Possible values:**\n- `DELIVERED` : The shipment has been successfully delivered to the recipient.\n- `NOT_DELIVERED` : The shipment has not been delivered yet.\n- `NOT_AVAILABLE` : The delivery status is currently unavailable."
+        }
+      },
+      "description": "Information about the delivery of a shipment."
+    },
+    "DateTime": {
+      "type": "object",
+      "required": [
+        "date"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time in ISO 8601 format with UTC timezone. The format is YYYY-MM-DDThh:mm:ssZ. For example, 2025-01-15T10:30:00Z represents January 15, 2025 at 10:30 AM UTC."
+        }
+      },
+      "description": "The date format based on ISO 8601."
+    },
+    "Money": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currencyCode"
+      ],
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The currency code in ISO 4217 format.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "amount": {
+          "type": "number",
+          "description": "The monetary amount."
+        }
+      },
+      "description": "Representation of a monetary value."
+    },
+    "OrderReport": {
+      "type": "object",
+      "required": [
+        "charges",
+        "orderMetadata",
+        "orderStatus"
+      ],
+      "properties": {
+        "orderMetadata": {
+          "description": "Metadata about an order including order ID and order date.",
+          "$ref": "#/definitions/OrderMetadata"
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "The purchase order number associated with the order."
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges associated with the order",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        },
+        "orderStatus": {
+          "type": "string",
+          "description": "The current status of an order in the system.\n\n**Possible values:**\n- `PENDING_APPROVAL` : The order has been submitted for approval.\n- `PAYMENT_CONFIRMED` : The payment information has been collected by Amazon Business.\n- `PENDING_FULFILLMENT` : The order is due for fulfillment. \n- `PENDING` : The order details are being processed by Amazon Business.\n- `CANCELLED` : The order has been cancelled either by the buyer or by Amazon Business.\n- `CLOSED` : The order has been delivered to the buyer and closed."
+        },
+        "buyingCustomer": {
+          "description": "Details of the customer who placed the order.",
+          "$ref": "#/definitions/Customer"
+        },
+        "buyerGroup": {
+          "description": "Details of the buyer group associated with the order.",
+          "$ref": "#/definitions/BuyerGroupDetails"
+        },
+        "businessOrderInfo": {
+          "type": "object",
+          "description": "Additional business-specific information about the order.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "approverDetails": {
+          "description": "Details of the person who approved the order.",
+          "$ref": "#/definitions/ApproverDetails"
+        }
+      },
+      "description": "Represents a detailed order report containing comprehensive order information."
+    },
+    "ShipmentReport": {
+      "type": "object",
+      "required": [
+        "charges",
+        "orderMetadata",
+        "shipmentMetadata",
+        "shipmentStatus",
+        "shippingAddress"
+      ],
+      "properties": {
+        "orderMetadata": {
+          "description": "Metadata about an order including order ID and order date.",
+          "$ref": "#/definitions/OrderMetadata"
+        },
+        "shipmentMetadata": {
+          "description": "Metadata about a shipment including shipment ID and shipment date.",
+          "$ref": "#/definitions/ShipmentMetadata"
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "The purchase order number associated with the order."
+        },
+        "shipmentStatus": {
+          "type": "string",
+          "description": "The status of a shipment.\n\n**Possible values:**\n- `SHIPPED` : The shipment has been sent out.\n- `PENDING_PAYMENT` : The shipment is awaiting payment before it can be processed.\n- `SHIPPING_SOON` : The shipment is being prepared and will be shipped shortly.\n- `SHIPPED_PLANNED` : The shipment has been planned but not yet dispatched."
+        },
+        "shippingAddress": {
+          "description": "The shipping address for the shipment.",
+          "$ref": "#/definitions/ShippingAddress"
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges associated with the order",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        },
+        "deliveryInfo": {
+          "description": "Information about the delivery of the shipment.",
+          "$ref": "#/definitions/DeliveryInfo"
+        }
+      },
+      "description": "Represents a detailed shipment report."
+    },
+    "Sustainability": {
+      "type": "object",
+      "properties": {
+        "certificationCategory": {
+          "type": "string",
+          "description": "The category of sustainability certification."
+        },
+        "certificationTypes": {
+          "type": "array",
+          "description": "The types of sustainability certification.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Sustainability information for a line item."
+    },
+    "ProductDetails": {
+      "type": "object",
+      "required": [
+        "asin",
+        "brandCode",
+        "brandName",
+        "manufacturerName",
+        "productCategory",
+        "productCondition",
+        "title",
+        "unspsc"
+      ],
+      "properties": {
+        "productCategory": {
+          "type": "string",
+          "description": "The category of the product."
+        },
+        "asin": {
+          "type": "string",
+          "description": "The Amazon Standard Identification Number (ASIN) of the product."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the product."
+        },
+        "unspsc": {
+          "description": "The United Nations Standard Products and Services Code (UNSPSC) for the product.",
+          "$ref": "#/definitions/Unspsc"
+        },
+        "productCondition": {
+          "type": "string",
+          "description": "The physical condition of the product at time of shipment."
+        },
+        "brandCode": {
+          "type": "string",
+          "description": "The code identifying the brand of the product."
+        },
+        "brandName": {
+          "type": "string",
+          "description": "The name of the brand."
+        },
+        "manufacturerName": {
+          "type": "string",
+          "description": "The name of the manufacturer."
+        },
+        "serialNumbers": {
+          "type": "array",
+          "description": "List of serial numbers associated with the product.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Information about a product."
+    },
+    "GetOrderReportsByPurchaseOrderNumberResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "ordersReport"
+      ],
+      "properties": {
+        "ordersReport": {
+          "type": "array",
+          "description": "The list of orders matching the search criteria.",
+          "items": {
+            "$ref": "#/definitions/OrderReport"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        },
+        "size": {
+          "type": "integer",
+          "description": "Number of orders in the response."
+        }
+      },
+      "description": "The response schema for the GetOrderReportsByPurchaseOrderNumber operation."
+    },
+    "ApproverDetails": {
+      "type": "object",
+      "properties": {
+        "lastOrderApproverCustomer": {
+          "description": "Details of a customer.",
+          "$ref": "#/definitions/Customer"
+        }
+      },
+      "description": "Details of the order approver."
+    },
+    "ShipmentLineItemReport": {
+      "type": "object",
+      "required": [
+        "charges",
+        "orderLineItemId",
+        "orderMetadata",
+        "productDetails",
+        "shipmentMetadata"
+      ],
+      "properties": {
+        "orderMetadata": {
+          "description": "Metadata about an order including order ID and order date.",
+          "$ref": "#/definitions/OrderMetadata"
+        },
+        "shipmentMetadata": {
+          "description": "Metadata about a shipment including shipment ID and shipment date.",
+          "$ref": "#/definitions/ShipmentMetadata"
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "The purchase order number associated with the order."
+        },
+        "orderLineItemId": {
+          "type": "string",
+          "description": "The unique identifier assigned to this specific line item in the order."
+        },
+        "purchaseOrderLineItemNumber": {
+          "type": "string",
+          "description": "The reference number that identifies this line item on the purchase order."
+        },
+        "productDetails": {
+          "description": "Details of the product in this line item.",
+          "$ref": "#/definitions/ProductDetails"
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges associated with the order",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "The quantity of items",
+          "minimum": 0
+        },
+        "carrierName": {
+          "type": "string",
+          "description": "The name of the carrier for this shipment."
+        },
+        "packages": {
+          "type": "array",
+          "description": "The physical packages that comprise this shipment item.",
+          "items": {
+            "$ref": "#/definitions/Package"
+          }
+        },
+        "receivingInfo": {
+          "description": "The Receiving status, date and quantity details for tracking shipment items in 3-way matching.",
+          "$ref": "#/definitions/ReceivingInfo"
+        }
+      },
+      "description": "Represents a detailed shipment line item report."
+    },
+    "GetOrderReportsResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "ordersReport"
+      ],
+      "properties": {
+        "ordersReport": {
+          "type": "array",
+          "description": "The list of orders matching the search criteria.",
+          "items": {
+            "$ref": "#/definitions/OrderReport"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        },
+        "size": {
+          "type": "integer",
+          "description": "Number of orders in the response."
+        }
+      },
+      "description": "The response schema for the GetOrderReports operation."
+    },
+    "BuyerGroupDetails": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the group."
+        }
+      },
+      "description": "Details of a buyer group."
+    },
+    "PricingProgram": {
+      "type": "object",
+      "required": [
+        "discountAmount",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the pricing program applied."
+        },
+        "discountAmount": {
+          "description": "The discount amount applied to this line item through the pricing program.",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Information about pricing programs and discounts applied to a line item."
+    },
+    "OrderMetadata": {
+      "type": "object",
+      "required": [
+        "orderDate",
+        "orderId"
+      ],
+      "properties": {
+        "orderDate": {
+          "description": "The date when the order was placed.",
+          "$ref": "#/definitions/DateTime"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "The unique identifier for the order."
+        },
+        "region": {
+          "type": "string",
+          "description": "The region where the order was placed.\n\n**Possible values:**\n- `DE` : Germany\n- `FR` : France\n- `UK` : United Kingdom\n- `IT` : Italy\n- `ES` : Spain\n- `IN` : India\n- `US` : United States of America\n- `CA` : Canada\n- `MX` : Mexico\n- `JP` : Japan\n- `AU` : Australia"
+        }
+      },
+      "description": "Metadata about an order including order ID and order date."
+    },
+    "ShipmentMetadata": {
+      "type": "object",
+      "required": [
+        "shipmentDate",
+        "shipmentId"
+      ],
+      "properties": {
+        "shipmentId": {
+          "type": "string",
+          "description": "The unique identifier for the shipment."
+        },
+        "shipmentDate": {
+          "description": "The date when the shipment was made.",
+          "$ref": "#/definitions/DateTime"
+        }
+      },
+      "description": "Metadata about a shipment including shipment ID and shipment date."
+    },
+    "Charge": {
+      "type": "object",
+      "required": [
+        "amount",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of charge. \n\n**Possible values:**\n- `SUBTOTAL` : The subtotal amount before additional charges and adjustments.\n- `SHIPPING_AND_HANDLING` : The charges for shipping and handling services.\n- `PROMOTION` : The promotional discount applied. \n- `TAX` : The tax amount.\n- `NET_TOTAL` : The final total amount after all charges and adjustments."
+        },
+        "amount": {
+          "description": "The monetary amount for this charge",
+          "$ref": "#/definitions/Money"
+        }
+      },
+      "description": "Financial amount for a specific type of charge"
+    },
+    "Unspsc": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The UNSPSC code.",
+          "pattern": "^[0-9]{8}$"
+        }
+      },
+      "description": "United Nations Standard Products and Services Code (UNSPSC)."
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "An error code that identifies the type of error that occurred."
+        },
+        "message": {
+          "type": "string",
+          "description": "A message that describes the error condition."
+        },
+        "details": {
+          "type": "string",
+          "description": "Additional details that can help the caller understand or fix the issue."
+        }
+      },
+      "description": "Error response returned when the request is unsuccessful."
+    },
+    "TaxExemption": {
+      "type": "object",
+      "required": [
+        "applied",
+        "optOut",
+        "type"
+      ],
+      "properties": {
+        "applied": {
+          "type": "boolean",
+          "description": "Indicates if tax exemption was applied."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of tax exemption."
+        },
+        "optOut": {
+          "type": "boolean",
+          "description": "Indicates if the customer opted out of tax exemption."
+        }
+      },
+      "description": "Information about tax exemption for a line item."
+    },
+    "GetShipmentReportsResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "shipmentsReport"
+      ],
+      "properties": {
+        "shipmentsReport": {
+          "type": "array",
+          "description": "The list of shipments matching the search criteria.",
+          "items": {
+            "$ref": "#/definitions/ShipmentReport"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        },
+        "size": {
+          "type": "integer",
+          "description": "Number of shipments in the response."
+        }
+      },
+      "description": "The response schema for the GetShipmentReports operation."
+    },
+    "SellerCredentials": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "type": "array",
+          "description": "List of credential types held by the seller.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "details": {
+          "type": "array",
+          "description": "Detailed information about each credential including certification and expiration details.",
+          "items": {
+            "$ref": "#/definitions/CredentialDetail"
+          }
+        }
+      },
+      "description": "Comprehensive information about seller's credentials including basic and detailed credential data."
+    },
+    "CredentialDetail": {
+      "type": "object",
+      "required": [
+        "certificateType"
+      ],
+      "properties": {
+        "certificateType": {
+          "type": "string",
+          "description": "The type of certificate."
+        },
+        "certifyingAgenciesDetails": {
+          "type": "array",
+          "description": "Details about the agencies certifying this credential.",
+          "items": {
+            "$ref": "#/definitions/CertifyingAgencyDetail"
+          }
+        }
+      },
+      "description": "Detailed information about a specific credential."
+    },
+    "ErrorList": {
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "A list of errors.",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      },
+      "description": "A list of error responses returned when a request is unsuccessful."
+    },
+    "GetShipmentLineItemReportsResponse": {
+      "type": "object",
+      "required": [
+        "nextPageToken",
+        "shipmentLineItemsReport"
+      ],
+      "properties": {
+        "shipmentLineItemsReport": {
+          "type": "array",
+          "description": "The list of shipment line items matching the search criteria.",
+          "items": {
+            "$ref": "#/definitions/ShipmentLineItemReport"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        },
+        "size": {
+          "type": "integer",
+          "description": "Number of shipment line items in the response."
+        }
+      },
+      "description": "The response schema for the GetShipmentLineItemReports operation."
+    },
+    "ShippingAddress": {
+      "type": "object",
+      "required": [
+        "addressLine1",
+        "city",
+        "countryCode",
+        "fullName",
+        "postalCode"
+      ],
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "The full name of the recipient.",
+          "minLength": 1
+        },
+        "addressLine1": {
+          "type": "string",
+          "description": "The primary address line.",
+          "minLength": 1
+        },
+        "addressLine2": {
+          "type": "string",
+          "description": "The secondary address line.",
+          "maxLength": 60
+        },
+        "city": {
+          "type": "string",
+          "description": "The city name.",
+          "minLength": 1
+        },
+        "stateOrRegion": {
+          "type": "string",
+          "description": "The state or region. Mandatory for addresses in the US."
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "The postal code.",
+          "minLength": 1
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "The country code in ISO 3166-1 alpha-2 format.",
+          "pattern": "^[A-Z]{2}$"
+        }
+      },
+      "description": "A detailed shipping address with recipient information."
+    },
+    "Package": {
+      "type": "object",
+      "required": [
+        "packageId",
+        "trackingId"
+      ],
+      "properties": {
+        "trackingId": {
+          "type": "string",
+          "description": "The tracking identifier assigned by the carrier for package tracking purposes."
+        },
+        "packageId": {
+          "type": "string",
+          "description": "The identifier that represents this package in the shipment."
+        }
+      },
+      "description": "Represents a package in a shipment."
+    },
+    "Seller": {
+      "type": "object",
+      "required": [
+        "name",
+        "primaryAddress"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the seller."
+        },
+        "primaryAddress": {
+          "description": "The primary address of the seller.",
+          "$ref": "#/definitions/Address"
+        },
+        "credentials": {
+          "description": "Comprehensive information about seller's credentials including basic and detailed credential data.",
+          "$ref": "#/definitions/SellerCredentials"
+        }
+      },
+      "description": "Information about the seller of a line item."
+    }
+  },
+  "externalDocs": {
+    "description": "Learn more about the Amazon Business API.",
+    "url": "http://business.amazon.com"
+  },
+  "parameters": {
+    "Region": {
+      "name": "region",
+      "in": "query",
+      "description": "The region where the order was placed. If the business has not placed orders in that region or does not belong to that region, the result would be empty.",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "DE",
+        "FR",
+        "UK",
+        "IT",
+        "ES",
+        "IN",
+        "US",
+        "CA",
+        "MX",
+        "JP",
+        "AU"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "DE",
+          "description": "Germany"
+        },
+        {
+          "value": "FR",
+          "description": "France"
+        },
+        {
+          "value": "UK",
+          "description": "United Kingdom"
+        },
+        {
+          "value": "IT",
+          "description": "Italy"
+        },
+        {
+          "value": "ES",
+          "description": "Spain"
+        },
+        {
+          "value": "IN",
+          "description": "India"
+        },
+        {
+          "value": "US",
+          "description": "United States of America"
+        },
+        {
+          "value": "CA",
+          "description": "Canada"
+        },
+        {
+          "value": "MX",
+          "description": "Mexico"
+        },
+        {
+          "value": "JP",
+          "description": "Japan"
+        },
+        {
+          "value": "AU",
+          "description": "Australia"
+        }
+      ]
+    }
+  }
+}

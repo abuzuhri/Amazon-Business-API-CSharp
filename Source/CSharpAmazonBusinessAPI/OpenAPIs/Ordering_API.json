@@ -1,0 +1,1675 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "With Amazon Business ordering API, integrators can build applications that allow Amazon Business customers to define and execute an order request.",
+        "version": "1.0.0",
+        "title": "Amazon Business Ordering API Model"
+    },
+    "host": "www",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/ordering/2022-10-30/orders": {
+            "post": {
+                "description": "Attempts to place an order with the given attributes and expectations from the order request.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+                "operationId": "placeOrder",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "request",
+                        "description": "A request to place an order.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PlaceOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The order was successfully placed.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestid": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/PlaceOrderResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Request has missing or invalid parameters and can't be parsed.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "403": {
+                        "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+                        "headers": {
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "404": {
+                        "description": "The specified resource doesn't exist.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "415": {
+                        "description": "The request payload is in an unsupported format.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "429": {
+                        "description": "The frequency of requests was greater than allowed.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "500": {
+                        "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "Unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    }
+                }
+            }
+        },
+        "/ordering/2022-10-30/orders/{externalId}": {
+            "get": {
+                "description": "Retrieves order details with externalId.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+                "operationId": "orderDetails",
+                "parameters": [
+                    {
+                        "name": "externalId",
+                        "in": "path",
+                        "description": "The unique identifier provided by the customer while placing the order.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-amz-user-email",
+                        "in": "header",
+                        "description": "The email address of the user requesting this resource.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order details successfully retrieved.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestid": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/OrderDetailsResult"
+                        }
+                    },
+                    "400": {
+                        "description": "The request has missing or invalid parameters and can't be parsed.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "403": {
+                        "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+                        "headers": {
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "404": {
+                        "description": "The specified resource doesn't exist.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "429": {
+                        "description": "The frequency of requests was greater than allowed.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "500": {
+                        "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "The allowed rate limit (requests per second) for this operation."
+                            },
+                            "x-amzn-requestId": {
+                                "type": "string",
+                                "description": "A unique request reference identifier."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "PlaceOrderRequest": {
+            "type": "object",
+            "required": [
+                "attributes",
+                "expectations",
+                "externalId",
+                "lineItems"
+            ],
+            "properties": {
+                "externalId": {
+                    "type": "string",
+                    "description": "A customer-specified identifier that is unique for each order.",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "lineItems": {
+                    "type": "array",
+                    "description": "Items in the order.",
+                    "items": {
+                        "$ref": "#/definitions/RequestLineItem"
+                    },
+                    "maxItems": 50,
+                    "minItems": 1
+                },
+                "attributes": {
+                    "type": "array",
+                    "description": "Customer-determined order properties.",
+                    "items": {
+                        "$ref": "#/definitions/Attribute"
+                    }
+                },
+                "expectations": {
+                    "type": "array",
+                    "description": "Customer expectations about aspects of an order they do not directly control.",
+                    "items": {
+                        "$ref": "#/definitions/Expectation"
+                    }
+                }
+            },
+            "description": "A request to place an order."
+        },
+        "RequestLineItem": {
+            "type": "object",
+            "required": [
+                "attributes",
+                "expectations",
+                "externalId",
+                "quantity"
+            ],
+            "properties": {
+                "externalId": {
+                    "type": "string",
+                    "description": "A customer-specified identifier that is unique for each line item. This value corresponds to the line item number. It is recommended to send numeric values in this field that increment sequentially for each line item, such as 1, 2, and 3.",
+                    "minLength": 1,
+                    "maxLength": 127
+                },
+                "quantity": {
+                    "type": "integer",
+                    "description": "The total number to order for this item.",
+                    "minimum": 1
+                },
+                "attributes": {
+                    "type": "array",
+                    "description": "Customer-determined line item properties.",
+                    "items": {
+                        "$ref": "#/definitions/Attribute"
+                    }
+                },
+                "expectations": {
+                    "type": "array",
+                    "description": "Line-item-specific customer expectations about aspects of the order they do not directly control.",
+                    "items": {
+                        "$ref": "#/definitions/Expectation"
+                    }
+                }
+            },
+            "description": "A single line item in an order request."
+        },
+        "Attribute": {
+            "type": "object",
+            "required": [
+                "attributeType"
+            ],
+            "discriminator": "attributeType",
+            "properties": {
+                "attributeType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A customer-determined aspect of the order."
+        },
+        "Expectation": {
+            "type": "object",
+            "required": [
+                "expectationType"
+            ],
+            "discriminator": "expectationType",
+            "properties": {
+                "expectationType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A customer's expectation about an aspect of an order they do not control."
+        },
+        "PlaceOrderResult": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/OrderResult"
+                }
+            ],
+            "description": "The result of a request to place an order. Specifies how line items in the request were broken up into ordered and rejected portions."
+        },
+        "OrderDetailsResult": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/OrderResult"
+                }
+            ],
+            "description": "The details of the order. Specifies how line items are broken up into ordered and rejected portions."
+        },
+        "OrderResult": {
+            "type": "object",
+            "required": [
+                "acceptanceArtifacts",
+                "lineItems",
+                "rejectionArtifacts"
+            ],
+            "properties": {
+                "lineItems": {
+                    "type": "array",
+                    "description": "Order results for specific line items.",
+                    "items": {
+                        "$ref": "#/definitions/ResultLineItem"
+                    }
+                },
+                "acceptanceArtifacts": {
+                    "type": "array",
+                    "description": "Results of a successful order.",
+                    "items": {
+                        "$ref": "#/definitions/AcceptanceArtifact"
+                    }
+                },
+                "rejectionArtifacts": {
+                    "type": "array",
+                    "description": "Reasons the order was rejected.",
+                    "items": {
+                        "$ref": "#/definitions/RejectionArtifact"
+                    }
+                }
+            }
+        },
+        "ResultLineItem": {
+            "type": "object",
+            "required": [
+                "acceptedItems",
+                "externalId",
+                "rejectedItems"
+            ],
+            "properties": {
+                "externalId": {
+                    "type": "string",
+                    "description": "The customer-specified identifier for this line item."
+                },
+                "acceptedItems": {
+                    "type": "array",
+                    "description": "Portions of the requested line item quantity that were successfully ordered.",
+                    "items": {
+                        "$ref": "#/definitions/AcceptedItem"
+                    }
+                },
+                "rejectedItems": {
+                    "type": "array",
+                    "description": "Portions of the requested line item quantity that couldn't be ordered.",
+                    "items": {
+                        "$ref": "#/definitions/RejectedItem"
+                    }
+                }
+            },
+            "description": "Results of an order for a specific line item."
+        },
+        "AcceptedItem": {
+            "type": "object",
+            "required": [
+                "acceptedItemType",
+                "artifacts",
+                "quantity"
+            ],
+            "discriminator": "acceptedItemType",
+            "properties": {
+                "acceptedItemType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                },
+                "quantity": {
+                    "type": "integer",
+                    "description": "The accepted line item quantity."
+                },
+                "artifacts": {
+                    "type": "array",
+                    "description": "Details about the ordered line item quantity.",
+                    "items": {
+                        "$ref": "#/definitions/AcceptanceArtifact"
+                    }
+                }
+            },
+            "description": "A portion of requested item quantity that was successfully ordered."
+        },
+        "SingleAcceptedItem": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptedItem"
+                }
+            ],
+            "description": "The standard variant of AcceptedItem."
+        },
+        "AcceptedItemGroup": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptedItem"
+                },
+                {
+                    "required": [
+                        "items"
+                    ],
+                    "properties": {
+                        "items": {
+                            "type": "array",
+                            "description": "Details about the items included in the item group.",
+                            "items": {
+                                "$ref": "#/definitions/AcceptedItem"
+                            }
+                        }
+                    }
+                }
+            ],
+            "description": "A group of items that are sold as a single unit. The quantity field in this object refers to the quantity of this item group that was successfully ordered. The quantity field on an item within the items group represents the quantity of that item within the group. For example, an AcceptedItemGroup with a quantity of 2 that contains three items, each with a quantity of 2, represents a total quantity of 12."
+        },
+        "RejectedItem": {
+            "type": "object",
+            "required": [
+                "artifacts",
+                "quantity"
+            ],
+            "properties": {
+                "quantity": {
+                    "type": "integer",
+                    "description": "This rejected portion's item quantity."
+                },
+                "artifacts": {
+                    "type": "array",
+                    "description": "Details about the rejected line item quantity.",
+                    "items": {
+                        "$ref": "#/definitions/RejectionArtifact"
+                    }
+                }
+            },
+            "description": "A portion of requested item quantity that couldn't be ordered."
+        },
+        "AcceptanceArtifact": {
+            "type": "object",
+            "required": [
+                "acceptanceArtifactType"
+            ],
+            "discriminator": "acceptanceArtifactType",
+            "properties": {
+                "acceptanceArtifactType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "The details of a successful order."
+        },
+        "RejectionArtifact": {
+            "type": "object",
+            "required": [
+                "rejectionArtifactType"
+            ],
+            "discriminator": "rejectionArtifactType",
+            "properties": {
+                "rejectionArtifactType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "Details the reason for order rejection."
+        },
+        "ErrorList": {
+            "type": "object",
+            "required": [
+                "errors"
+            ],
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Error"
+                    }
+                }
+            },
+            "description": "A list of error responses for an unsuccessful request."
+        },
+        "Error": {
+            "type": "object",
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "An error code that identifies the type of error that occurred."
+                },
+                "message": {
+                    "type": "string",
+                    "description": "A message describing the error condition."
+                },
+                "details": {
+                    "type": "string",
+                    "description": "Additional details to help the caller understand or fix the issue."
+                }
+            },
+            "description": "An error response for an unsuccessful request."
+        },
+        "Region": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "region"
+                    ],
+                    "properties": {
+                        "region": {
+                            "type": "string",
+                            "description": "The Amazon Business stores.",
+                            "enum": [
+                                "DE",
+                                "FR",
+                                "UK",
+                                "IT",
+                                "ES",
+                                "IN",
+                                "US",
+                                "CA",
+                                "MX",
+                                "JP",
+                                "AU"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "description": "The country or region where the buyer places an order."
+        },
+        "DeliveryPreference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "shipPreference"
+                    ],
+                    "properties": {
+                        "shipPreference": {
+                            "type": "string",
+                            "description": "The customer's shipping option preference.",
+                            "enum": [
+                                "FAST_FREE",
+                                "CONSOLIDATED",
+                                "EXPEDITED_PAID"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "description": "The customer's delivery preferences."
+        },
+        "SelectedProductReference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "productReference"
+                    ],
+                    "properties": {
+                        "productReference": {
+                            "description": "The type of reference selected for a product.",
+                            "$ref": "#/definitions/ProductReference"
+                        }
+                    }
+                }
+            ],
+            "description": "Contains a reference to the product to order. This attribute can be passed at line-item or order level. If passed at order level, the product reference will apply to all line items that has no set attribute."
+        },
+        "SelectedBuyingOptionReference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "buyingOptionReference"
+                    ],
+                    "properties": {
+                        "buyingOptionReference": {
+                            "description": "The type of reference selected for a buying option.",
+                            "$ref": "#/definitions/BuyingOptionReference"
+                        }
+                    }
+                }
+            ],
+            "description": "Contains a reference to the buying option to order. This attribute can be passed at line-item or order level. If passed at order level, the buying option reference will apply to all line items that has no set attribute."
+        },
+        "ShippingAddress": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "address"
+                    ],
+                    "properties": {
+                        "address": {
+                            "description": "The address where an item or order will be sent. This attribute can be passed at line-item or order level. If passed at order level, the address will apply to all line items that has no set attribute.",
+                            "$ref": "#/definitions/Address"
+                        }
+                    }
+                }
+            ],
+            "description": "The address where the order will be shipped."
+        },
+        "BillingAddress": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "address"
+                    ],
+                    "properties": {
+                        "address": {
+                            "description": "The customer-provided billing address for a specific transaction that only uses Pay by Invoice (PBI) as the payment method. When no billing address is specified in this field, the API returns the default address specified on Amazon Business PBI payment method.",
+                            "$ref": "#/definitions/Address"
+                        }
+                    }
+                }
+            ],
+            "description": "The billing address associated with the payment method used. Pass this attribute only at order level."
+        },
+        "SelectedPaymentMethodReference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "paymentMethodReference"
+                    ],
+                    "properties": {
+                        "paymentMethodReference": {
+                            "description": "The payment method used to purchase the item or order.",
+                            "$ref": "#/definitions/PaymentMethodReference"
+                        }
+                    }
+                }
+            ],
+            "description": "The payment method where the charges for the order will apply. This attribute can only be passed at order level."
+        },
+        "BuyingGroupReference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "groupReference"
+                    ],
+                    "properties": {
+                        "groupReference": {
+                            "description": "A reference to the buying group.",
+                            "$ref": "#/definitions/GroupReference"
+                        }
+                    }
+                }
+            ],
+            "description": "A reference to the buying group associated with an order request. This attribute can only be passed at order level."
+        },
+        "BuyerReference": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "userReference"
+                    ],
+                    "properties": {
+                        "userReference": {
+                            "description": "A reference to the buyer.",
+                            "$ref": "#/definitions/UserReference"
+                        }
+                    }
+                }
+            ],
+            "description": "A reference to the buying customer. This attribute can only be passed at order level."
+        },
+        "PurchaseOrderNumber": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "purchaseOrderNumber"
+                    ],
+                    "properties": {
+                        "purchaseOrderNumber": {
+                            "type": "string",
+                            "description": "A numerical string acting as the identifier for the purchase order form.",
+                            "minLength": 1,
+                            "maxLength": 255
+                        }
+                    }
+                }
+            ],
+            "description": "A unique reference to the purchase order form of the order request. This attribute can only be passed at order level."
+        },
+        "BlanketPurchaseOrderNumber": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/PurchaseOrderNumber"
+                },
+                {}
+            ],
+            "description": "Identifies if the order request is placed against the blanket purchase order."
+        },
+        "TrialMode": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {}
+            ],
+            "description": "Indicates that an order is a trial order. The steps to place an order will be completed, but no actual order will be created. This attribute can only be passed at order level."
+        },
+        "ExpectedUnitPrice": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Expectation"
+                },
+                {
+                    "required": [
+                        "amount"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "description": "The expected unit price for an item.",
+                            "$ref": "#/definitions/Money"
+                        }
+                    }
+                }
+            ],
+            "description": "The unit price value the customer expects for an item. This expectation can be passed at line-item or order level. If passed at order level, the expected monetary charge will apply to all line items that has no set expectation."
+        },
+        "ExpectedCharge": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Expectation"
+                },
+                {
+                    "required": [
+                        "amount",
+                        "source"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "description": "The expected charge amount.",
+                            "$ref": "#/definitions/Money"
+                        },
+                        "source": {
+                            "description": "Indicates where the charges come from.",
+                            "$ref": "#/definitions/ChargeSource"
+                        }
+                    }
+                }
+            ],
+            "description": "The monetary charge that is expected for an item or order. This expectation can be passed at line-item or order level. If passed at order level, the expected monetary charge will apply to all line items that has no set expectation."
+        },
+        "OrderIdentifier": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "identifier"
+                    ],
+                    "properties": {
+                        "identifier": {
+                            "type": "string",
+                            "description": "The identifier."
+                        }
+                    }
+                }
+            ],
+            "description": "The Amazon-generated identifier for a placed order. This artifact will be included at acceptance-item level."
+        },
+        "DeliveryTimeRange": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "lowerBoundary",
+                        "upperBoundary"
+                    ],
+                    "properties": {
+                        "lowerBoundary": {
+                            "description": "The earliest estimated delivery date when an item or order is expected to reach the buyer or recipient.",
+                            "$ref": "#/definitions/DateTime"
+                        },
+                        "upperBoundary": {
+                            "description": "The latest estimated delivery date when an item or order is expected to reach the buyer or recipient.",
+                            "$ref": "#/definitions/DateTime"
+                        }
+                    }
+                }
+            ],
+            "description": "The time range when a product is expected to reach its specified location. This artifact will appear at acceptance-item level."
+        },
+        "UnitPrice": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "amount"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "description": "The unit price.",
+                            "$ref": "#/definitions/Money"
+                        }
+                    }
+                }
+            ],
+            "description": "The unit price for an item. This artifact will appear at acceptance-item level."
+        },
+        "Charge": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "amount",
+                        "category",
+                        "type"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "description": "The charge.",
+                            "$ref": "#/definitions/Money"
+                        },
+                        "category": {
+                            "type": "string",
+                            "description": "The charge category.",
+                            "enum": [
+                                "SUBTOTAL",
+                                "SHIPPING",
+                                "GIFT_WRAP",
+                                "PAYMENT_METHOD_FEE",
+                                "EXPORT_FEE",
+                                "OTHER"
+                            ]
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": "These are the type of charges applied to an item or order.",
+                            "enum": [
+                                "PRINCIPAL",
+                                "TAX",
+                                "DISCOUNT"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "description": "A qualified monetary charge for an item or an order. This artifact will appear at acceptance-item level."
+        },
+        "PriceSuppressionDirective": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {}
+            ],
+            "description": "Indicates that price information should be omitted in packing slips for all shipments in the order. This attribute can only be passed at order level."
+        },
+        "UnavailableQuantity": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "quantity"
+                    ],
+                    "properties": {
+                        "quantity": {
+                            "type": "integer",
+                            "description": "The number of unavailable items."
+                        }
+                    }
+                }
+            ],
+            "description": "The number of unavailable quantity deducted from the total requested quantity. The order can only be fulfilled by the number of available quantity. This artifact will appear at rejected-item level."
+        },
+        "AvailableQuantity": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "quantity"
+                    ],
+                    "properties": {
+                        "quantity": {
+                            "type": "integer",
+                            "description": "The number of available items."
+                        }
+                    }
+                }
+            ],
+            "description": "The number of available items. The order may be rejected because of the ordering constraints. This artifact will appear at rejected-item level."
+        },
+        "RejectionMessage": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "message"
+                    ],
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "description": "The rejection message."
+                        }
+                    }
+                }
+            ],
+            "description": "A message that summarizes a reason for rejection. This artifact will appear at rejected-item level."
+        },
+        "RejectionCode": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "code"
+                    ],
+                    "properties": {
+                        "code": {
+                            "type": "string",
+                            "description": "The rejection code."
+                        }
+                    }
+                }
+            ],
+            "description": "A code that maps to a reason for rejection. This artifact will appear at rejected-item level."
+        },
+        "AgeRestriction": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "minimumAge"
+                    ],
+                    "properties": {
+                        "minimumAge": {
+                            "type": "number",
+                            "description": "The minimum age required to purchase the item."
+                        }
+                    }
+                }
+            ],
+            "description": "A non-compliance with the age limit requirement results in order rejection. This artifact will appear at rejected-item level."
+        },
+        "DeliveryTimeRangeIncongruity": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "actualDateTime",
+                        "upperBoundary"
+                    ],
+                    "properties": {
+                        "upperBoundary": {
+                            "description": "The item or order is for delivery on a later date.",
+                            "$ref": "#/definitions/DateTime"
+                        },
+                        "actualDateTime": {
+                            "description": "The item or order is for delivery on the actual estimated delivery time.",
+                            "$ref": "#/definitions/DateTime"
+                        }
+                    }
+                }
+            ],
+            "description": "The estimated delivery time is outside the delivery time range, which led to order rejection. This artifact will appear at rejected-item level."
+        },
+        "BrokenUnitPriceExpectation": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "actualAmount",
+                        "boundary"
+                    ],
+                    "properties": {
+                        "boundary": {
+                            "description": "The broken boundary for the unit price.",
+                            "$ref": "#/definitions/Money"
+                        },
+                        "actualAmount": {
+                            "description": "The actual unit price of an item or order.",
+                            "$ref": "#/definitions/Money"
+                        }
+                    }
+                }
+            ],
+            "description": "The unit price exceeds the expected limit, which led to order rejection. This artifact will appear at rejected-item level."
+        },
+        "BrokenChargeExpectation": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/RejectionArtifact"
+                },
+                {
+                    "required": [
+                        "actualAmount",
+                        "boundary"
+                    ],
+                    "properties": {
+                        "boundary": {
+                            "description": "The broken boundary for the charge.",
+                            "$ref": "#/definitions/Money"
+                        },
+                        "actualAmount": {
+                            "description": "The actual amount charged to an item or order.",
+                            "$ref": "#/definitions/Money"
+                        },
+                        "sources": {
+                            "type": "array",
+                            "description": "The list of charges with sum that exceeds the limit.",
+                            "items": {
+                                "$ref": "#/definitions/ChargeSource"
+                            }
+                        }
+                    }
+                }
+            ],
+            "description": "The charges exceed the expected limit, which led to order rejection. This artifact will appear at rejected-item level."
+        },
+        "ChargeSource": {
+            "type": "string",
+            "description": "The source of a monetary charge in an item or an order.",
+            "enum": [
+                "SUBTOTAL",
+                "SHIPPING",
+                "TAX"
+            ]
+        },
+        "Signed": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {}
+            ],
+            "description": "Indicates that all accepted items have been placed as Amazon Business orders. This artifact will appear at order-result level."
+        },
+        "Shipment": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "identifier",
+                        "packages"
+                    ],
+                    "properties": {
+                        "identifier": {
+                            "type": "string",
+                            "description": "The identifier for a shipment."
+                        },
+                        "packages": {
+                            "type": "array",
+                            "description": "The collection of packages in this shipment.",
+                            "items": {
+                                "$ref": "#/definitions/Package"
+                            }
+                        }
+                    }
+                }
+            ],
+            "description": "The shipment details for an order. This artifact will appear at order-level."
+        },
+        "Package": {
+            "type": "object",
+            "required": [
+                "packageAttributes",
+                "packageReference"
+            ],
+            "properties": {
+                "packageReference": {
+                    "description": "A reference to the package.",
+                    "$ref": "#/definitions/PackageReference"
+                },
+                "packageAttributes": {
+                    "type": "array",
+                    "description": "The attributes of the package.",
+                    "items": {
+                        "$ref": "#/definitions/PackageAttribute"
+                    }
+                }
+            },
+            "description": "The package within the shipment."
+        },
+        "ShipmentGroup": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/AcceptanceArtifact"
+                },
+                {
+                    "required": [
+                        "identifier",
+                        "packageReferences",
+                        "quantity"
+                    ],
+                    "properties": {
+                        "identifier": {
+                            "type": "string",
+                            "description": "The identifier for a shipment."
+                        },
+                        "packageReferences": {
+                            "type": "array",
+                            "description": "The collection of package references.",
+                            "items": {
+                                "$ref": "#/definitions/PackageReference"
+                            }
+                        },
+                        "quantity": {
+                            "type": "integer",
+                            "description": "The total number of quantities in the package or shipment."
+                        }
+                    }
+                }
+            ],
+            "description": "The shipment group details for a line item. This artifact will appear at line item level."
+        },
+        "PackageReference": {
+            "type": "object",
+            "required": [
+                "packageReferenceType"
+            ],
+            "discriminator": "packageReferenceType",
+            "properties": {
+                "packageReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "The base type for a reference to a package."
+        },
+        "CarrierTrackingNumber": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/PackageReference"
+                },
+                {
+                    "required": [
+                        "value"
+                    ],
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "description": "The carrier tracking number.",
+                            "minLength": 1
+                        }
+                    }
+                }
+            ],
+            "description": "The carrier tracking number of the package."
+        },
+        "PackageAttribute": {
+            "type": "object",
+            "required": [
+                "packageAttributeType"
+            ],
+            "discriminator": "packageAttributeType",
+            "properties": {
+                "packageAttributeType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "The base type for a package attribute."
+        },
+        "PackageTrackingAttribute": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/PackageAttribute"
+                },
+                {
+                    "required": [
+                        "carrierName",
+                        "deliveryDateRange"
+                    ],
+                    "properties": {
+                        "carrierName": {
+                            "type": "string",
+                            "description": "The carrier name.",
+                            "minLength": 1
+                        },
+                        "deliveryDateRange": {
+                            "type": "object",
+                            "description": "The delivery date range when a package is expected to reach the buyer.",
+                            "properties": {
+                                "startDateTime": {
+                                    "description": "The earliest delivery date for the package to reach the buyer.",
+                                    "$ref": "#/definitions/DateTime"
+                                },
+                                "endDateTime": {
+                                    "description": "The later delivery date for the package to reach the buyer.",
+                                    "$ref": "#/definitions/DateTime"
+                                }
+                            },
+                            "required": [
+                                "endDateTime",
+                                "startDateTime"
+                            ]
+                        },
+                        "packageId": {
+                            "type": "string",
+                            "description": "The identifier that represents this package in the shipment."
+                        }
+                    }
+                }
+            ],
+            "description": "The tracking package attribute."
+        },
+        "ProductReference": {
+            "type": "object",
+            "required": [
+                "productReferenceType"
+            ],
+            "discriminator": "productReferenceType",
+            "properties": {
+                "productReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A unique reference for a product."
+        },
+        "BuyingOptionReference": {
+            "type": "object",
+            "required": [
+                "buyingOptionReferenceType"
+            ],
+            "discriminator": "buyingOptionReferenceType",
+            "properties": {
+                "buyingOptionReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A unique reference for a buying option."
+        },
+        "Address": {
+            "type": "object",
+            "required": [
+                "addressType"
+            ],
+            "discriminator": "addressType",
+            "properties": {
+                "addressType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "The base type for an address."
+        },
+        "PaymentMethodReference": {
+            "type": "object",
+            "required": [
+                "paymentMethodReferenceType"
+            ],
+            "discriminator": "paymentMethodReferenceType",
+            "properties": {
+                "paymentMethodReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A unique reference to a payment method."
+        },
+        "GroupReference": {
+            "type": "object",
+            "required": [
+                "groupReferenceType"
+            ],
+            "discriminator": "groupReferenceType",
+            "properties": {
+                "groupReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A unique reference for a group."
+        },
+        "UserReference": {
+            "type": "object",
+            "required": [
+                "userReferenceType"
+            ],
+            "discriminator": "userReferenceType",
+            "properties": {
+                "userReferenceType": {
+                    "type": "string",
+                    "description": "The schema name for a subtype."
+                }
+            },
+            "description": "A unique reference for a user."
+        },
+        "Money": {
+            "type": "object",
+            "required": [
+                "amount",
+                "currencyCode"
+            ],
+            "properties": {
+                "currencyCode": {
+                    "type": "string",
+                    "description": "The three-digit currency code based on ISO 4217.",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "amount": {
+                    "type": "number",
+                    "description": "The amount in currency value."
+                }
+            },
+            "description": "Represents a monetary value in currency."
+        },
+        "DateTime": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The date and time format based on ISO 8601. Time zone is optional. The format is YYYY-MM-DD HH:MM:SS:MMS. For example, 2020-07-10 15:00:00.000, represents the 10th of July 2020 at 3 p.m."
+                }
+            },
+            "description": "The date format based on ISO 8601."
+        },
+        "Accounting": {
+            "type": "object",
+            "required": [
+                "name",
+                "segments"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the object containing the specified accounting segments.",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "segments": {
+                    "type": "array",
+                    "description": "Accounting segments. A segment can contain any relevant accounting code used by a buying organization. Examples of possible values include asset number, billing code, cost center, G/L account, and department.",
+                    "items": {
+                        "$ref": "#/definitions/Segment"
+                    },
+                    "maxItems": 15,
+                    "minItems": 1
+                }
+            },
+            "description": "A group of accounting segments to identify who is charged. This group contains accounting information generated by the buying organization, such as cost center or general ledger category."
+        },
+        "Segment": {
+            "type": "object",
+            "required": [
+                "description",
+                "id",
+                "type"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The unique key of this segment against the type.",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The accounting type of this segment.",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Textual description of the segment for human readability.",
+                    "minLength": 1,
+                    "maxLength": 255
+                }
+            },
+            "description": "An accounting segment. A segment can contain any relevant accounting code used by a buying organization. Examples of possible values include asset number, billing code, cost center, G/L account, and department."
+        },
+        "Charge_2": {
+            "type": "object",
+            "required": [
+                "amount"
+            ],
+            "properties": {
+                "amount": {
+                    "description": "Monetary charge amount.",
+                    "$ref": "#/definitions/Money"
+                }
+            },
+            "description": "Specifies the amount to be charged to the entity represented by the Accounting object."
+        },
+        "ExternalAddress": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Address"
+                },
+                {
+                    "required": [
+                        "address",
+                        "addressId"
+                    ],
+                    "properties": {
+                        "addressId": {
+                            "type": "string",
+                            "description": "An external address ID that is returned back to the customer after order placement for reconciliation purposes.",
+                            "minLength": 1,
+                            "maxLength": 255
+                        },
+                        "address": {
+                            "description": "A detailed address.",
+                            "$ref": "#/definitions/Address"
+                        }
+                    }
+                }
+            ],
+            "description": "The combination of an external address ID and a detailed address."
+        },
+        "Auxiliary": {
+            "type": "object",
+            "description": "An additional fields for customers to send additional information for pre or post order processing.",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "properties": {
+                        "values": {
+                            "description": "A reference to a auxiliary values.",
+                            "$ref": "#/definitions/AuxiliaryValues"
+                        }
+                    },
+                    "required": [
+                        "auxiliaryValues"
+                    ]
+                }
+            ]
+        },
+        "AuxiliaryValues": {
+            "type": "object",
+            "description": "An auxiliary field values.",
+            "maxProperties": 30,
+            "additionalProperties": {
+                "$ref": "#/definitions/AuxiliaryValue"
+            }
+        },
+        "AuxiliaryValue": {
+            "type": "object",
+            "description": "An auxiliary value.",
+            "properties": {
+                "value": {
+                    "description": "A value of auxiliary field.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                }
+            },
+            "required": [
+                "value"
+            ]
+        },
+        "Distribution": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Attribute"
+                },
+                {
+                    "required": [
+                        "accounting",
+                        "charge"
+                    ],
+                    "properties": {
+                        "accounting": {
+                            "description": "An accounting object. This object contains a group of accounting segments to identify who is charged. This group contains accounting information generated by the buying organization, such as cost center or general ledger category.",
+                            "$ref": "#/definitions/Accounting"
+                        },
+                        "charge": {
+                            "description": "Specifies the amount to be charged to the entity represented by the Accounting object.",
+                            "$ref": "#/definitions/Charge_2"
+                        }
+                    }
+                }
+            ],
+            "description": "Distribution divides the cost of an item among multiple parties. Suppliers return the Distribution element on invoices to facilitate the buyer's reconciliation process."
+        },
+        "PhysicalAddress": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Address"
+                },
+                {
+                    "required": [
+                        "addressLine1",
+                        "city",
+                        "countryCode",
+                        "fullName",
+                        "postalCode"
+                    ],
+                    "properties": {
+                        "fullName": {
+                            "type": "string",
+                            "description": "The full name of the customer associated with the address.",
+                            "minLength": 1
+                        },
+                        "phoneNumber": {
+                            "type": "string",
+                            "description": "The phone number of the customer associated with the address.",
+                            "minLength": 1
+                        },
+                        "companyName": {
+                            "type": "string",
+                            "description": "The company name of the customer associated with the address."
+                        },
+                        "addressLine1": {
+                            "type": "string",
+                            "description": "The primary address of the customer with the street name, building number, city, state, and postal code.",
+                            "minLength": 1
+                        },
+                        "addressLine2": {
+                            "type": "string",
+                            "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers.",
+                            "maxLength": 60
+                        },
+                        "addressLine3": {
+                            "type": "string",
+                            "description": "The secondary address of the customer which can contain apartment, suite, room, or floor numbers. Preferred to use addressLine3 when addressLine2 exceeds the allowed number of characters",
+                            "maxLength": 60
+                        },
+                        "city": {
+                            "type": "string",
+                            "description": "The city associated with the customer's address.",
+                            "minLength": 1
+                        },
+                        "stateOrRegion": {
+                            "type": "string",
+                            "description": "The state associated with the customer's address. This is a requirement for US region only."
+                        },
+                        "postalCode": {
+                            "type": "string",
+                            "description": "The postal code associated with the customer's address.",
+                            "minLength": 1
+                        },
+                        "countryCode": {
+                            "type": "string",
+                            "description": "The country code associated with the customer's address in ISO 3166 alpha-2 (2-char) format.",
+                            "pattern": "^[A-Z]{2}$"
+                        }
+                    }
+                }
+            ],
+            "description": "A detailed physical address."
+        }
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Amazon Business API for Application Management",
+        "description": "The Amazon Business API for Application Management lets you programmatically update the client secret on registered applications.",
+        "version": "2023-11-30",
+        "contact": {
+            "name": "Learn more about Amazon Business",
+            "url": "https://business.amazon.com"
+        },
+        "license": {
+            "name": "Apache License 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "api.business.amazon.com",
+    "schemes": ["https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/applications/2023-11-30/clientSecret": {
+            "post": {
+                "tags": ["Applications"],
+                "description": "Rotates application client secrets for a developer application. Developers must register a destination queue in the developer console before calling this operation. When this operation is called a new client secret is generated and sent to the developer-registered queue.",
+                "operationId": "rotateApplicationClientSecret",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": "Success.",
+                        "headers": {
+                            "x-amzn-RateLimit-Limit": {"description": "Your rate limit (requests per second) for this operation.", "type": "string"},
+                            "x-amzn-RequestId": {"description": "Unique request reference identifier.", "type": "string"}
+                        }
+                    },
+                    "400": {"description": "The application has not enrolled for programmatic rotations.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "403": {"description": "Access forbidden.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "404": {"description": "The resource specified does not exist.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "413": {"description": "The request size exceeded the maximum accepted size.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "415": {"description": "The request payload is in an unsupported format.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "429": {"description": "The frequency of requests was greater than allowed.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "500": {"description": "Server error.", "schema": {"$ref": "#/definitions/ErrorList"}},
+                    "503": {"description": "Temporary overloading or maintenance of the server.", "schema": {"$ref": "#/definitions/ErrorList"}}
+                }
+            }
+        }
+    },
+    "definitions": {
+        "ErrorList": {
+            "type": "object",
+            "description": "A list of error responses returned when a request is unsuccessful.",
+            "required": ["errors"],
+            "properties": {
+                "errors": {"type": "array", "items": {"$ref": "#/definitions/Error"}}
+            }
+        },
+        "Error": {
+            "type": "object",
+            "description": "Error response returned when the request is unsuccessful.",
+            "required": ["code", "message"],
+            "properties": {
+                "code": {"type": "string", "description": "An error code that identifies the type of error that occurred."},
+                "message": {"type": "string", "description": "A message that describes the error condition."},
+                "details": {"type": "string", "description": "Additional details that can help the caller understand or fix the issue."}
+            }
+        }
+    }
+}

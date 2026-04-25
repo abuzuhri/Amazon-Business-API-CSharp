@@ -1,0 +1,612 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Amazon Business API for Package Tracking Details",
+    "description": "With the Amazon Business API for Package Tracking Details, you can build tracking applications that help Amazon Business customers get granular tracking details.",
+    "version": "2025-07-02",
+    "contact": {
+      "name": "AB Support",
+      "url": "https://developer-docs.amazon.com/amazon-business/"
+    },
+    "license": {
+      "name": "Amazon Software License",
+      "url": "https://aws.amazon.com/asl/"
+    }
+  },
+  "externalDocs": {
+    "description": "Learn more about Amazon Business.",
+    "url": "https://business.amazon.com"
+  },
+  "host": "api.business.amazon.com",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ab-tracking/2025-07-02/orders/{orderId}/shipments/{shipmentId}/packages/{packageId}": {
+      "get": {
+        "operationId": "getPackageTrackingDetails",
+        "description": "Returns detailed tracking information for a package.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 0.5 | 10 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "The unique identifier of an order.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "shipmentId",
+            "in": "path",
+            "description": "The unique identifier for a shipment whose package tracking details are to be retrieved.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "packageId",
+            "in": "path",
+            "description": "The unique identifier of the package whose tracking details are to be retrieved.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "The locale of the request in the form of an IETF language tag. The format is [two-letter language code]-[Two-letter country code], such as en-US for American English. If not specified, the default value will be en-US.",
+            "required": false,
+            "default": "en-US",
+            "type": "string"
+          },
+          {
+            "description": "The region where the customer wants to track the package.",
+            "enum": [
+              "DE",
+              "FR",
+              "UK",
+              "IT",
+              "ES",
+              "IN",
+              "US",
+              "CA",
+              "MX",
+              "JP",
+              "AU"
+            ],
+            "x-docgen-enum-table-extension": [
+              {
+                "value": "DE",
+                "description": "Germany"
+              },
+              {
+                "value": "FR",
+                "description": "France"
+              },
+              {
+                "value": "UK",
+                "description": "United Kingdom"
+              },
+              {
+                "value": "IT",
+                "description": "Italy"
+              },
+              {
+                "value": "ES",
+                "description": "Spain"
+              },
+              {
+                "value": "IN",
+                "description": "India"
+              },
+              {
+                "value": "US",
+                "description": "United States of America"
+              },
+              {
+                "value": "CA",
+                "description": "Canada"
+              },
+              {
+                "value": "MX",
+                "description": "Mexico"
+              },
+              {
+                "value": "JP",
+                "description": "Japan"
+              },
+              {
+                "value": "AU",
+                "description": "Australia"
+              }
+            ],
+            "in": "query",
+            "name": "region",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The package tracking details were successfully retrieved.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetPackageTrackingDetailsResponse"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "orderId": {
+                        "value": "114-2589187-9801025"
+                      },
+                      "shipmentId": {
+                        "value": "401971789238301"
+                      },
+                      "packageId": {
+                        "value": "1"
+                      },
+                      "locale": {
+                        "value": "en-US"
+                      },
+                      "region": {
+                        "value": "US"
+                      }
+                    }
+                  },
+                  "response": {
+                    "packageTrackingDetails": {
+                      "trackingStatus": "DELIVERED",
+                      "localizedDeliveryPromise": "Delivered April 29",
+                      "deliveryWindow": {
+                        "endDate": "2025-04-29T19:15:23Z"
+                      },
+                      "carrierDetails": {
+                        "localizedCarrierName": "Delivery by Amazon",
+                        "carrierTrackingId": "TBA321021468276"
+                      },
+                      "packageTrackingEvents": [
+                        {
+                          "localizedDescription": "Package delivered near the front door or porch.",
+                          "localizedEventDate": "Tuesday, April 29",
+                          "localizedEventTime": "12:15 PM",
+                          "location": {
+                            "city": "Bellevue",
+                            "country": "US"
+                          }
+                        },
+                        {
+                          "localizedDescription": "Package is out for delivery.",
+                          "localizedEventDate": "Tuesday, April 29",
+                          "localizedEventTime": "10:50 AM",
+                          "location": {
+                            "city": "Kent",
+                            "country": "US"
+                          }
+                        },
+                        {
+                          "localizedDescription": "Package being processed at carrier facility.",
+                          "localizedEventDate": "Tuesday, April 29",
+                          "localizedEventTime": "6:39 AM",
+                          "location": {
+                            "city": "Kent",
+                            "country": "US"
+                          }
+                        },
+                        {
+                          "localizedDescription": "Package arrived at a carrier facility.",
+                          "localizedEventDate": "Tuesday, April 29",
+                          "localizedEventTime": "6:34 AM",
+                          "location": {
+                            "city": "Kent",
+                            "country": "US"
+                          }
+                        },
+                        {
+                          "localizedDescription": "Package left the shipper facility.",
+                          "localizedEventDate": "Tuesday, April 29"
+                        }
+                      ],
+                      "packageMilestones": [
+                        {
+                          "milestoneType": "DELIVERED",
+                          "milestoneWindow": {
+                            "endDate": "2025-04-29T12:15:23.101-07:00"
+                          }
+                        },
+                        {
+                          "milestoneType": "OUT_FOR_DELIVERY",
+                          "milestoneWindow": {
+                            "endDate": "2025-04-29T00:00:00-07:00"
+                          }
+                        },
+                        {
+                          "milestoneType": "SHIPPED",
+                          "milestoneWindow": {
+                            "endDate": "2025-04-29T05:27:59-07:00"
+                          }
+                        },
+                        {
+                          "milestoneType": "ORDERED",
+                          "milestoneWindow": {
+                            "endDate": "2025-04-28T23:06:38-07:00"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Request has missing or invalid parameters and cannot be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {}
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameters are missing: orderId, shipmentId, packageId.",
+                        "details": "Please provide the required parameters (orderId, shipmentId, packageId) in the request."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "The request's Authorization header is not formatted correctly or does not contain a valid token.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified does not exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "type": "string",
+                "description": "Your rate limit (requests per second) for this operation."
+              },
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "Unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "504": {
+            "description": "A gateway timeout occurred.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "type": "string",
+                "description": "Unique request reference identifier."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GetPackageTrackingDetailsResponse": {
+      "type": "object",
+      "description": "Response object for the getPackageTrackingDetails operation.",
+      "properties": {
+        "packageTrackingDetails": {
+          "$ref": "#/definitions/PackageTrackingDetails"
+        }
+      },
+      "required": [
+        "packageTrackingDetails"
+      ]
+    },
+    "PackageTrackingDetails": {
+      "type": "object",
+      "description": "Detailed tracking information for a package.",
+      "properties": {
+        "trackingStatus": {
+          "type": "string",
+          "description": "The current tracking status of the package.\n\n**Possible values:**\n- `ORDERED` : The order has been placed but not yet shipped.\n- `SHIPPED` : The package has been shipped.\n- `OUT_FOR_DELIVERY` : The package is out for delivery. \n- `DELIVERED` : The package has been delivered.\n- `DELAYED` : The package delivery has been delayed beyond the original estimated delivery date.\n- `UNDELIVERABLE` : The package could not be delivered to the recipient and will be returned to the seller or fulfillment center.\n- `RETURNED` : The package has been returned to the seller or fulfillment center.\n- `REFUND_ISSUED` : A refund has been issued for the package.\n- `AVAILABLE_FOR_PICKUP` : The package is available for pickup at a designated location.\n- `CUSTOMER_ACTION` : The package requires action from the customer, such as providing delivery instructions or scheduling a redelivery."
+        },
+        "localizedDeliveryPromise": {
+          "type": "string",
+          "description": "Localized description of the delivery promise."
+        },
+        "deliveryWindow": {
+          "description": "The time window when the package is expected to be delivered.",
+          "$ref": "#/definitions/TimeWindow"
+        },
+        "carrierDetails": {
+          "description": "Carrier details of the package.",
+          "$ref": "#/definitions/CarrierDetails"
+        },
+        "packageTrackingEvents": {
+          "type": "array",
+          "description": "A list of tracking events for the package.",
+          "items": {
+            "$ref": "#/definitions/PackageTrackingEvent"
+          }
+        },
+        "packageMilestones": {
+          "type": "array",
+          "description": "A list of milestone events in the package's journey.",
+          "items": {
+            "$ref": "#/definitions/PackageMilestone"
+          }
+        }
+      },
+      "required": [
+        "trackingStatus",
+        "localizedDeliveryPromise"
+      ]
+    },
+    "TimeWindow": {
+      "type": "object",
+      "description": "A time window with start and end dates.",
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "description": "The estimated start date in ISO-8601 format.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The estimated end date in ISO-8601 format.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "endDate"
+      ]
+    },
+    "CarrierDetails": {
+      "type": "object",
+      "description": "Information about the carrier delivering the package.",
+      "properties": {
+        "localizedCarrierName": {
+          "type": "string",
+          "description": "The localized name of the carrier delivering the package."
+        },
+        "carrierTrackingId": {
+          "type": "string",
+          "description": "The tracking identifier assigned by the carrier."
+        }
+      }
+    },
+    "PackageTrackingEvent": {
+      "type": "object",
+      "description": "Package tracking event for the package.",
+      "properties": {
+        "localizedDescription": {
+          "type": "string",
+          "description": "Localized description of the package tracking event."
+        },
+        "localizedEventDate": {
+          "type": "string",
+          "description": "Localized event date of the package tracking event in human-readable format."
+        },
+        "localizedEventTime": {
+          "type": "string",
+          "description": "Localized event time of the package tracking event in human-readable format."
+        },
+        "location": {
+          "$ref": "#/definitions/EventLocation"
+        }
+      }
+    },
+    "EventLocation": {
+      "type": "object",
+      "description": "The location where the tracking event occurred.",
+      "properties": {
+        "city": {
+          "type": "string",
+          "description": "The city where the tracking event occurred."
+        },
+        "state": {
+          "type": "string",
+          "description": "The state where the tracking event occurred."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country where the tracking event occurred."
+        }
+      }
+    },
+    "PackageMilestone": {
+      "type": "object",
+      "description": "Represents a significant event in the package's journey.",
+      "properties": {
+        "milestoneType": {
+          "type": "string",
+          "description": "The identifier of the package milestone event.",
+          "enum": [
+            "DELIVERED",
+            "OUT_FOR_DELIVERY",
+            "SHIPPED",
+            "ORDERED"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "DELIVERED",
+              "description": "The package has been delivered."
+            },
+            {
+              "value": "OUT_FOR_DELIVERY",
+              "description": "The package is out for delivery."
+            },
+            {
+              "value": "SHIPPED",
+              "description": "The package has been shipped."
+            },
+            {
+              "value": "ORDERED",
+              "description": "The order has been placed but not yet shipped."
+            }
+          ]
+        },
+        "milestoneWindow": {
+          "description": "The time window for the milestone event.",
+          "$ref": "#/definitions/TimeWindow"
+        }
+      },
+      "required": [
+        "milestoneType",
+        "milestoneWindow"
+      ]
+    },
+    "Error": {
+      "description": "Error response returned when the request is unsuccessful.",
+      "properties": {
+        "code": {
+          "description": "An error code that identifies the type of error that occurred.",
+          "type": "string"
+        },
+        "message": {
+          "description": "A message that describes the error condition.",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional details that can help the caller understand or fix the issue.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object"
+    },
+    "ErrorList": {
+      "type": "object",
+      "description": "A list of error responses returned when a request is unsuccessful.",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "A list of error responses returned when a request is unsuccessful.",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      },
+      "required": [
+        "errors"
+      ]
+    }
+  },
+  "parameters": {}
+}

@@ -1,0 +1,449 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Amazon Business API for Managing Accounts.",
+    "description": "An API for managing Amazon Business accounts.",
+    "version": "2021-08-30",
+    "license": {
+      "name": "Amazon Software License",
+      "url": "https://aws.amazon.com/asl/"
+    }
+  },
+  "externalDocs": {
+    "description": "Learn more about Amazon Business.",
+    "url": "https://business.amazon.com"
+  },
+  "host": "na.business-api.amazon.com",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "CreateBusinessUserAccountRequest": {
+      "description": "A request to create a business user account.",
+      "type": "object",
+      "required": [
+        "accountHolder",
+        "groupId",
+        "role",
+        "region"
+      ],
+      "properties": {
+        "accountHolder": {
+          "description": "The name of the account holder to whom the Amazon Business user account will be created for. The account holder's email shouldn't be associated to an existing Amazon Business user account.",
+          "$ref": "#/definitions/AccountHolder"
+        },
+        "groupId": {
+          "description": "A group identifier that indicates which business group the account holder will be added to. The groupId should already exist before adding a user.",
+          "$ref": "#/definitions/BusinessGroupIdentifier"
+        },
+        "role": {
+          "description": "The business role that will be assigned to the account holder.",
+          "$ref": "#/definitions/BusinessRole"
+        },
+        "region": {
+          "description": "The country or region where the user account will be created.",
+          "$ref": "#/definitions/Region"
+        },
+        "notificationTypesToSuppress": {
+          "description": "A list of enums that specifies the types of notification to suppress.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NotificationType"
+          }
+        }
+      }
+    },
+    "CreateBusinessUserAccountResponse": {
+      "description": "A response indicating that a business user account was created.",
+      "type": "object"
+    },
+    "AccountHolder": {
+      "description": "An Amazon Business user account holder.",
+      "type": "object",
+      "required": [
+        "email",
+        "givenName",
+        "familyName"
+      ],
+      "properties": {
+        "email": {
+          "description": "The email address of the account holder.",
+          "type": "string"
+        },
+        "givenName": {
+          "description": "The given name of the account holder.",
+          "type": "string"
+        },
+        "familyName": {
+          "description": "The family name of the account holder.",
+          "type": "string"
+        }
+      }
+    },
+    "BusinessGroupIdentifier": {
+      "description": "An Amazon Business group identifier",
+      "type": "object",
+      "properties": {
+        "idType": {
+          "type": "string",
+          "description": "The type of group identifier.",
+          "enum": [
+            "GroupId",
+            "GroupTag"
+          ],
+          "x-docgen-enum-table-extension": [
+            {
+              "value": "GroupId",
+              "description": "An Amazon Business auto-generated unique identifier for a group."
+            },
+            {
+              "value": "GroupTag",
+              "description": "A value that identifies which group, within the Amazon Business account, a customer belongs to. Customer sets this in Amazon Business account information. GroupTag is necessary only if the customer account belongs to more than one group."
+            }
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "The value of the identifier."
+        }
+      },
+      "required": [
+        "idType",
+        "id"
+      ]
+    },
+    "BusinessRole": {
+      "description": "An Amazon Business user role.",
+      "type": "string",
+      "enum": [
+        "Requisitioner",
+        "PunchoutUser",
+        "Administrator",
+        "Finance",
+        "Tech"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "Requisitioner",
+          "description": "Buyer role."
+        },
+        {
+          "value": "PunchoutUser",
+          "description": "Punchout catalog user buying role."
+        },
+        {
+          "value": "Administrator",
+          "description": "Administrator role."
+        },
+        {
+          "value": "Finance",
+          "description": "Finance role."
+        },
+        {
+          "value": "Tech",
+          "description": "Tech role."
+        }
+      ]
+    },
+    "Region": {
+      "description": "A country or region where an Amazon Business user account will be created.",
+      "type": "string",
+      "enum": [
+        "DE",
+        "FR",
+        "UK",
+        "IT",
+        "ES",
+        "US",
+        "CA",
+        "JP"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "DE",
+          "description": "amazon.de"
+        },
+        {
+          "value": "FR",
+          "description": "amazon.fr"
+        },
+        {
+          "value": "UK",
+          "description": "amazon.co.uk"
+        },
+        {
+          "value": "IT",
+          "description": "amazon.it"
+        },
+        {
+          "value": "ES",
+          "description": "amazon.es"
+        },
+        {
+          "value": "US",
+          "description": "amazon.com"
+        },
+        {
+          "value": "CA",
+          "description": "amazon.ca"
+        },
+        {
+          "value": "JP",
+          "description": "amazon.co.jp"
+        }
+      ]
+    },
+    "NotificationType": {
+      "description": "The type of notification to suppress.",
+      "type": "string",
+      "enum": [
+        "EMAIL"
+      ],
+      "x-docgen-enum-table-extension": [
+        {
+          "value": "EMAIL",
+          "description": "Email notifications."
+        }
+      ]
+    },
+    "ErrorList": {
+      "type": "object",
+      "description": "A list of error responses returned when a request is unsuccessful.",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "description": "The list of errors.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      }
+    },
+    "Error": {
+      "description": "An error response that's returned when the request is unsuccessful.",
+      "properties": {
+        "code": {
+          "description": "An error code that identifies the type of error that occurred.",
+          "type": "string"
+        },
+        "message": {
+          "description": "A message that describes the error condition.",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional details to help the customer understand or fix the issue.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object"
+    }
+  },
+  "paths": {
+    "/businessAccounts/2021-08-30/businessUserAccount": {
+      "post": {
+        "description": "Creates a new Amazon Business user account with a name and email you specified, and an autogenerated password. Adds the account holder to the specified group with an specified role. The account holder will receive an email message to update the account password.\n\n**Usage Plan:**\n\n| Rate (requests per second) | Burst |\n| ---- | ---- |\n| 1 | 5 |\n\nThe `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation. The preceding table indicates the default rate and burst values for this operation. For questions about your usage plan, reach out to your Amazon Business technical contact.",
+        "operationId": "createBusinessUserAccount",
+        "parameters": [
+          {
+            "name": "request",
+            "description": "A request for creating a business user account.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateBusinessUserAccountRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created an Amazon Business user account with the specified email, group, and role. Sent an email to the account holder for password reset.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "The rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "body": {
+                        "value": {
+                          "accountHolder": {
+                            "email": "[Email]",
+                            "givenName": "[Given_name]",
+                            "familyName": "[Family_name]"
+                          },
+                          "groupId": {
+                            "idType": "GroupId",
+                            "id": "[Id]"
+                          },
+                          "role": "Requisitioner",
+                          "region": "US",
+                          "notificationTypesToSuppress": [
+                            "EMAIL"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "response": {}
+                }
+              ]
+            },
+            "schema": {
+              "$ref": "#/definitions/CreateBusinessUserAccountResponse"
+            }
+          },
+          "400": {
+            "description": "The request has missing or invalid parameters and can't be parsed.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "The rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "x-amzn-api-sandbox": {
+              "static": [
+                {
+                  "request": {
+                    "parameters": {
+                      "body": {
+                        "value": {
+                          "role": "PunchoutUser",
+                          "region": "US"
+                        }
+                      }
+                    }
+                  },
+                  "response": {
+                    "errors": [
+                      {
+                        "code": "INVALID_REQUEST_PARAMETER",
+                        "message": "The required request parameter is missing: accountHolder.",
+                        "details": ""
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "403": {
+            "description": "Indicates that access to the resource is forbidden. Possible reasons include Access Denied, Unauthorized, Expired Token, or Invalid Signature.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "404": {
+            "description": "The resource specified doesn't exist.",
+            "headers": {
+              "x-amzn-RateLimit-Limit": {
+                "description": "The rate limit (requests per second) for this operation.",
+                "type": "string"
+              },
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "413": {
+            "description": "The request size exceeded the maximum accepted size.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "415": {
+            "description": "The request payload is in an unsupported format.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "429": {
+            "description": "The frequency of requests was greater than allowed.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "500": {
+            "description": "An unexpected condition occurred that prevented the server from fulfilling the request.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          },
+          "503": {
+            "description": "Temporary overloading or maintenance of the server.",
+            "headers": {
+              "x-amzn-RequestId": {
+                "description": "A unique request reference identifier.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorList"
+            }
+          }
+        }
+      }
+    }
+  }
+}

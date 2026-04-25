@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Exceptions\ApiException.cs" />
+    <InternalsVisibleTo Include="CSharpAmazonBusinessAPI.Tests" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NSwag.ApiDescription.Client" Version="13.18.2">
       <PrivateAssets>all</PrivateAssets>
@@ -17,8 +18,35 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\Document_API_v1.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="DocumentApiV1" OutputPath="DocumentApiV1.cs">
+    <OpenApiReference Include="OpenAPIs\Document_API_v1.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.Document" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="DocumentApiV1" OutputPath="DocumentApiV1.cs">
       <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/document-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\Cart_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.Cart" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="CartApiV1" OutputPath="CartApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/cart-api-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\ApplicationManagement_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.ApplicationManagement" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="ApplicationManagementApiV1" OutputPath="ApplicationManagementApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/application-management-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\Ordering_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.Ordering" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="OrderingApiV1" OutputPath="OrderingApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/ordering-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\PackageTracking_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.PackageTracking" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="PackageTrackingApiV1" OutputPath="PackageTrackingApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/package-tracking-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\ProductSearch_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.ProductSearch" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="ProductSearchApiV1" OutputPath="ProductSearchApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/product-search-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\Reconciliation_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.Reconciliation" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="ReconciliationApiV1" OutputPath="ReconciliationApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/reconciliation-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\Reporting_API_v2025_06_09.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.Reporting" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="ReportingApiV20250609" OutputPath="ReportingApiV20250609.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/reporting-api-v2025-06-09-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\Reporting_API_v2021_01_08.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.ReportingLegacy" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="ReportingApiV20210108" OutputPath="ReportingApiV20210108.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/reporting-api-v1-model</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\UserManagement_API.json" CodeGenerator="NSwagCSharp" Namespace="CSharpAmazonBusinessAPI.Model.UserManagement" Options="/UseBaseUrl:false /GenerateClientInterfaces:false /GenerateExceptionClasses:true /AdditionalNamespaceUsages:CSharpAmazonBusinessAPI.Exceptions" ClassName="UserManagementApiV1" OutputPath="UserManagementApiV1.cs">
+      <SourceUri>https://developer-docs.amazon.com/amazon-business/docs/user-management-v1-model</SourceUri>
     </OpenApiReference>
   </ItemGroup>
   <ItemGroup>
