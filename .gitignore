@@ -10,6 +10,15 @@
 *.userosscache
 *.sln.docstates
 
+# Local credentials — never commit. Use the *.example.json templates instead.
+.env
+.env.local
+.env.*.local
+secrets.json
+appsettings.Local.json
+appsettings.*.Local.json
+appsettings.Local.*.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
