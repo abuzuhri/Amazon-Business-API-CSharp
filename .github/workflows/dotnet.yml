@@ -12,12 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      # Two SDKs: lib + tests + SampleCode use net6.0 (also satisfies netstandard2.0);
+      # WebAuthSample targets net8.0.
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: |
+          6.0.x
+          8.0.x
+
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Source/Amazon-Business-API-CSharp.sln
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build Source/Amazon-Business-API-CSharp.sln --no-restore --configuration Release
+
+    - name: Test
+      run: dotnet test Source/Tests/CSharpAmazonBusinessAPI.Tests/CSharpAmazonBusinessAPI.Tests.csproj --no-build --configuration Release --verbosity normal
