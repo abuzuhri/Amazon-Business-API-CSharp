@@ -6,7 +6,7 @@
 
   <PropertyGroup Label="NuGet">
     <PackageId>CSharpAmazonBusinessAPI</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Tareq Abuzuhri</Authors>
     <Company>Tareq Abuzuhri</Company>
     <Title>Amazon Business API for .NET</Title>
