@@ -153,6 +153,31 @@ def dedupe_inline_enums(spec: dict) -> int:
     return refs_written
 
 
+# Pagination tokens that Amazon's specs sometimes mark as `required` but actually
+# omit from responses when there's nothing to paginate. NSwag generates strict
+# parsers from `required`, so deserialization breaks on the omission. Strip them.
+_OPTIONAL_PAGINATION_FIELDS = {"nextPageToken", "nextToken"}
+
+
+def relax_pagination_required(spec: dict) -> int:
+    """Remove pagination-style fields from `required` arrays in definitions/."""
+    fixed = 0
+    for schema in spec.get("definitions", {}).values():
+        if not isinstance(schema, dict):
+            continue
+        req = schema.get("required")
+        if not isinstance(req, list):
+            continue
+        new_req = [r for r in req if r not in _OPTIONAL_PAGINATION_FIELDS]
+        if len(new_req) != len(req):
+            if new_req:
+                schema["required"] = new_req
+            else:
+                del schema["required"]
+            fixed += 1
+    return fixed
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         print("Usage: python fetch_spec.py <model_page_slug> <output_filename>", file=sys.stderr)
@@ -161,10 +186,14 @@ def main() -> int:
     slug, filename = sys.argv[1], sys.argv[2]
     spec = fetch_spec(slug)
     refs = dedupe_inline_enums(spec)
+    relaxed = relax_pagination_required(spec)
     spec_text = json.dumps(spec, indent=2)
     out_path = OUTPUT_DIR / filename
     out_path.write_text(spec_text, encoding="utf-8")
-    print(f"Wrote {out_path} ({len(spec_text)} bytes, {refs} enum refs deduped)")
+    print(
+        f"Wrote {out_path} ({len(spec_text)} bytes, "
+        f"{refs} enum refs deduped, {relaxed} pagination fields relaxed)"
+    )
     return 0
 
 

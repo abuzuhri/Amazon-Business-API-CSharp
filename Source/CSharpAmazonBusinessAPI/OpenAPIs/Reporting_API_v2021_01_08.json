@@ -994,7 +994,7 @@
           "type": "string"
         },
         "amount": {
-          "description": "The amount charged for a particular transaction. This is the amount for which Amazon received an authorization if the transaction isn’t settled yet.",
+          "description": "The amount charged for a particular transaction. This is the amount for which Amazon received an authorization if the transaction isn\u2019t settled yet.",
           "$ref": "#/definitions/Money"
         },
         "paymentInstrumentType": {
@@ -1033,7 +1033,6 @@
       "description": "A paginated list of orders",
       "required": [
         "orders",
-        "nextPageToken",
         "size"
       ],
       "properties": {
@@ -1297,7 +1296,7 @@
           "description": "The name of the credential or certificate.",
           "type": "string"
         },
-        "certifyingAgenciesDetails" : {
+        "certifyingAgenciesDetails": {
           "type": "array",
           "description": "Details of issuing agency and expiration date of certificate.",
           "items": {

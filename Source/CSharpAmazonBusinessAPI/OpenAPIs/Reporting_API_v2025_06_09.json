@@ -1680,7 +1680,6 @@
     "GetOrderLineItemReportsResponse": {
       "type": "object",
       "required": [
-        "nextPageToken",
         "orderLineItemsReport"
       ],
       "properties": {
@@ -1935,7 +1934,6 @@
     "GetOrderReportsByPurchaseOrderNumberResponse": {
       "type": "object",
       "required": [
-        "nextPageToken",
         "ordersReport"
       ],
       "properties": {
@@ -2034,7 +2032,6 @@
     "GetOrderReportsResponse": {
       "type": "object",
       "required": [
-        "nextPageToken",
         "ordersReport"
       ],
       "properties": {
@@ -2207,7 +2204,6 @@
     "GetShipmentReportsResponse": {
       "type": "object",
       "required": [
-        "nextPageToken",
         "shipmentsReport"
       ],
       "properties": {
@@ -2288,7 +2284,6 @@
     "GetShipmentLineItemReportsResponse": {
       "type": "object",
       "required": [
-        "nextPageToken",
         "shipmentLineItemsReport"
       ],
       "properties": {
