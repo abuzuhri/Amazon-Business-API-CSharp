@@ -34,8 +34,15 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Country = CSharpAmazonBusinessAPI.Utils.Country;
+using MarketPlace = CSharpAmazonBusinessAPI.Utils.MarketPlace;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Optional local override (gitignored). See appsettings.Local.example.json for the shape.
+// Order matters: appsettings.json → appsettings.{Env}.json → appsettings.Local.json
+//                → User Secrets (Dev only) → env vars → command line.
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache();
@@ -59,12 +66,13 @@ app.Use(async (ctx, next) =>
 });
 
 var ab = app.Configuration.GetSection("AmazonBusiness");
+string ApplicationId() => ab["ApplicationId"] ?? throw new InvalidOperationException("AmazonBusiness:ApplicationId not set (the amzn1.sp.solution.* value from Solution Provider Portal)");
 string ClientId() => ab["ClientId"] ?? throw new InvalidOperationException("AmazonBusiness:ClientId not set");
 string ClientSecret() => ab["ClientSecret"] ?? throw new InvalidOperationException("AmazonBusiness:ClientSecret not set");
 string RedirectUri() => ab["RedirectUri"] ?? throw new InvalidOperationException("AmazonBusiness:RedirectUri not set");
 string AppCenterRedirectUri() => ab["AppCenterRedirectUri"] ?? throw new InvalidOperationException("AmazonBusiness:AppCenterRedirectUri not set");
 string MarketplaceId() => ab["MarketPlaceID"] ?? "ATVPDKIKX0DER";
-string Scope() => ab["Scope"] ?? "profile";
+Country MarketplaceCountry() => MarketPlace.GetMarketPlaceByID(MarketplaceId()).Country;
 
 const string StateSessionKey = "lwa_state";
 const string RefreshTokenSessionKey = "lwa_refresh_token";
@@ -76,16 +84,20 @@ app.MapGet("/", () => Results.Content(Pages.Home(IsConfigured()), "text/html"));
 app.MapGet("/connect", (HttpContext ctx) =>
 {
     if (!IsConfigured())
-        return Results.Content(Pages.Error("Set AmazonBusiness:ClientId / ClientSecret / RedirectUri in appsettings.json or User Secrets first."), "text/html");
+        return Results.Content(Pages.Error("Set AmazonBusiness:ApplicationId / ClientId / ClientSecret / RedirectUri in appsettings.json or User Secrets first."), "text/html");
 
     var state = GenerateCsrfState();
     ctx.Session.SetString(StateSessionKey, state);
 
-    var url = LwaConsentHelper.BuildAuthorizationUrl(
-        clientId: ClientId(),
-        redirectUri: RedirectUri(),
-        state: state,
-        scope: Scope());
+    // Amazon Business uses its own consent endpoint (/b2b/abws/oauth) — NOT the standard
+    // LWA endpoint. Pass the SPP `applicationId` (amzn1.sp.solution.*), not the LWA
+    // `client_id`. No `scope` parameter — Business consent shows permissions based on the
+    // app's registered roles in Solution Provider Portal.
+    var url = LwaConsentHelper.BuildBusinessAuthorizationUrl(
+        applicationId: ApplicationId(),
+        redirectUri:   RedirectUri(),
+        state:         state,
+        country:       MarketplaceCountry());
 
     return Results.Redirect(url);
 });
@@ -172,11 +184,11 @@ app.MapGet("/appcenter/login-uri", async (HttpContext ctx, string? amazon_callba
     cache.Set(StateCacheKey(state), new AppCenterContext(amazon_state, amazon_callback_uri),
         absoluteExpirationRelativeToNow: TimeSpan.FromMinutes(10));
 
-    var url = LwaConsentHelper.BuildAuthorizationUrl(
-        clientId: ClientId(),
-        redirectUri: AppCenterRedirectUri(),
-        state: state,
-        scope: Scope());
+    var url = LwaConsentHelper.BuildBusinessAuthorizationUrl(
+        applicationId: ApplicationId(),
+        redirectUri:   AppCenterRedirectUri(),
+        state:         state,
+        country:       MarketplaceCountry());
 
     return Results.Redirect(url);
 });
@@ -231,10 +243,12 @@ app.Run();
 // ===================== Helpers =====================
 
 bool IsConfigured() =>
+    !string.IsNullOrEmpty(ab["ApplicationId"]) &&
     !string.IsNullOrEmpty(ab["ClientId"]) &&
     !string.IsNullOrEmpty(ab["ClientSecret"]) &&
     !string.IsNullOrEmpty(ab["RedirectUri"]) &&
-    !ab["ClientId"]!.Contains('X');
+    !ab["ClientId"]!.Contains('X') &&
+    !ab["ApplicationId"]!.Contains('X');
 
 static string StateCacheKey(string state) => "appcenter_ctx:" + state;
 

@@ -16,6 +16,13 @@ namespace CSharpAmazonBusinessAPI.Utils
         // We keep `Code` as the ISO standard and surface `AmazonCode` for wire serialization.
         public string AmazonCode => Code == "GB" ? "UK" : Code;
 
+        // Regional Amazon Business OAuth consent endpoint, derived from AmazonUrl's host.
+        // E.g. AmazonUrl = "https://www.amazon.com/business" → "https://www.amazon.com/b2b/abws/oauth".
+        // See https://developer-docs.amazon.com/amazon-business/docs/generate-refresh-token
+        public string BusinessOAuthUrl =>
+            string.IsNullOrEmpty(AmazonUrl) ? null
+                : $"{new System.Uri(AmazonUrl).GetLeftPart(System.UriPartial.Authority)}/b2b/abws/oauth";
+
         private Country(string code, string name, string businessDomain, string amazonUrl)
         {
             Code = code;

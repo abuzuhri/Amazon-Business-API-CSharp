@@ -11,4 +11,13 @@
     <ProjectReference Include="..\CSharpAmazonBusinessAPI\CSharpAmazonBusinessAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Local-only credentials. Gitignored. Web SDK already implicitly includes
+         appsettings*.json — we just override metadata so it never ships in publish. -->
+    <Content Update="appsettings.Local.json" Condition="Exists('appsettings.Local.json')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

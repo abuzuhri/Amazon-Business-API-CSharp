@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 var config = new ConfigurationBuilder()
     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
     .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false)
     .AddUserSecrets<Program>(optional: true)
     .Build();
 
@@ -27,6 +28,16 @@ Console.WriteLine($"Sandbox:   {connection.CurrentMarketPlace.Region.SandboxHost
 Console.WriteLine($"Marketplace: {connection.CurrentMarketPlace.Country.Name} ({connection.CurrentMarketPlace.ID})");
 Console.WriteLine();
 
+
+var carts = new CartSample(connection);
+var customerEmail = section["CustomerEmail"]!;
+var cartList = await carts.ListCartsAsync(customerEmail);
+Console.WriteLine($"Cart.ListCarts → {cartList.CartDetailsList?.Count ?? 0} cart(s)");
+
+
+var docs = new DocumentSample(connection);
+var reports = await docs.GetReportsAsync();
+Console.WriteLine($"Documents.GetReports → {reports.Reports?.Count ?? 0} report(s)");
 
 
 // Live calls — uncomment once real credentials are in appsettings.json or User Secrets.

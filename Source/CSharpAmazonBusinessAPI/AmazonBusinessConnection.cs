@@ -44,10 +44,11 @@ namespace CSharpAmazonBusinessAPI
         public MarketPlace CurrentMarketPlace => Credentials.MarketPlace;
 
         // Handler chain (outermost → innermost):
-        //   RateLimit → Auth → Debug → HttpClientHandler
+        //   RateLimit → Auth → CsvRewrite → Debug → HttpClientHandler
         // - RateLimit retries on 429; on retry, Auth re-attaches a fresh token if needed.
         // - Auth adds the LWA bearer; on 401, invalidates the cache and retries once.
-        // - Debug sees the final wire-format request (with auth header) and the raw response.
+        // - CsvRewrite joins repeated query keys (NSwag emits multi-format, Amazon expects csv).
+        // - Debug sees the final wire-format request (with auth header + csv arrays) and response.
         private static HttpClient BuildHttpClient(AmazonBusinessCredential credential, ILoggerFactory loggerFactory)
         {
             var transport = new HttpClientHandler();
@@ -58,7 +59,8 @@ namespace CSharpAmazonBusinessAPI
             }
 
             var debug = new DebugLogHandler(credential, loggerFactory?.CreateLogger<AmazonBusinessConnection>(), transport);
-            var lwa = new LwaAuthHandler(credential, new LwaClient(credential.Proxy), debug);
+            var csv = new CsvArrayRewriteHandler(debug);
+            var lwa = new LwaAuthHandler(credential, new LwaClient(credential.Proxy), csv);
             var rateLimit = new RateLimitHandler(credential, lwa);
 
             var baseUrl = credential.Environment == Environments.Sandbox

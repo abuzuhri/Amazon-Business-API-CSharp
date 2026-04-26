@@ -38,7 +38,8 @@
             "description": "A list of report types used to filter reports. When reportTypes is provided, the other filter parameters (processingStatuses, marketplaceIds, createdSince, createdUntil) and pageSize may also be provided. Either reportTypes or nextToken is required.",
             "items": {
               "type": "string"
-            }
+            },
+            "collectionFormat": "csv"
           },
           {
             "name": "processingStatuses",
@@ -78,7 +79,8 @@
                   "description": "The report has not yet started processing. It may be waiting for another IN_PROGRESS report."
                 }
               ]
-            }
+            },
+            "collectionFormat": "csv"
           },
           {
             "name": "marketplaceIds",
@@ -90,7 +92,8 @@
             "maxItems": 10,
             "items": {
               "type": "string"
-            }
+            },
+            "collectionFormat": "csv"
           },
           {
             "name": "pageSize",

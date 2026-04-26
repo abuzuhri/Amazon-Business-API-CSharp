@@ -15,7 +15,10 @@ public class CartSample
     }
 
     public Task<CartDetailsResult> ListCartsAsync(string customerEmail) =>
-        _connection.Cart.ListCartsAsync(customerEmail, pageSize: 25);
+        // Static sandbox accepts only `region` for this op — no pageToken, no pageSize.
+        // https://developer-docs.amazon.com/amazon-business/docs/cart-api-static-sandbox-guide
+        // For production: add pageSize / pageToken back as needed.
+        _connection.Cart.ListCartsAsync(customerEmail);
 
     public Task<Cart> GetCartAsync(string cartId) =>
         _connection.Cart.GetCartAsync(cartId);

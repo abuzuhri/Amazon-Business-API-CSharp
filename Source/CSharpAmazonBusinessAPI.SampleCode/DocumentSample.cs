@@ -14,9 +14,17 @@ public class DocumentSample
 
     public async Task<GetReportsResponse> GetReportsAsync()
     {
-        // marketplaceIds defaults to the credential's marketplace when omitted.
+        // The static sandbox does EXACT (not subset) parameter matching, so any extra
+        // query parameter — even a defaulted-from-credential marketplaceIds — breaks the
+        // match and returns 400 "Could not match input arguments". Pass an empty array
+        // explicitly to skip the wrapper's marketplaceIds-from-credential default.
+        // Documented sandbox pattern:
+        //   https://developer-docs.amazon.com/amazon-business/docs/document-api-static-sandbox-guide
+        // Production: drop the explicit empty array and pass the real filters you want.
         return await _connection.Documents.GetReportsAsync(
-            createdSince: DateTime.UtcNow.AddDays(-30));
+            reportTypes:        new[] { "FEE_DISCOUNTS_REPORT", "GET_AFN_INVENTORY_DATA" },
+            processingStatuses: new[] { Anonymous.IN_QUEUE, Anonymous.IN_PROGRESS },
+            marketplaceIds:     Array.Empty<string>());
     }
 
     public async Task<string> CreateInvoiceReportAsync()
