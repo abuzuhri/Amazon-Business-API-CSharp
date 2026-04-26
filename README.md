@@ -4,14 +4,30 @@
 
 The generated clients are produced by [NSwag](https://github.com/RicoSuter/NSwag) from Amazon's published OpenAPI specs ([fetched](scripts/fetch_spec.py) verbatim from `developer-docs.amazon.com`); the wrapper layer hides the per-spec type duplication so callers see `Country.US` instead of NSwag-generated `Region2`/`Region3`/etc.
 
-**Contents** — [Quick start](#quick-start) · [Configuration](#configuration) · [Service surface](#amazonbusinessconnection-exposes-one-property-per-api-surface) · [Onboarding (OAuth consent)](#onboard-a-customer-oauth-consent--refresh-token) · [Roles](#roles-required-per-api) · [Status](#status--roadmap)
+**Contents** — [Quick start](#quick-start) · [Configuration](#configuration) · [Service surface](#amazonbusinessconnection-exposes-one-property-per-api-surface) · [Onboarding (OAuth consent)](#onboard-a-customer-oauth-consent--refresh-token) · [Roles](#roles-required-per-api) · [Troubleshooting](#troubleshooting) · [Status](#status--roadmap)
 
 ---
-## Installation [![NuGet](https://img.shields.io/nuget/v/CSharpAmazonBusinessAPI.svg)](https://www.nuget.org/packages/CSharpAmazonBusinessAPI/)
+## Installation [![NuGet](https://img.shields.io/nuget/v/CSharpAmazonBusinessAPI.svg)](https://www.nuget.org/packages/CSharpAmazonBusinessAPI/) [![NuGet Downloads](https://img.shields.io/nuget/dt/CSharpAmazonBusinessAPI.svg)](https://www.nuget.org/packages/CSharpAmazonBusinessAPI/)
+
+Latest version is published on nuget.org. Install with the .NET CLI:
+
+```bash
+dotnet add package CSharpAmazonBusinessAPI
+```
+
+…or via the legacy Package Manager Console:
 
 ```powershell
 Install-Package CSharpAmazonBusinessAPI
 ```
+
+…or in your `.csproj` directly:
+
+```xml
+<PackageReference Include="CSharpAmazonBusinessAPI" Version="*" />
+```
+
+Targets `netstandard2.0` — runs on .NET Framework 4.6.1+, .NET Core 2.0+, and every modern .NET (.NET 5/6/7/8/9/10).
 
 ## Quick start
 
@@ -25,14 +41,17 @@ var connection = new AmazonBusinessConnection(new AmazonBusinessCredential
     ClientSecret = "XXXX",
     RefreshToken = "Atzr|XXXX",
     MarketPlace  = MarketPlace.UnitedStates,
+    // Environment = AmazonBusinessCredential.Environments.Sandbox,  // for testing
 });
 
 // First call — token refresh, regional host, auth header are all handled.
 var reports = await connection.Documents.GetReportsAsync(
     createdSince: DateTime.UtcNow.AddDays(-7));
+
+Console.WriteLine($"Got {reports.Reports?.Count ?? 0} report(s)");
 ```
 
-See [Configuration](#configuration) for proxy / sandbox / debug-logging options, [Onboard a customer](#onboard-a-customer-oauth-consent--refresh-token) for the OAuth consent flow used during one-time customer onboarding, and `Source/CSharpAmazonBusinessAPI.SampleCode/` for a per-API sample for every wrapper.
+See [Configuration](#configuration) for proxy / sandbox / debug-logging options, [Onboard a customer](#onboard-a-customer-oauth-consent--refresh-token) for the OAuth consent flow used during one-time customer onboarding, [Troubleshooting](#troubleshooting) when something doesn't behave as expected, and `Source/CSharpAmazonBusinessAPI.SampleCode/` for a per-API sample for every wrapper.
 
 ## Status & roadmap
 
@@ -297,6 +316,58 @@ Each API call needs a specific Amazon Business role granted at app-creation time
 | *(no role required)* | `connection.Applications` — uses standard LWA scope |
 
 All roles are available across NA, EU, and FE marketplaces.
+
+### Troubleshooting
+
+#### `400 InvalidInput "Could not match input arguments"` in sandbox
+
+Amazon Business's static sandbox does **exact** parameter matching, not subset matching. Sending any extra query parameter — even a sensible-looking one like `marketplaceIds` — breaks the match. Each operation has a documented sandbox match block in its OpenAPI spec under `responses.200.x-amzn-api-sandbox.static[].request.parameters`; send only those parameters with their literal values to get a 200.
+
+Common offenders this SDK fixes automatically:
+- **Repeated query keys** (`?foo=a&foo=b`) — NSwag's default; sandbox needs csv (`?foo=a,b`). Handled by `CsvArrayRewriteHandler`.
+- **Bare ISO timestamps** (`2020-07-09T00:00:00`) — NSwag's `"s"` format omits the timezone designator; sandbox needs the trailing `Z`. Handled by `IsoDateTimeRewriteHandler`.
+- **Auto-defaulted `marketplaceIds`** in `Documents.GetReports` — defaults from your credential's marketplace, but the sandbox doesn't expect it. Pass `marketplaceIds: Array.Empty<string>()` explicitly to skip the default for sandbox testing.
+
+#### `500 InternalFailure` with empty `details`
+
+Amazon's sandbox returns generic 500s for several scenarios where you'd hope for a clearer error. Check, in order:
+
+1. **Role not granted** on your sandbox app. Each API requires a specific role (see [Roles required per API](#roles-required-per-api)). Confirm in [Solution Provider Portal](https://solutionproviderportal.amazon.com/) → your app → Roles. The fastest signal: if some APIs work and others 500, it's role-shaped — APIs sharing a role will fail together.
+2. **Cart in particular is broken in sandbox.** Even with the documented `?region=US` and `cart-123` values, all Cart ops return 500 InternalFailure. This is an Amazon-side issue (not the SDK); production calls work fine. If you need this fixed, open a ticket via SPP support.
+3. **Sandbox app not fully provisioned.** If *every* API 500s, the sandbox refresh token may not be properly bound. Email Amazon Business Support with your `applicationId` and a failed `x-amzn-RequestId`.
+
+#### Operations that don't actually work in sandbox (despite Amazon's docs claiming so)
+
+These have no `x-amzn-api-sandbox` block in their OpenAPI spec — the sandbox doesn't mock them and will always 400:
+- `ProductSearch.SearchProducts` and the rest of Product Search
+- `ReportingLegacy` (Reporting v2021-01-08) — both operations
+
+They work fine against production endpoints. For local validation, hit production with `Environment.Production` once you have approved production credentials.
+
+#### Operations not available in sandbox at all
+
+Per Amazon's [sandbox docs](https://developer-docs.amazon.com/amazon-business/docs/amazon-business-api-sandbox), three APIs are intentionally not in sandbox because they're destructive:
+- `connection.Ordering` — would place real orders
+- `connection.Applications.RotateApplicationClientSecretAsync` — rotates your real production secret even from a sandbox-context call
+- `connection.Users.CreateBusinessUserAccountAsync` — creates real Amazon Business users
+
+The SDK exposes them; you just need to opt into testing them deliberately against production.
+
+#### `lwa-invalid-parameter-bad-scope` on the OAuth consent page
+
+You're sending the customer to `https://www.amazon.com/ap/oa` (the standard LWA endpoint) instead of `https://www.amazon.<tld>/b2b/abws/oauth` (the Amazon Business endpoint). Use `LwaConsentHelper.BuildBusinessAuthorizationUrl(applicationId, redirectUri, state, country)` — not `BuildAuthorizationUrl`. The Business endpoint takes the SPP `applicationId` (`amzn1.sp.solution.*`), not the LWA `client_id`, and accepts no `scope` parameter.
+
+#### "We cannot connect this account" on Amazon's consent page
+
+Your sandbox app **doesn't go through the consent flow** — the sandbox refresh token is generated directly in SPP (Action → Create token), not via OAuth. The website-authorization workflow is for **production** customer onboarding, where real Amazon Business admins authorize your app for their org. Sandbox apps lack the registration metadata to consent against real accounts.
+
+#### NSwag-generated `ApiException<ErrorList>` leaks into application code
+
+If you see this, you're on a build before the `ErrorTranslationHandler` was wired in (pre-0.1.1). Upgrade to the current package — non-2xx responses now throw `AmazonBusinessException` subclasses (`InvalidInput` / `Unauthorized` / `NotFound` / `QuotaExceeded` / `InternalError`) carrying `StatusCode` + `ResponseBody` + a parsed Amazon-error message.
+
+#### Push protection blocks `git push` with "Repository contains secrets"
+
+You committed real LWA credentials. Rotate them in SPP **first** (they're already exposed). Then either re-create the bad commit without the secret files (`git rm --cached <file>`, amend or rebase) or use `git filter-repo` to scrub the file from the entire history. Don't take the "allow this secret" escape hatch — secrets in git history are permanent.
 
 ### Out of scope: Integrated Quoting
 Amazon's [Integrated Quoting workflow](https://developer-docs.amazon.com/amazon-business/docs/integrated-quoting) is a separate **cXML over HTTPS** integration with digital-certificate auth, used by enterprise eProcurement sourcing modules — it does not use the REST APIs this SDK wraps. If you need that flow, integrate it via your cXML stack alongside this library.
